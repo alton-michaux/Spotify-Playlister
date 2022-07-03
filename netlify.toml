@@ -2,12 +2,6 @@
   base = "/"
   publish = ""
   command = ""
-  clientID = "CLIENT_ID"
-  clientSecret = "CLIENT_SECRET"
-  userID = "USER_ID"
 [dev]
   base = "/"
   publish = ""
-  clientID = "CLIENT_ID"
-  clientSecret = "CLIENT_SECRET"
-  userID = "USER_ID"
