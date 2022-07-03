@@ -1,34 +1,7 @@
 //-----------------------------------//
-//---------Global Functions----------//
-//-----------------------------------//
-
- //node mod parser function
- const modConfig = (module) => {
-  const result = require(module).config();
-  if (result.error) {
-    console.log(result.error);
-    throw result.error;
-  } else {
-    // console.log(result.parsed);
-    return result.parsed;
-  }
-};
-
-//-----------------------------------//
 //-----API Controller Module---------//
 //-----------------------------------//
 const apiController = (function () {
-  //declare environment variables for authentication
-  const env = modConfig("dotenv");
-        env.exports ={
-          C_ID : env.SPOTIFY_CLIENT_ID,
-          SECRET : env.SPOTIFY_CLIENT_SECRET,
-          U_ID : env.SPOTIFY_USER_ID,
-        };
-
-  console.log(
-    env.exports
-  );
 
   //get access token
   const getToken = async () => {
@@ -40,7 +13,7 @@ const apiController = (function () {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization:
-              "Basic " + btoa(env.exports.C_ID + ":" + env.exports.SECRET),
+              "Basic " + btoa(clientID + ":" + clientSecret),
           },
           body: "grant_type=client_credentials",
         }
@@ -82,10 +55,10 @@ const apiController = (function () {
   //fetch user playlist information from api
   const getMyPlaylists = async (token) => {
     try {
-      const limit = 20;
+      const limit = 21;
 
       const result = await fetch(
-        `https://api.spotify.com/v1/users/${env.exports.U_ID}/playlists?limit=${limit}&offset=0`,
+        `https://api.spotify.com/v1/users/${userID}/playlists?limit=${limit}&offset=0`,
         {
           method: "GET",
           headers: {
@@ -105,6 +78,7 @@ const apiController = (function () {
 
   //fetch user playlist information from api
   const getPlaylistByID = async (playlistID, token) => {
+    // console.log(token)
     try {
       const result = await fetch(
         `https://api.spotify.com/v1/playlists/${playlistID}`,
@@ -501,15 +475,15 @@ const appController = (function (apiCtrl, uiCtrl) {
     //-------User Login Module-----------//
     //-----------------------------------//
 
-    const loginListener = async () => {
-      const loginDiv = domOutput.hiddenDiv;
-      const login = domOutput.btnLogin;
-      login.addEventListener("click", async () => {
-        musicPopulate();
-        genrePopulate();
-        loginDiv.style.display = "none";
-      });
-    };
+    // const loginListener = async () => {
+    //   const loginDiv = domOutput.hiddenDiv;
+    //   const login = domOutput.btnLogin;
+    //   login.addEventListener("click", async () => {
+    //     musicPopulate();
+    //     genrePopulate();
+    //     loginDiv.style.display = "none";
+    //   });
+    // };
 
     //-----------------------------------//
     //-------App Event Listeners---------//
@@ -584,7 +558,7 @@ const appController = (function (apiCtrl, uiCtrl) {
       // console.log(playlistContainer);
       playlistContainer.addEventListener("click", async (e) => {
         uiCtrl.resetTracks();
-        const btnID = e.target.value;
+        const btnID = e.target.value; // <----- there is a bug here, if user clicks image it will not work
         // console.log(btnID, "clicked");
         const currentPlaylist = await apiCtrl.getPlaylistByID(btnID, token);
         // console.log(currentPlaylist);
@@ -662,10 +636,13 @@ const appController = (function (apiCtrl, uiCtrl) {
       // })
     };
 
+    
+    musicPopulate();
+    genrePopulate();
     genreListener();
     playlistListener();
     trackPlayListener();
-    loginListener();
+    // loginListener();
     tracklistListener();
   };
 
