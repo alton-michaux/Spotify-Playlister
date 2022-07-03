@@ -7,3 +7,6 @@ npm-debug.log
 .replit
 
 _confg.yml
+
+# Local Netlify folder
+.netlify
