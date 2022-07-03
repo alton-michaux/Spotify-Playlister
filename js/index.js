@@ -1,10 +1,7 @@
 //-----------------------------------//
 //-----API Controller Module---------//
 //-----------------------------------//
-const apiController = (function () { 
-const clientID = "4986258db999480dbcb94669e69535ad";
-const clientSecret = "50a5f956f0f84b278d3d90745c3308b5";
-const userID = "12172782523";
+const apiController = (function () {
 
   //get access token
   const getToken = async () => {
