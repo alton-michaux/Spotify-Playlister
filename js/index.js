@@ -2,9 +2,9 @@
 //-----API Controller Module---------//
 //-----------------------------------//
 const apiController = (function () { 
-const clientID = "";
-const clientSecret = "";
-const userID = "";
+const clientID = "4986258db999480dbcb94669e69535ad";
+const clientSecret = "50a5f956f0f84b278d3d90745c3308b5";
+const userID = "12172782523";
 
   //get access token
   const getToken = async () => {
@@ -58,7 +58,7 @@ const userID = "";
   //fetch user playlist information from api
   const getMyPlaylists = async (token) => {
     try {
-      const limit = 20;
+      const limit = 21;
 
       const result = await fetch(
         `https://api.spotify.com/v1/users/${userID}/playlists?limit=${limit}&offset=0`,
@@ -81,6 +81,7 @@ const userID = "";
 
   //fetch user playlist information from api
   const getPlaylistByID = async (playlistID, token) => {
+    // console.log(token)
     try {
       const result = await fetch(
         `https://api.spotify.com/v1/playlists/${playlistID}`,
@@ -477,15 +478,15 @@ const appController = (function (apiCtrl, uiCtrl) {
     //-------User Login Module-----------//
     //-----------------------------------//
 
-    const loginListener = async () => {
-      const loginDiv = domOutput.hiddenDiv;
-      const login = domOutput.btnLogin;
-      login.addEventListener("click", async () => {
-        musicPopulate();
-        genrePopulate();
-        loginDiv.style.display = "none";
-      });
-    };
+    // const loginListener = async () => {
+    //   const loginDiv = domOutput.hiddenDiv;
+    //   const login = domOutput.btnLogin;
+    //   login.addEventListener("click", async () => {
+    //     musicPopulate();
+    //     genrePopulate();
+    //     loginDiv.style.display = "none";
+    //   });
+    // };
 
     //-----------------------------------//
     //-------App Event Listeners---------//
@@ -561,7 +562,7 @@ const appController = (function (apiCtrl, uiCtrl) {
       playlistContainer.addEventListener("click", async (e) => {
         uiCtrl.resetTracks();
         const btnID = e.target.value;
-        // console.log(btnID, "clicked");
+        console.log(e, "clicked");
         const currentPlaylist = await apiCtrl.getPlaylistByID(btnID, token);
         // console.log(currentPlaylist);
         uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
@@ -638,10 +639,13 @@ const appController = (function (apiCtrl, uiCtrl) {
       // })
     };
 
+    
+    musicPopulate();
+    genrePopulate();
     genreListener();
     playlistListener();
     trackPlayListener();
-    loginListener();
+    // loginListener();
     tracklistListener();
   };
 
