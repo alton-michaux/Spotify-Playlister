@@ -13,7 +13,7 @@ const apiController = (function () {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization:
-              "Basic " + btoa(CLIENT_ID + ":" + CLIENT_SECRET),
+              "Basic " + btoa(clientID + ":" + clientSecret),
           },
           body: "grant_type=client_credentials",
         }
@@ -58,7 +58,7 @@ const apiController = (function () {
       const limit = 21;
 
       const result = await fetch(
-        `https://api.spotify.com/v1/users/${USER_ID}/playlists?limit=${limit}&offset=0`,
+        `https://api.spotify.com/v1/users/${userID}/playlists?limit=${limit}&offset=0`,
         {
           method: "GET",
           headers: {

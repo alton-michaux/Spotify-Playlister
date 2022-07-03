@@ -2,3 +2,8 @@
   base = "/"
   publish = ""
   command = ""
+[dev]
+  publish = ""
+  clientID = "CLIENT_ID"
+  clientSecret = "CLIENT_SECRET"
+  userID = "USER_ID"
