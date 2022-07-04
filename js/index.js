@@ -3,30 +3,6 @@ require('dotenv').config();
 //-----API Controller Module---------//
 //-----------------------------------//
 const apiController = (function () {
-
-  //get access token
-  const getToken = async () => {
-    try {
-      const result = await fetch(
-        "https://accounts.spotify.com/api/token",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization:
-              "Basic " + btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET),
-          },
-          body: "grant_type=client_credentials",
-        }
-      );
-      const data = await result.json();
-      // console.log(data);
-      return data.access_token;
-    } catch (err) {
-      throw err;
-    }
-  };
-
   //-----------------------------------//
   //--------API Display Module---------//
   //-----------------------------------//
@@ -48,30 +24,6 @@ const apiController = (function () {
       const data = await result.json();
       // console.log(data);
       return data.genres;
-    } catch (err) {
-      throw err;
-    }
-  };
-
-  //fetch user playlist information from api
-  const getMyPlaylists = async (token) => {
-    try {
-      const limit = 21;
-
-      const result = await fetch(
-        `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await result.json();
-      // console.log(data);
-      return data;
     } catch (err) {
       throw err;
     }
