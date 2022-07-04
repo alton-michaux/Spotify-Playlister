@@ -23,9 +23,7 @@
   },
   "homepage": "https://github.com/codeGobbler/cTd-Final_Project#readme",
   "devDependencies": {
-    "browserify": "^17.0.0",
     "chai": "^4.3.4",
-    "dotenv": "^8.2.0",
     "mocha": "^8.3.2"
   }
 }
