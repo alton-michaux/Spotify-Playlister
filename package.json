@@ -5,7 +5,8 @@
   "main": "js/bundle.js",
   "scripts": {
     "test": "mocha js/index.js",
-    "build": "browserify js/index.js -o js/bundle.js"
+    "build": "browserify js/index.js -o js/bundle.js",
+    "lambda-build": "netlify-lambda build functions && node -p 'process.env'"
   },
   "repository": {
     "type": "git",
