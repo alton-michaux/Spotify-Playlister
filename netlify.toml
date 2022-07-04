@@ -1,5 +1,4 @@
 [build]
   base = "/"
   publish = ""
-  command = "npm run lambda-build"
-  functions = "lambda"
+  command = "npm run build"
