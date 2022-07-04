@@ -21,3 +21,5 @@ Spotify-Playlister is a simple way to view and discover new playlists and the ar
 * Testing:
 
   -In progress
+
+  [![Netlify Status](https://api.netlify.com/api/v1/badges/285ecbdb-9756-4901-b544-85b276a38f70/deploy-status)](https://app.netlify.com/sites/gvomusicdiscovery/deploys)
