@@ -28,6 +28,7 @@
     "mocha": "^8.3.2"
   },
   "dependencies": {
+    "browserify": "^17.0.0",
     "dotenv": "^16.0.1"
   }
 }
