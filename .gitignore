@@ -11,4 +11,4 @@ _confg.yml
 # Local Netlify folder
 .netlify
 
-js/hidden.js
+js/
