@@ -1,4 +1,4 @@
 [build]
-  base = "https://github.com/alton-michaux/Spotify-Playlister.git"
-  publish = "/"
+  base = "/"
+  publish = ""
   command = ""
