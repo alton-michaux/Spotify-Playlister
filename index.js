@@ -1,10 +1,10 @@
 require('dotenv').config();
 const jsdom = require("jsdom");
 const JSDOM = jsdom.JSDOM;
-const document = new JSDOM(`../index.html`).window.document;
+const document = new JSDOM(`index.html`).window.document;
 const fetch = require("axios");
 const { Buffer } = require('buffer');
-console.log(process.env, document, fetch, Buffer);
+// console.log(process.env, document, fetch, Buffer);
 //-----------------------------------//
 //-----API Controller Module---------//
 //-----------------------------------//
@@ -12,7 +12,7 @@ const apiController = (function () {
   //get access token
   async function getToken() {
     try {
-      const result = await fetch.get(
+      const response = await fetch.get(
         "https://accounts.spotify.com/api/token",
         {
           method: "POST",
@@ -23,15 +23,18 @@ const apiController = (function () {
           },
           body: "grant_type=client_credentials",
         }
-      );
-
-      const data = await result.json();
-      // console.log(data);
-      return data.access_token;
-    } catch (err) {
-    throw err;
+      ).then( function (response) {
+        // console.log(response);
+        data =  response;
+        console.log(data.access_token)
+        return data.access_token;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
 
   //-----------------------------------//
   //--------API Display Module---------//
@@ -40,7 +43,7 @@ const apiController = (function () {
   //fetch genres from spotify for later sorting
   async function getGenres(token) {
     try {
-      const result = await fetch.get(
+      const response = await fetch.get(
         `https://api.spotify.com/v1/recommendations/available-genre-seeds`,
         {
           method: "GET",
@@ -50,13 +53,15 @@ const apiController = (function () {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-
-      const data = await result.json();
-      // console.log(data);
-      return data.genres;
-    } catch (err) {
-      throw err;
+      ).then( function (response) {
+        // console.log(response);
+        data =  response;
+        return data.genres;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -65,7 +70,7 @@ const apiController = (function () {
     try {
       const limit = 21;
 
-      const result = await fetch.get(
+      const response = await fetch.get(
         `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
         {
           method: "GET",
@@ -75,21 +80,23 @@ const apiController = (function () {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-
-      const data = await result.json();
-      // console.log(data);
-      return data;
-    } catch (err) {
-      throw err;
+      ).then( function (response) {
+        // console.log(response);
+        data =  response;
+        return data;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   //fetch user playlist information from api
   async function getPlaylistByID(playlistID, token) {
-    // console.log(token)
+    console.log(token)
     try {
-      const result = await fetch.get(
+      const response = await fetch.get(
         `https://api.spotify.com/v1/playlists/${playlistID}`,
         {
           method: "GET",
@@ -99,20 +106,22 @@ const apiController = (function () {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-
-      const data = await result.json();
-      // console.log(data);
-      return data;
-    } catch (err) {
-      throw err;
+      ).then( function (response) {
+        // console.log(response);
+        data =  response;
+        return data;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   //function used to fetch playlist track list
   async function getMyPlaylistsTrackList(playlistID, token) {
     try {
-      const result = await fetch.get(
+      const response = await fetch.get(
         `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
         {
           method: "GET",
@@ -122,20 +131,22 @@ const apiController = (function () {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-
-      const data = await result.json();
-
-      return data;
-    } catch (err) {
-      throw err;
+      ).then( function (response) {
+        // console.log(response);
+        data =  response;
+        return data;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   //function used to fetch individual track info from playlists
   async function getTracksInfo(trackID, token) {
     try {
-      const result = await fetch.get(
+      const response = await fetch.get(
         `https://api.spotify.com/v1/tracks/${trackID}`,
         {
           method: "GET",
@@ -145,12 +156,15 @@ const apiController = (function () {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-
-      const data = await result.json();
-      return data;
-    } catch (err) {
-      throw err;
+      ).then( function (response) {
+        // console.log(response);
+        data =  response;
+        return data;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -161,7 +175,7 @@ const apiController = (function () {
   //fetch play/pause
   async function playFunction(token, uri) {
     try {
-      const result = await fetch.put(`https://api.spotify.com/v1/me/player/play`, {
+      const response = await fetch.put(`https://api.spotify.com/v1/me/player/play`, {
         method: "PUT",
         headers: {
           Accept: "application/json",
@@ -169,13 +183,16 @@ const apiController = (function () {
           Authorization: `Bearer ${token}`,
         },
         body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
+      }).then( function (response) {
+        // console.log(response);
+        data =  response;
+        console.log("Playing", data);
+        return data;
+      }).catch(function (error) {
+        console.log(error);
       });
-
-      const data = await result.json();
-      console.log("playing", data);
-      return data;
-    } catch (err) {
-      throw err;
+    } catch (error) {
+      console.log(error);
     }
   };
 
