@@ -1,8 +1,13 @@
+require('dotenv').config();
+const jsdom = require("jsdom");
+const JSDOM = jsdom.JSDOM;
+const document = new JSDOM(`../index.html`).window.document;
+const fetch = require("node-fetch");
+console.log(process.env, document, fetch)
 //-----------------------------------//
 //-----API Controller Module---------//
 //-----------------------------------//
 const apiController = (function () {
-
   //get access token
   const getToken = async () => {
     try {
@@ -13,7 +18,7 @@ const apiController = (function () {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization:
-              "Basic " + btoa(clientID + ":" + clientSecret),
+              "Basic " + btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET),
           },
           body: "grant_type=client_credentials",
         }
@@ -58,7 +63,7 @@ const apiController = (function () {
       const limit = 21;
 
       const result = await fetch(
-        `https://api.spotify.com/v1/users/${userID}/playlists?limit=${limit}&offset=0`,
+        `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
         {
           method: "GET",
           headers: {
@@ -201,8 +206,6 @@ const apiController = (function () {
 
 // //initialize local connect device on browser
 // window.onSpotifyWebPlaybackSDKReady = () => {
-//   const token =
-//     "BQBMRGSqIxyP71BLn2JgvRMYyyk6fvPewR2kncYL9qpM7PtsU-APT62Ut2scTcDEK3bAL63UiwYMIULRzGz7lOs0hFJa6COCqJcqDSrPeI8a4kzQ7eN6vopn60F8EvHMrbv2FfZv-uDh9bj36bbHdbk6k9pD_aHKweMQ";
 //   const player = new Spotify.Player({
 //     name: 'GVO Player',
 //     getOAuthToken: cb => {
