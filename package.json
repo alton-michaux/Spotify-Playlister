@@ -1,11 +1,11 @@
 {
-  "name": "my-playlist-app",
+  "name": "gvomusicdiscovery",
   "version": "0.0.1",
   "description": "A web app to display my spotify collection and collect music submissions",
-  "main": "js/bundle.js",
+  "main": "bundle.js",
   "scripts": {
     "test": "mocha js/index.js",
-    "build": "browserify js/index.js -o js/bundle.js"
+    "build": "browserify index.js -o bundle.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/codeGobbler/cTd-Final_Project/issues"
   },
-  "homepage": "https://github.com/codeGobbler/cTd-Final_Project#readme",
+  "homepage": "https://gvomusicdiscovery.netlify.app/",
   "devDependencies": {
     "browserify": "^17.0.0",
     "chai": "^4.3.4",
@@ -38,6 +38,7 @@
     "asn1.js": "^5.4.1",
     "assert": "^1.5.0",
     "available-typed-arrays": "^1.0.2",
+    "axios": "^0.27.2",
     "base64-js": "^1.5.1",
     "bn.js": "^5.2.0",
     "brorand": "^1.1.0",
