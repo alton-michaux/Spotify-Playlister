@@ -1,47 +1,68 @@
 require('dotenv').config();
+const clientID = process.env.CLIENT_ID;
+const clientSecret = process.env.CLIENT_SECRET;
+const userID = process.env.USER_ID;
+
+require('cors');
+
 const jsdom = require("jsdom");
 const JSDOM = jsdom.JSDOM;
 const document = new JSDOM(`index.html`).window.document;
-const fetch = require("axios");
 const { Buffer } = require('buffer');
-// console.log(process.env, document, fetch, Buffer);
+const axios = require('axios');
+
+const tokenFetch = axios.create({
+  headers: {  
+    'Accept': 'application/json, text/plain, */*', 
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'User-Agent': 'axios/0.27.2',
+    'Authorization': 'Basic ' + Buffer.from(clientID + ':' + clientSecret).toString('base64')
+  },
+  responseType: 'json',
+  maxContentLength: 2000,
+  maxBodyLength: 2000,
+  transformRequest: [function (body) {
+    let data = body.access_token;
+    return data;
+  }],
+  params: {
+    grant_type: 'client_credentials'
+  },
+  data: {
+    'grant_type': 'client_credentials'
+  }
+});
+
+const fetch = axios.create({});
 //-----------------------------------//
 //-----API Controller Module---------//
 //-----------------------------------//
 const apiController = (function () {
   //get access token
   async function getToken() {
+    const url = 'https://accounts.spotify.com/api/token';
+    // console.log(tokenFetch)
     try {
-      const response = await fetch.get(
-        "https://accounts.spotify.com/api/token",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization:
-              "Basic " + Buffer.from(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET).toString("base64"),
-          },
-          body: "grant_type=client_credentials",
-        }
-      ).then( function (response) {
-        // console.log(response);
-        data =  response;
-        console.log(data.access_token)
-        return data.access_token;
+      console.log('fetching token...');
+      const response = await tokenFetch.post(url, function(response, body) {
+        const token = response.body.access_token;
+        return token;
+      }).then( function (token) {
+        return token;
       }).catch(function (error) {
         console.log(error);
-      });
+      })
     } catch (error) {
       console.log(error);
     }
-  };
-
+};
   //-----------------------------------//
   //--------API Display Module---------//
   //-----------------------------------//
 
   //fetch genres from spotify for later sorting
   async function getGenres(token) {
+    console.log('fetching genres...');
     try {
       const response = await fetch.get(
         `https://api.spotify.com/v1/recommendations/available-genre-seeds`,
@@ -67,11 +88,12 @@ const apiController = (function () {
 
   //fetch user playlist information from api
   async function getMyPlaylists(token) {
+    console.log('fetching playlists...');
     try {
       const limit = 21;
 
       const response = await fetch.get(
-        `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
+        `https://api.spotify.com/v1/users/${userID}/playlists?limit=${limit}&offset=0`,
         {
           method: "GET",
           headers: {
@@ -94,6 +116,7 @@ const apiController = (function () {
 
   //fetch user playlist information from api
   async function getPlaylistByID(playlistID, token) {
+    console.log('fetching playlist by ID...');
     console.log(token)
     try {
       const response = await fetch.get(
@@ -120,6 +143,7 @@ const apiController = (function () {
 
   //function used to fetch playlist track list
   async function getMyPlaylistsTrackList(playlistID, token) {
+    console.log('fetching playlist track list...');
     try {
       const response = await fetch.get(
         `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
@@ -145,6 +169,7 @@ const apiController = (function () {
 
   //function used to fetch individual track info from playlists
   async function getTracksInfo(trackID, token) {
+    console.log('fetching track info...');
     try {
       const response = await fetch.get(
         `https://api.spotify.com/v1/tracks/${trackID}`,
