@@ -52,10 +52,9 @@ const fetch = axios.create({});
 const apiController = (function () {
   //get access token
   async function getToken() {
-    const url = 'https://accounts.spotify.com/api/token';
     // console.log(tokenFetch)
     try {
-      await tokenFetch.post(url).then( function (response) {
+      await tokenFetch.post('https://accounts.spotify.com/api/token').then( function (response) {
         console.log('fetching token...');
         if (response.status === 200) {
           console.log('token fetched!');
