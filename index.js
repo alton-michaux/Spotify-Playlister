@@ -33,8 +33,7 @@ const tokenFetch = axios.create({
   responseType: 'json',
   maxContentLength: 2000,
   maxBodyLength: 2000,
-  transformRequest: [function (body) {
-    let data = body.access_token;
+  transformRequest: [function (data) {
     return data;
   }],
   params: {
@@ -56,12 +55,13 @@ const apiController = (function () {
     const url = 'https://accounts.spotify.com/api/token';
     // console.log(tokenFetch)
     try {
-      console.log('fetching token...');
-      await tokenFetch.post(url, function(body) {
-        const token = body.access_token;
-        return token;
-      }).then( function (token) {
-        return token;
+      await tokenFetch.post(url).then( function (response) {
+        console.log('fetching token...');
+        if (response.status === 200) {
+          console.log('token fetched!');
+          token = response.data.access_token;
+          return token;
+        }
       }).catch(function (error) {
         console.log(error);
       })
