@@ -11,7 +11,9 @@ const clientSecret = process.env.CLIENT_SECRET;
 const userID = process.env.USER_ID;
 
 // require cors to allow cross origin resource sharing
-require('cors');
+// require('cors');
+const express = require('express');
+const app = express();
 
 // create a new instance of JSDOM for node server to render DOM objects
 const jsdom = require("jsdom");
@@ -45,6 +47,10 @@ const tokenFetch = axios.create({
 });
 // create a new instance of axios for get requests to the Spotify API
 const fetch = axios.create({});
+
+app.get("/", (req, res) => {
+  res.send(document.documentElement.outerHTML);
+});
 
 //-----------------------------------//
 //-----API Controller Module---------//
@@ -756,3 +762,7 @@ const appController = (function (apiCtrl, uiCtrl) {
   asyncOps();
   }
 })(apiController, uiController);
+
+app.listen(5000, ()=>{
+  console.log('server running at Port 5000')
+})
