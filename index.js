@@ -1,16 +1,28 @@
+//-----------------------------------//
+//-----Node Environment Setup--------//
+//-----------------------------------//
+
+// require dotenv to load environment variables
 require('dotenv').config();
+
+// assign secret variables to process.env
 const clientID = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const userID = process.env.USER_ID;
 
+// require cors to allow cross origin resource sharing
 require('cors');
 
+// create a new instance of JSDOM for node server to render DOM objects
 const jsdom = require("jsdom");
 const JSDOM = jsdom.JSDOM;
 const document = new JSDOM(`index.html`).window.document;
-const { Buffer } = require('buffer');
-const axios = require('axios');
 
+// create a new instance of Buffer to convert base64 string to binary
+const { Buffer } = require('buffer');
+
+// create a new instance of the axios client for posting data to the API
+const axios = require('axios');
 const tokenFetch = axios.create({
   headers: {  
     'Accept': 'application/json, text/plain, */*', 
@@ -32,8 +44,9 @@ const tokenFetch = axios.create({
     'grant_type': 'client_credentials'
   }
 });
-
+// create a new instance of axios for get requests to the Spotify API
 const fetch = axios.create({});
+
 //-----------------------------------//
 //-----API Controller Module---------//
 //-----------------------------------//
@@ -44,8 +57,8 @@ const apiController = (function () {
     // console.log(tokenFetch)
     try {
       console.log('fetching token...');
-      const response = await tokenFetch.post(url, function(response, body) {
-        const token = response.body.access_token;
+      await tokenFetch.post(url, function(body) {
+        const token = body.access_token;
         return token;
       }).then( function (token) {
         return token;
