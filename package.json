@@ -2,7 +2,7 @@
   "name": "gvomusicdiscovery",
   "version": "0.0.1",
   "description": "A web app to display my spotify collection and collect music submissions",
-  "main": "bundle.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha js/index.js",
     "build": "browserify index.js -o bundle.js"
@@ -23,7 +23,6 @@
   },
   "homepage": "https://gvomusicdiscovery.netlify.app/",
   "devDependencies": {
-    "browserify": "^17.0.0",
     "chai": "^4.3.4",
     "dotenv": "^16.0.1",
     "mocha": "^10.0.0"
@@ -44,12 +43,6 @@
     "brorand": "^1.1.0",
     "browser-pack": "^6.1.0",
     "browser-resolve": "^2.0.0",
-    "browserify-aes": "^1.2.0",
-    "browserify-cipher": "^1.0.1",
-    "browserify-des": "^1.0.2",
-    "browserify-rsa": "^4.1.0",
-    "browserify-sign": "^4.2.1",
-    "browserify-zlib": "^0.2.0",
     "buffer": "^5.2.1",
     "buffer-from": "^1.1.1",
     "buffer-xor": "^1.0.3",

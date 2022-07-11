@@ -439,7 +439,7 @@ const uiController = (function () {
     },
 
     storeToken(value) {
-      console.log(`document: ${document}`);
+      console.log(`document: ${domElements.hToken}`);
       document.querySelector(domElements.hToken).value = value;
     },
 
@@ -479,83 +479,93 @@ const appController = (function (apiCtrl, uiCtrl) {
       //retrieve token
       let token = uiCtrl.getStoredToken().token;
       //fetch genres
-      const genreObj = await apiCtrl.getGenres(token);
-      // console.log(genreObj);
-      //populate drop-down menu with genres
-      genreObj.forEach((element) => uiCtrl.assignGenre(element, element));
+      try {
+        const genreObj = await apiCtrl.getGenres(token);
+        // console.log(genreObj);
+        //populate drop-down menu with genres
+        genreObj.forEach((element) => uiCtrl.assignGenre(element, element));
+      } catch (error) {
+        console.log(error);
+      };
     };
 
     const musicPopulate = async () => {
       //retrieve token
       let token = uiCtrl.getStoredToken().token;
-      //fetch playlist info for each playlist
-      const data = await apiCtrl.getMyPlaylists(token);
-      //populate title
-      const title = data.items[3].name;
-      const id = data.items[3].id;
-      // console.log(data);
-      uiCtrl.assignTitle(id, title);
-      //place image on center div
-      uiCtrl.assignPlaylistArt(data.items[3].images[0].url);
-      //populate playlist selection library
-      for (i = 0; i < data.items.length; i++) {
-        // console.log(data.items[i])
-        uiCtrl.populatePlaylists(
-          data.items[i].id,
-          data.items[i].images[0].url,
-          data.items[i].name
+
+      try {
+        //fetch playlist info for each playlist
+        const data = await apiCtrl.getMyPlaylists(token);
+        //populate title
+        const title = data.items[3].name;
+        const id = data.items[3].id;
+        // console.log(data);
+        uiCtrl.assignTitle(id, title);
+        //place image on center div
+        uiCtrl.assignPlaylistArt(data.items[3].images[0].url);
+        //populate playlist selection library
+        for (i = 0; i < data.items.length; i++) {
+          // console.log(data.items[i])
+          uiCtrl.populatePlaylists(
+            data.items[i].id,
+            data.items[i].images[0].url,
+            data.items[i].name
+          );
+        };
+      } catch (error) {
+          console.log(error);
+      };
+
+      try {
+        //fetch tracklist info for each track
+        const newData = await apiCtrl.getMyPlaylistsTrackList(
+          data.items[3].id,
+          token
         );
-      }
-      //fetch tracklist info for each track
-      const newData = await apiCtrl.getMyPlaylistsTrackList(
-        data.items[3].id,
-        token
-      );
-      // console.log(newData);
-      for (i = 0; i < newData.items.length; i++) {
-        //place html
-        uiCtrl.populateTrackList(
-          newData.items[i].track.uri,
-          i + 1,
-          newData.items[i].track.name,
-          newData.items[i].track.artists[0].name,
-          newData.items[i].track.duration_ms,
-          newData.items[i].track.id
+        // console.log(newData);
+        for (i = 0; i < newData.items.length; i++) {
+          //place html
+          uiCtrl.populateTrackList(
+            newData.items[i].track.uri,
+            i + 1,
+            newData.items[i].track.name,
+            newData.items[i].track.artists[0].name,
+            newData.items[i].track.duration_ms,
+            newData.items[i].track.id
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      };
+
+      try {
+        //fetch current song image
+        const newerData = await apiCtrl.getTracksInfo(
+          newData.items[0].track.id,
+          token
         );
+        // console.log(newerData)
+        uiCtrl.populateSongInfo(
+          newerData.name,
+          newerData.artists[0].name,
+          newerData.album.name
+        );
+      } catch (error) {
+        console.log(error);
+      };
+
+      try {
+        const newestData = await apiCtrl.getTracksInfo(
+          newData.items[0].track.id,
+          token
+        );
+        // console.log(newestData)
+        //place song images
+        uiCtrl.populateSongImage(newestData.album.images[0].url);
+      } catch (error) {
+        console.log(error);
       }
-      //fetch current song image
-      const newerData = await apiCtrl.getTracksInfo(
-        newData.items[0].track.id,
-        token
-      );
-      // console.log(newerData)
-      uiCtrl.populateSongInfo(
-        newerData.name,
-        newerData.artists[0].name,
-        newerData.album.name
-      );
-      const newestData = await apiCtrl.getTracksInfo(
-        newData.items[0].track.id,
-        token
-      );
-      // console.log(newestData)
-      //place song images
-      uiCtrl.populateSongImage(newestData.album.images[0].url);
     };
-
-    //-----------------------------------//
-    //-------User Login Module-----------//
-    //-----------------------------------//
-
-    // const loginListener = async () => {
-    //   const loginDiv = domOutput.hiddenDiv;
-    //   const login = domOutput.btnLogin;
-    //   login.addEventListener("click", async () => {
-    //     musicPopulate();
-    //     genrePopulate();
-    //     loginDiv.style.display = "none";
-    //   });
-    // };
 
     //-----------------------------------//
     //-------App Event Listeners---------//
@@ -568,58 +578,66 @@ const appController = (function (apiCtrl, uiCtrl) {
       genreSelect.addEventListener("change", async () => {
         uiCtrl.resetPlaylists();
         const genreId = genreSelect.options[genreSelect.selectedIndex].value;
-        const playlist = await apiCtrl.getMyPlaylists(token);
-        for (i = 0; i < playlist.items.length; i++) {
-          // console.log(i);
-          const description = playlist.items[i].description;
-          // console.log(description.split(" "));
-          if (description.split(" ").includes(genreId)) {
-            // console.log(`${i} is a match`);
-            // console.log(`${description} ${i} contains ${genreId}!`);
-            //populate title
-            const title = playlist.items[i].name;
-            // console.log(title);
-            uiCtrl.resetTracks();
-            uiCtrl.assignTitle(genreId, title);
-            //assign current playlist image to center div
-            uiCtrl.assignPlaylistArt(playlist.items[i].images[0].url);
-            //assign current playlist(s)
-            uiCtrl.populatePlaylists(
-              playlist.items[i].id,
-              playlist.items[i].images[0].url,
-              playlist.items[i].name
+        try {
+          const playlist = await apiCtrl.getMyPlaylists(token);
+          for (i = 0; i < playlist.items.length; i++) {
+            // console.log(i);
+            const description = playlist.items[i].description;
+            // console.log(description.split(" "));
+            if (description.split(" ").includes(genreId)) {
+              // console.log(`${i} is a match`);
+              // console.log(`${description} ${i} contains ${genreId}!`);
+              //populate title
+              const title = playlist.items[i].name;
+              // console.log(title);
+              uiCtrl.resetTracks();
+              uiCtrl.assignTitle(genreId, title);
+              //assign current playlist image to center div
+              uiCtrl.assignPlaylistArt(playlist.items[i].images[0].url);
+              //assign current playlist(s)
+              uiCtrl.populatePlaylists(
+                playlist.items[i].id,
+                playlist.items[i].images[0].url,
+                playlist.items[i].name
+              );
+            }
+          }} catch (error) {
+            console.log(error);
+          };
+
+        try {
+          //assign current tracklist
+          const newData = await apiCtrl.getMyPlaylistsTrackList(
+            playlist.items[i].id,
+            token
+          );
+          // console.log(newData);
+          for (j = 0; j < newData.items.length; j++) {
+            //place current tracklist
+            uiCtrl.populateTrackList(
+              newData.items[j].track.uri,
+              j + 1,
+              newData.items[j].track.name,
+              newData.items[j].track.artists[0].name,
+              newData.items[j].track.duration_ms,
+              newData.items[i].track.id
             );
-            //assign current tracklist
-            const newData = await apiCtrl.getMyPlaylistsTrackList(
-              playlist.items[i].id,
+            //fetch current song image
+            const newerData = await apiCtrl.getTracksInfo(
+              newData.items[j].track.id,
               token
             );
-            // console.log(newData);
-            for (j = 0; j < newData.items.length; j++) {
-              //place current tracklist
-              uiCtrl.populateTrackList(
-                newData.items[j].track.uri,
-                j + 1,
-                newData.items[j].track.name,
-                newData.items[j].track.artists[0].name,
-                newData.items[j].track.duration_ms,
-                newData.items[i].track.id
-              );
-              //fetch current song image
-              const newerData = await apiCtrl.getTracksInfo(
-                newData.items[j].track.id,
-                token
-              );
-              // console.log(newerData)
-              uiCtrl.populateSongInfo(
-                newerData.name,
-                newerData.artists[0].name,
-                newerData.album.name
-              );
-              uiCtrl.populateSongImage(newerData.album.images[0].url);
-            }
+            // console.log(newerData)
+            uiCtrl.populateSongInfo(
+              newerData.name,
+              newerData.artists[0].name,
+              newerData.album.name
+            );
+            uiCtrl.populateSongImage(newerData.album.images[0].url);
           }
-        }
+        } catch (error) {
+          console.log(error);
+        };
       });
     };
 
@@ -632,36 +650,39 @@ const appController = (function (apiCtrl, uiCtrl) {
         uiCtrl.resetTracks();
         const btnID = e.target.value; // <----- there is a bug here, if user clicks image it will not work
         // console.log(btnID, "clicked");
-        const currentPlaylist = await apiCtrl.getPlaylistByID(btnID, token);
-        // console.log(currentPlaylist);
-        uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
-        uiCtrl.assignTitle(currentPlaylist.id, currentPlaylist.name);
-        const trackList = await apiCtrl.getMyPlaylistsTrackList(btnID, token);
-        // console.log(trackList);
-        for (i = 0; i < trackList.items.length; i++) {
-          uiCtrl.populateTrackList(
-            trackList.items[i].track.uri,
-            i + 1,
-            trackList.items[i].track.name,
-            trackList.items[i].track.artists[0].name,
-            trackList.items[i].track.duration_ms,
-            trackList.items[i].track.id
-          );
-          //fetch current song image
-          const trackInfo = await apiCtrl.getTracksInfo(
-            trackList.items[i].track.id,
-            token
-          );
-          // console.log(trackInfo);
-          uiCtrl.populateSongInfo(
-            trackInfo.name,
-            trackInfo.artists[0].name,
-            trackInfo.album.name
-          );
-          uiCtrl.populateSongImage(trackInfo.album.images[0].url);
-        }
-      });
-    };
+        try {
+          const currentPlaylist = await apiCtrl.getPlaylistByID(btnID, token);
+          // console.log(currentPlaylist);
+          uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
+          uiCtrl.assignTitle(currentPlaylist.id, currentPlaylist.name);
+          const trackList = await apiCtrl.getMyPlaylistsTrackList(btnID, token);
+          // console.log(trackList);
+          for (i = 0; i < trackList.items.length; i++) {
+            uiCtrl.populateTrackList(
+              trackList.items[i].track.uri,
+              i + 1,
+              trackList.items[i].track.name,
+              trackList.items[i].track.artists[0].name,
+              trackList.items[i].track.duration_ms,
+              trackList.items[i].track.id
+            );
+            //fetch current song image
+            const trackInfo = await apiCtrl.getTracksInfo(
+              trackList.items[i].track.id,
+              token
+            );
+            // console.log(trackInfo);
+            uiCtrl.populateSongInfo(
+              trackInfo.name,
+              trackInfo.artists[0].name,
+              trackInfo.album.name
+            );
+            uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+          }
+        } catch (error) {
+          console.log(error);
+        };
+    });
 
     const tracklistListener = () => {
       //retrieve token
@@ -673,16 +694,26 @@ const appController = (function (apiCtrl, uiCtrl) {
         // const uri = document.querySelector("uri");
         const trackID = e.target.value;
         // console.log(trackID)
-        const trackInfo = await apiCtrl.getTracksInfo(trackID, token);
-        uiCtrl.populateSongInfo(
-          trackInfo.name,
-          trackInfo.artists[0].name,
-          trackInfo.album.name
-        );
-        uiCtrl.populateSongImage(trackInfo.album.images[0].url);
-        console.log(trackInfo.uri);
-        const uri = trackInfo;
-        const trackPlay = await apiCtrl.playFunction(token, uri);
+
+        try {
+          const trackInfo = await apiCtrl.getTracksInfo(trackID, token);
+          uiCtrl.populateSongInfo(
+            trackInfo.name,
+            trackInfo.artists[0].name,
+            trackInfo.album.name
+          );
+          uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+          console.log(trackInfo.uri);
+          const uri = trackInfo;
+        } catch (error) {
+          console.log(error);
+        };
+
+        try {
+          const trackPlay = await apiCtrl.playFunction(token, uri);
+        } catch (error) {
+          console.log(error);
+        };
       });
     };
 
@@ -696,8 +727,12 @@ const appController = (function (apiCtrl, uiCtrl) {
         const tracklist = domOutput.playlistSongs.children;
         const uri = tracklist[0].childNodes[0].defaultValue;
         console.log(uri);
-        await apiCtrl.playFunction(token, uri);
-      });
+
+        try {
+          await apiCtrl.playFunction(token, uri);
+        } catch (error) {
+          console.log(error);
+        };
       // songSkip.addEventListener("click", async () => {
       //   // console.log("skip clicked")
       //   await apiCtrl.playFunction(token, uri);
@@ -706,6 +741,7 @@ const appController = (function (apiCtrl, uiCtrl) {
       //   //  console.log("back clicked")
       //   await apiCtrl.playFunction(token, uri);
       // })
+      })
     };
 
     
@@ -714,9 +750,9 @@ const appController = (function (apiCtrl, uiCtrl) {
     genreListener();
     playlistListener();
     trackPlayListener();
-    // loginListener();
     tracklistListener();
   };
 
   asyncOps();
+  }
 })(apiController, uiController);
