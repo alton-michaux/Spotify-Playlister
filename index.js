@@ -57,8 +57,8 @@ const apiController = (function () {
       await tokenFetch.post('https://accounts.spotify.com/api/token').then( function (response) {
         console.log('fetching token...');
         if (response.status === 200) {
-          console.log('token fetched!');
           token = response.data.access_token;
+          // console.log(token)
           return token;
         }
       }).catch(function (error) {
@@ -439,6 +439,7 @@ const uiController = (function () {
     },
 
     storeToken(value) {
+      console.log(`document: ${document}`);
       document.querySelector(domElements.hToken).value = value;
     },
 
@@ -460,8 +461,14 @@ const appController = (function (apiCtrl, uiCtrl) {
   // console.log(domOutput);
 
   const asyncOps = async () => {
+    console.log("starting async ops");
     //fetch token
-    let token = await apiCtrl.getToken();
+    try { 
+      const token = await apiCtrl.getToken()
+    } catch (error) {
+      console.log(error);
+    };
+    // console.log(token);
     //store token in hidden html element
     uiCtrl.storeToken(token);
 
