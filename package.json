@@ -5,10 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha js/server.js",
-    "build": "node server.js",
+    "build": "browserify index.js -o bundle.js",
     "start:development": "cross-env NODE_ENV=development nodemon server.js",
     "start:production": "cross-env NODE_ENV=production nodemon server.js"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/codeGobbler/cTd-Final_Project.git"
@@ -46,6 +46,7 @@
     "brorand": "^1.1.0",
     "browser-pack": "^6.1.0",
     "browser-resolve": "^2.0.0",
+    "browserify": "^17.0.0",
     "buffer": "^5.2.1",
     "buffer-from": "^1.1.1",
     "buffer-xor": "^1.0.3",
