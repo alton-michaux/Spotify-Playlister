@@ -15,10 +15,11 @@ const env = process.env.NODE_ENV;
 const configration = config[env];
 console.log(env);
 
+// explicityly specify css and js files
 app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
-	res.sendFile(__dirname + "/index.html");
+	res.status(200).sendFile(__dirname + "/index.html");
 });
 
 // listen to port

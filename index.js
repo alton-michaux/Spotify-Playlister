@@ -20,7 +20,7 @@ require('cors');
 // create a new instance of JSDOM for node server to render DOM objects
 const jsdom = require("jsdom");
 const JSDOM = jsdom.JSDOM;
-const document = new JSDOM(`index.html`).window.document;
+const document = new JSDOM(`/index.html`).window.document;
 
 // create a new instance of Buffer to convert base64 string to binary
 const { Buffer } = require('buffer');
