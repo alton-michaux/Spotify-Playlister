@@ -15,6 +15,8 @@ const env = process.env.NODE_ENV;
 const configration = config[env];
 console.log(env);
 
+app.use(express.static(__dirname));
+
 app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/index.html");
 });
