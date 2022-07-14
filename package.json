@@ -2,11 +2,13 @@
   "name": "gvomusicdiscovery",
   "version": "0.0.1",
   "description": "A web app to display my spotify collection and collect music submissions",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "mocha js/index.js",
-    "build": "node index.js"
-  },
+    "test": "mocha js/server.js",
+    "build": "node server.js",
+    "start:development": "cross-env NODE_ENV=development nodemon server.js",
+    "start:production": "cross-env NODE_ENV=production nodemon server.js"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/codeGobbler/cTd-Final_Project.git"
@@ -24,6 +26,7 @@
   "homepage": "https://gvomusicdiscovery.netlify.app/",
   "devDependencies": {
     "chai": "^4.3.4",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "mocha": "^10.0.0"
   },

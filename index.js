@@ -10,10 +10,12 @@ const clientID = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const userID = process.env.USER_ID;
 
+// require express to create a server
+// const express = require('express');
+// const app = express();
+
 // require cors to allow cross origin resource sharing
-// require('cors');
-const express = require('express');
-const app = express();
+require('cors');
 
 // create a new instance of JSDOM for node server to render DOM objects
 const jsdom = require("jsdom");
@@ -47,10 +49,6 @@ const tokenFetch = axios.create({
 });
 // create a new instance of axios for get requests to the Spotify API
 const fetch = axios.create({});
-
-app.get("/", (req, res) => {
-  res.send(document.documentElement.outerHTML);
-});
 
 //-----------------------------------//
 //-----API Controller Module---------//
@@ -267,54 +265,6 @@ const apiController = (function () {
     },
   };
 })();
-
-//-----------------------------------//
-//-----SDK/API Playback Module-------//
-//-----------------------------------//
-
-// //initialize local connect device on browser
-// window.onSpotifyWebPlaybackSDKReady = () => {
-//   const player = new Spotify.Player({
-//     name: 'GVO Player',
-//     getOAuthToken: cb => {
-//       cb(token);
-//     },
-//     volume: 0.5,
-//   });
-
-//   // Error handling
-//   player.addListener("initialization_error", ({ message }) => {
-//     console.error(message);
-//   });
-//   player.addListener("authentication_error", ({ message }) => {
-//     console.error(message);
-//   });
-//   player.addListener("account_error", ({ message }) => {
-//     console.error(message);
-//   });
-//   player.addListener("playback_error", ({ message }) => {
-//     console.error(message);
-//   });
-
-//   // Playback status updates
-//   player.addListener("player_state_changed", (state) => {
-//     console.log(state);
-//   });
-
-//   // Ready
-//   player.addListener("ready", ({ device_id }) => {
-//     console.log("Ready with Device ID", device_id);
-//   });
-
-//   // Not Ready
-//   player.addListener("not_ready", ({ device_id }) => {
-//     console.log("Device ID has gone offline", device_id);
-//   });
-
-//   // Connect to the player!
-//   player.connect();
-
-// };
 
 //-----------------------------------//
 //-------UI Selector Module----------//
@@ -739,14 +689,6 @@ const appController = (function (apiCtrl, uiCtrl) {
         } catch (error) {
           console.log(error);
         };
-      // songSkip.addEventListener("click", async () => {
-      //   // console.log("skip clicked")
-      //   await apiCtrl.playFunction(token, uri);
-      // })
-      // songBack.addEventListener("click", async () => {
-      //   //  console.log("back clicked")
-      //   await apiCtrl.playFunction(token, uri);
-      // })
       })
     };
 
@@ -762,7 +704,3 @@ const appController = (function (apiCtrl, uiCtrl) {
   asyncOps();
   }
 })(apiController, uiController);
-
-app.listen(5000, ()=>{
-  console.log('server running at Port 5000')
-})
