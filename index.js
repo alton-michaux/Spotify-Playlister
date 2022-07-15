@@ -4,11 +4,13 @@
 
 // require dotenv to load environment variables
 require('dotenv').config();
+console.log(process.env);
 
 // assign secret variables to process.env
 const clientID = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const userID = process.env.USER_ID;
+console.log(clientID, clientSecret, userID);
 
 // require express to create a server
 // const express = require('express');

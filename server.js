@@ -9,7 +9,7 @@ const app = express();
 const config = require("./config/config.json");
 
 // specify environment
-const env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV || 'development';
 
 // specify port according to environment
 const configration = config[env];
