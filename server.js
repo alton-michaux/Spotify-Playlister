@@ -17,7 +17,7 @@ const env = process.env.NODE_ENV || 'development';
 // specify port according to environment
 const configration = config[env];
 
-console.log(index)
+console.log(index());
 
 // explicityly specify css files
 app.use(express.static(__dirname));
