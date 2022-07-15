@@ -1,4 +1,5 @@
 module.exports = function() {
+  console.log('entering index.js');
   //-----------------------------------//
   //-----Node Environment Setup--------//
   //-----------------------------------//
@@ -664,6 +665,7 @@ module.exports = function() {
     asyncOps();
     }
   })(apiController, uiController);
+  console.log("app loaded");
 };
 
 // module.exports = { appController, apiController, uiController };

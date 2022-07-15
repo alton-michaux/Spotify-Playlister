@@ -22,8 +22,10 @@ console.log(index)
 // explicityly specify css files
 app.use(express.static(__dirname));
 
-app.get("/", (req, res) => {
-	res.status(200).sendFile(__dirname + "./index.html");
+app.get("/", (res) => {
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+	res.sendFile(__dirname + "./index.html");
+	res.send(index)
 });
 
 // listen to port
