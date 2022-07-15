@@ -4,13 +4,11 @@
 
 // require dotenv to load environment variables
 require('dotenv').config();
-console.log(process.env);
 
 // assign secret variables to process.env
 const clientID = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const userID = process.env.USER_ID;
-console.log(clientID, clientSecret, userID);
 
 // require express to create a server
 // const express = require('express');
@@ -22,7 +20,7 @@ require('cors');
 // create a new instance of JSDOM for node server to render DOM objects
 const jsdom = require("jsdom");
 const JSDOM = jsdom.JSDOM;
-const document = new JSDOM(`/index.html`).window.document;
+const document = new JSDOM(`./index.html`).window.document;
 
 // create a new instance of Buffer to convert base64 string to binary
 const { Buffer } = require('buffer');
@@ -58,13 +56,11 @@ const fetch = axios.create({});
 const apiController = (function () {
   //get access token
   async function getToken() {
-    // console.log(tokenFetch)
     try {
       await tokenFetch.post('https://accounts.spotify.com/api/token').then( function (response) {
         console.log('fetching token...');
         if (response.status === 200) {
           token = response.data.access_token;
-          // console.log(token)
           return token;
         }
       }).catch(function (error) {
@@ -93,7 +89,6 @@ const apiController = (function () {
           },
         }
       ).then( function (response) {
-        // console.log(response);
         data =  response;
         return data.genres;
       }).catch(function (error) {
@@ -121,7 +116,6 @@ const apiController = (function () {
           },
         }
       ).then( function (response) {
-        // console.log(response);
         data =  response;
         return data;
       }).catch(function (error) {
@@ -135,7 +129,6 @@ const apiController = (function () {
   //fetch user playlist information from api
   async function getPlaylistByID(playlistID, token) {
     console.log('fetching playlist by ID...');
-    console.log(token)
     try {
       const response = await fetch.get(
         `https://api.spotify.com/v1/playlists/${playlistID}`,
@@ -148,7 +141,6 @@ const apiController = (function () {
           },
         }
       ).then( function (response) {
-        // console.log(response);
         data =  response;
         return data;
       }).catch(function (error) {
@@ -174,7 +166,6 @@ const apiController = (function () {
           },
         }
       ).then( function (response) {
-        // console.log(response);
         data =  response;
         return data;
       }).catch(function (error) {
@@ -200,7 +191,6 @@ const apiController = (function () {
           },
         }
       ).then( function (response) {
-        // console.log(response);
         data =  response;
         return data;
       }).catch(function (error) {
@@ -227,7 +217,6 @@ const apiController = (function () {
         },
         body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
       }).then( function (response) {
-        // console.log(response);
         data =  response;
         console.log("Playing", data);
         return data;
@@ -397,7 +386,6 @@ const uiController = (function () {
     },
 
     storeToken(value) {
-      console.log(`document: ${domElements.hToken}`);
       document.querySelector(domElements.hToken).value = value;
     },
 
@@ -416,17 +404,14 @@ const uiController = (function () {
 const appController = (function (apiCtrl, uiCtrl) {
   //get object reference for DOM outputs
   const domOutput = uiCtrl.outputField();
-  // console.log(domOutput);
 
   const asyncOps = async () => {
-    console.log("starting async ops");
     //fetch token
     try { 
       const token = await apiCtrl.getToken()
     } catch (error) {
       console.log(error);
     };
-    // console.log(token);
     //store token in hidden html element
     uiCtrl.storeToken(token);
 
@@ -439,7 +424,6 @@ const appController = (function (apiCtrl, uiCtrl) {
       //fetch genres
       try {
         const genreObj = await apiCtrl.getGenres(token);
-        // console.log(genreObj);
         //populate drop-down menu with genres
         genreObj.forEach((element) => uiCtrl.assignGenre(element, element));
       } catch (error) {
@@ -457,13 +441,11 @@ const appController = (function (apiCtrl, uiCtrl) {
         //populate title
         const title = data.items[3].name;
         const id = data.items[3].id;
-        // console.log(data);
         uiCtrl.assignTitle(id, title);
         //place image on center div
         uiCtrl.assignPlaylistArt(data.items[3].images[0].url);
         //populate playlist selection library
         for (i = 0; i < data.items.length; i++) {
-          // console.log(data.items[i])
           uiCtrl.populatePlaylists(
             data.items[i].id,
             data.items[i].images[0].url,
@@ -480,7 +462,6 @@ const appController = (function (apiCtrl, uiCtrl) {
           data.items[3].id,
           token
         );
-        // console.log(newData);
         for (i = 0; i < newData.items.length; i++) {
           //place html
           uiCtrl.populateTrackList(
@@ -502,7 +483,6 @@ const appController = (function (apiCtrl, uiCtrl) {
           newData.items[0].track.id,
           token
         );
-        // console.log(newerData)
         uiCtrl.populateSongInfo(
           newerData.name,
           newerData.artists[0].name,
@@ -517,7 +497,6 @@ const appController = (function (apiCtrl, uiCtrl) {
           newData.items[0].track.id,
           token
         );
-        // console.log(newestData)
         //place song images
         uiCtrl.populateSongImage(newestData.album.images[0].url);
       } catch (error) {
@@ -539,15 +518,10 @@ const appController = (function (apiCtrl, uiCtrl) {
         try {
           const playlist = await apiCtrl.getMyPlaylists(token);
           for (i = 0; i < playlist.items.length; i++) {
-            // console.log(i);
             const description = playlist.items[i].description;
-            // console.log(description.split(" "));
             if (description.split(" ").includes(genreId)) {
-              // console.log(`${i} is a match`);
-              // console.log(`${description} ${i} contains ${genreId}!`);
               //populate title
               const title = playlist.items[i].name;
-              // console.log(title);
               uiCtrl.resetTracks();
               uiCtrl.assignTitle(genreId, title);
               //assign current playlist image to center div
@@ -569,7 +543,6 @@ const appController = (function (apiCtrl, uiCtrl) {
             playlist.items[i].id,
             token
           );
-          // console.log(newData);
           for (j = 0; j < newData.items.length; j++) {
             //place current tracklist
             uiCtrl.populateTrackList(
@@ -585,7 +558,6 @@ const appController = (function (apiCtrl, uiCtrl) {
               newData.items[j].track.id,
               token
             );
-            // console.log(newerData)
             uiCtrl.populateSongInfo(
               newerData.name,
               newerData.artists[0].name,
@@ -603,18 +575,14 @@ const appController = (function (apiCtrl, uiCtrl) {
       //retrieve token
       let token = uiCtrl.getStoredToken().token;
       const playlistContainer = domOutput.playlistLibrary;
-      // console.log(playlistContainer);
       playlistContainer.addEventListener("click", async (e) => {
         uiCtrl.resetTracks();
         const btnID = e.target.value; // <----- there is a bug here, if user clicks image it will not work
-        // console.log(btnID, "clicked");
         try {
           const currentPlaylist = await apiCtrl.getPlaylistByID(btnID, token);
-          // console.log(currentPlaylist);
           uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
           uiCtrl.assignTitle(currentPlaylist.id, currentPlaylist.name);
           const trackList = await apiCtrl.getMyPlaylistsTrackList(btnID, token);
-          // console.log(trackList);
           for (i = 0; i < trackList.items.length; i++) {
             uiCtrl.populateTrackList(
               trackList.items[i].track.uri,
@@ -629,7 +597,6 @@ const appController = (function (apiCtrl, uiCtrl) {
               trackList.items[i].track.id,
               token
             );
-            // console.log(trackInfo);
             uiCtrl.populateSongInfo(
               trackInfo.name,
               trackInfo.artists[0].name,
@@ -651,7 +618,6 @@ const appController = (function (apiCtrl, uiCtrl) {
         // const trackDiv = document.getElementsByClassName("track-items");
         // const uri = document.querySelector("uri");
         const trackID = e.target.value;
-        // console.log(trackID)
 
         try {
           const trackInfo = await apiCtrl.getTracksInfo(trackID, token);
@@ -661,7 +627,6 @@ const appController = (function (apiCtrl, uiCtrl) {
             trackInfo.album.name
           );
           uiCtrl.populateSongImage(trackInfo.album.images[0].url);
-          console.log(trackInfo.uri);
           const uri = trackInfo;
         } catch (error) {
           console.log(error);
@@ -684,7 +649,6 @@ const appController = (function (apiCtrl, uiCtrl) {
       songPlay.addEventListener("click", async () => {
         const tracklist = domOutput.playlistSongs.children;
         const uri = tracklist[0].childNodes[0].defaultValue;
-        console.log(uri);
 
         try {
           await apiCtrl.playFunction(token, uri);
@@ -706,3 +670,5 @@ const appController = (function (apiCtrl, uiCtrl) {
   asyncOps();
   }
 })(apiController, uiController);
+
+module.exports = { apiController, uiController, appController };

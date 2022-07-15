@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha js/server.js",
-    "build": "browserify index.js -o bundle.js",
+    "build": "browserify index.js -o --standalone bundle.js",
     "start:development": "cross-env NODE_ENV=development nodemon server.js",
     "start:production": "cross-env NODE_ENV=production nodemon server.js"
   },
@@ -135,6 +135,7 @@
     "module-deps": "^6.2.3",
     "nanoid": "^3.3.3",
     "node-fetch": "^3.2.6",
+    "npm": "^8.14.0",
     "object-assign": "^4.1.1",
     "object-inspect": "^1.9.0",
     "object-keys": "^1.1.1",

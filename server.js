@@ -1,6 +1,9 @@
 // require dotenv to load environment variables
 require('dotenv').config();
 
+// require index.js to load javascript file
+require('./index.js');
+
 // require express to create a server
 const express = require('express');
 const app = express();
@@ -13,7 +16,6 @@ const env = process.env.NODE_ENV || 'development';
 
 // specify port according to environment
 const configration = config[env];
-console.log(env);
 
 // explicityly specify css and js files
 app.use(express.static(__dirname));
