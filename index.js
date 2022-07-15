@@ -671,4 +671,4 @@ const appController = (function (apiCtrl, uiCtrl) {
   }
 })(apiController, uiController);
 
-module.exports = { apiController, uiController, appController };
+module.exports = { appController, apiController, uiController };

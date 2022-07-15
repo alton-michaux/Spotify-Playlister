@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha js/server.js",
-    "build": "browserify index.js -o --standalone bundle.js",
+    "build": "browserify index.js -o --standalone MusicModules > bundle.js && browserify index.js -o bundle.js",
     "start:development": "cross-env NODE_ENV=development nodemon server.js",
     "start:production": "cross-env NODE_ENV=production nodemon server.js"
   },
