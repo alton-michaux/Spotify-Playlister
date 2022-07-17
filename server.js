@@ -2,6 +2,8 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import * as JS from './index.js';
+
 // require express to create a server
 import * as express from 'express';
 
@@ -29,7 +31,7 @@ console.log("server started...");
 // explicityly specify css files
 app.use(express.static(__dirname));
 
-app.get("/", (res) => {
+app.get("/", async (req, res) => {
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.sendFile(__dirname + "./index.html");
 });
