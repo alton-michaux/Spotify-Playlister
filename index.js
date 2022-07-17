@@ -18,15 +18,8 @@ const document = await JSDOM.fromFile('./index.html').then(dom => {
   console.log(err);
 });
 
-
-// create a new instance of Buffer to convert base64 string to binary
-import * as buffer from 'buffer';
-
 // create a new instance of the node-fetch client for connecting to the API
 import fetch from 'node-fetch';
-
-// create a new instance of axios for get requests to the Spotify API
-// const fetch = axios.default.create({});
 
 //-----------------------------------//
 //-----API Controller Module---------//
@@ -363,7 +356,6 @@ const uiController = (function () {
     },
 
     storeToken(value) {
-      console.log(value);
       document.querySelector(domElements.hToken).value = value;
     },
 
@@ -387,7 +379,6 @@ const appController = (function (apiCtrl, uiCtrl) {
     //fetch token
     try {
       let token = await apiCtrl.getToken();
-      console.log(token);
       //retrieve token and store it in hidden html element
       uiCtrl.storeToken(token);
     } catch (error) {

@@ -48,7 +48,6 @@
     "browser-pack": "^6.1.0",
     "browser-resolve": "^2.0.0",
     "browserify": "^17.0.0",
-    "buffer": "^5.2.1",
     "buffer-from": "^1.1.1",
     "buffer-xor": "^1.0.3",
     "builtin-status-codes": "^3.0.0",
