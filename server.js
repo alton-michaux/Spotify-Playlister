@@ -29,7 +29,7 @@ console.log("server started...");
 // explicityly specify css files
 app.use(express.static(__dirname));
 
-app.get("/", (res) => {
+app.get("/", (req, res) => {
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.sendFile(__dirname + "./index.html");
 });

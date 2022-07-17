@@ -22,32 +22,11 @@ const document = await JSDOM.fromFile('./index.html').then(dom => {
 // create a new instance of Buffer to convert base64 string to binary
 import * as buffer from 'buffer';
 
-// create a new instance of the axios client for posting data to the API
-import * as axios from 'axios';
+// create a new instance of the node-fetch client for connecting to the API
+import fetch from 'node-fetch';
 
-// const axios = require('axios');
-const tokenFetch = axios.default.create({
-  headers: {  
-    'Accept': 'application/json, text/plain, */*', 
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'User-Agent': 'axios/0.27.2',
-    'Authorization': 'Basic ' + buffer.Buffer.from(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64')
-  },
-  responseType: 'json',
-  maxContentLength: 2000,
-  maxBodyLength: 2000,
-  transformRequest: [function (data) {
-    return data;
-  }],
-  params: {
-    grant_type: 'client_credentials'
-  },
-  data: {
-    'grant_type': 'client_credentials'
-  }
-});
 // create a new instance of axios for get requests to the Spotify API
-const fetch = axios.default.create({});
+// const fetch = axios.default.create({});
 
 //-----------------------------------//
 //-----API Controller Module---------//
@@ -55,19 +34,18 @@ const fetch = axios.default.create({});
 const apiController = (function () {
   //get access token
   async function getToken() {
-    try {
-      await tokenFetch.post('https://accounts.spotify.com/api/token').then( function (response) {
-        if (response.status === 200) {
-          const token = response.data.access_token;
-          return token;
-        }
-      }).catch(function (error) {
-        console.log(error);
-      })
-    } catch (error) {
-      console.log(error);
-    }
-};
+    const result = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+          'Content-Type' : 'application/x-www-form-urlencoded', 
+          'Authorization' : 'Basic ' + btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET)
+      },
+      body: 'grant_type=client_credentials'
+    });
+
+    const data = await result.json();
+    return data.access_token;
+  };
   //-----------------------------------//
   //--------API Display Module---------//
   //-----------------------------------//
@@ -408,7 +386,7 @@ const appController = (function (apiCtrl, uiCtrl) {
   const asyncOps = async () => {
     //fetch token
     try {
-      const token = await apiCtrl.getToken();
+      let token = await apiCtrl.getToken();
       console.log(token);
       //retrieve token and store it in hidden html element
       uiCtrl.storeToken(token);
