@@ -1,12 +1,10 @@
 //-----------------------------------//
-//-----Node Environment Setup--------//
+//--------Node Setup Module----------//
 //-----------------------------------//
 
 // require dotenv to load environment variables
 import * as dotenv from 'dotenv';
-
-const secret = dotenv.default.config();
-const key = secret["parsed"];
+dotenv.config();
 
 // create a new instance of JSDOM for node server to render DOM objects
 import * as jsdom from 'jsdom';
@@ -33,7 +31,7 @@ const tokenFetch = axios.default.create({
     'Accept': 'application/json, text/plain, */*', 
     'Content-Type': 'application/x-www-form-urlencoded',
     'User-Agent': 'axios/0.27.2',
-    'Authorization': 'Basic ' + buffer.Buffer.from(key.CLIENT_ID + ':' + key.CLIENT_SECRET).toString('base64')
+    'Authorization': 'Basic ' + buffer.Buffer.from(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64')
   },
   responseType: 'json',
   maxContentLength: 2000,
@@ -106,7 +104,7 @@ const apiController = (function () {
       const limit = 21;
 
       const response = await fetch.get(
-        `https://api.spotify.com/v1/users/${key.USER_ID}/playlists?limit=${limit}&offset=0`,
+        `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
         {
           method: "GET",
           headers: {
@@ -117,6 +115,7 @@ const apiController = (function () {
         }
       ).then( function (response) {
         data =  response;
+        console.log(data);
         return data;
       }).catch(function (error) {
         console.log(error);
@@ -386,6 +385,7 @@ const uiController = (function () {
     },
 
     storeToken(value) {
+      console.log(value);
       document.querySelector(domElements.hToken).value = value;
     },
 
@@ -407,9 +407,11 @@ const appController = (function (apiCtrl, uiCtrl) {
 
   const asyncOps = async () => {
     //fetch token
-    try { 
+    try {
+      const token = await apiCtrl.getToken();
+      console.log(token);
       //retrieve token and store it in hidden html element
-      uiCtrl.storeToken(await apiCtrl.getToken());
+      uiCtrl.storeToken(token);
     } catch (error) {
       console.log(error);
     };

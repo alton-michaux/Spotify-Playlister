@@ -1,8 +1,6 @@
 // require dotenv to load environment variables
-import dotenv from 'dotenv';
-
-// require index.js to load javascript file
-import './index.js';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 // require express to create a server
 import * as express from 'express';
