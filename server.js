@@ -1,29 +1,36 @@
 // require dotenv to load environment variables
-require('dotenv').config();
-
-// require index.js to load javascript file
-const index = require('./index.js');
+import 'dotenv/config'
 
 // require express to create a server
-const express = require('express');
-const app = express();
+import * as express from 'express';
+
+const app = express.default();
 
 // load config file
-const config = require("./config/config.json");
+import * as config from "./config/config.json" assert {type: 'json'};
+
+// import path modules to convert __dirname to a path
+import path from 'path';
+import {fileURLToPath} from 'url';
+
+// assign the path to the current directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // specify environment
 const env = process.env.NODE_ENV || 'development';
 
 // specify port according to environment
-const configration = config[env];
+const configration = config.default[env];
 
-console.log(index)
+console.log("server started...");
 
 // explicityly specify css files
 app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
-	res.status(200).sendFile(__dirname + "./index.html");
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+	res.sendFile(__dirname + "./index.html");
 });
 
 // listen to port
