@@ -67,96 +67,84 @@ const apiController = (function () {
   //fetch user playlist information from api
   async function getMyPlaylists(token) {
     console.log('fetching playlists...');
-    try {
-      const limit = 21;
+    const limit = 21;
 
-      const response = await fetch(
-        `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      ).then( async (response) => {
-        const data = await response.json().catch((error) => {console.log(error)});
-        return data;
-      })
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch(
+      `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then( async (response) => {
+      const data = await response.json().catch((error) => {console.log(error)});
+      return data;
+    })
+    return response;
   };
 
   //fetch user playlist information from api
   async function getPlaylistByID(playlistID, token) {
-    console.log('fetching playlist by ID...');
-    try {
-      const response = await fetch(
-        `https://api.spotify.com/v1/playlists/${playlistID}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      ).then( async (response) => {
-        data = await response.json().catch((error) => {console.log(error)});
-        return data;
-      })
-    } catch (error) {
-      console.log(error);
-    }
+    console.log('fetching playlist...');
+    const response = await fetch(
+      `https://api.spotify.com/v1/playlists/${playlistID}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then( async (response) => {
+      data = await response.json().catch((error) => {console.log(error)});
+      return data;
+    })
+    return response;
   };
 
   //function used to fetch playlist track list
   async function getMyPlaylistsTrackList(playlistID, token) {
     console.log('fetching playlist track list...');
-    try {
-      const response = await fetch(
-        `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      ).then( async (response) => {
-        data = await response.json().catch((error) => {console.log(error)});
-        return data;
-      })
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch(
+      `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then( async (response) => {
+      data = await response.json().catch((error) => {console.log(error)});
+      return data;
+    })
+    return response;
   };
 
   //function used to fetch individual track info from playlists
   async function getTracksInfo(trackID, token) {
     console.log('fetching track info...');
-    try {
-      const response = await fetch(
-        `https://api.spotify.com/v1/tracks/${trackID}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      ).then( async (response) => {
-        data = await response.json().catch((error) => {console.log(error)});
-        return data;
-      })
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    const response = await fetch(
+      `https://api.spotify.com/v1/tracks/${trackID}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then( async (response) => {
+      data = await response.json().catch((error) => {console.log(error)});
+      return data;
+    })
+    return response;
+    };
 
   //-----------------------------------//
   //--------API Function Module--------//
@@ -164,23 +152,20 @@ const apiController = (function () {
 
   //fetch play/pause
   async function playFunction(token, uri) {
-    try {
-      const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
-      }).then( async (response) => {
-        data = await response.json().catch((error) => {console.log(error)});
-        console.log("Playing", data);
-        return data;
-      })
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
+    }).then( async (response) => {
+      data = await response.json().catch((error) => {console.log(error)});
+      console.log("Playing", data);
+      return data;
+    })
+    return response;
   };
 
   //-----------------------------------//
