@@ -37,7 +37,7 @@ const apiController = (function () {
       body: 'grant_type=client_credentials'
     });
 
-    const data = await result.json();
+    const data = await result.json().catch((error) => {console.log(error)});
     return data.access_token;
   };
   //-----------------------------------//
@@ -47,26 +47,21 @@ const apiController = (function () {
   //fetch genres from spotify for later sorting
   async function getGenres(token) {
     console.log('fetching genres...');
-    try {
-      const response = await fetch(
-        `https://api.spotify.com/v1/recommendations/available-genre-seeds`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      ).then( async function (response) {
-        let data = await response.json();
-        return data.genres;
-      }).catch(function (error) {
-        console.log(error);
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch(
+      `https://api.spotify.com/v1/recommendations/available-genre-seeds`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then( async (response) => {
+      const data = await response.json().catch( (error) => {console.log(error)});
+      return data.genres;
+    })
+    return response;
   };
 
   //fetch user playlist information from api
@@ -85,12 +80,10 @@ const apiController = (function () {
             Authorization: `Bearer ${token}`,
           },
         }
-      ).then( async function (response) {
-        const data =  await response.json();
+      ).then( async (response) => {
+        const data = await response.json().catch((error) => {console.log(error)});
         return data;
-      }).catch(function (error) {
-        console.log(error);
-      });
+      })
     } catch (error) {
       console.log(error);
     }
@@ -110,12 +103,10 @@ const apiController = (function () {
             Authorization: `Bearer ${token}`,
           },
         }
-      ).then( async function (response) {
-        data =  await response.json();
+      ).then( async (response) => {
+        data = await response.json().catch((error) => {console.log(error)});
         return data;
-      }).catch(function (error) {
-        console.log(error);
-      });
+      })
     } catch (error) {
       console.log(error);
     }
@@ -135,12 +126,10 @@ const apiController = (function () {
             Authorization: `Bearer ${token}`,
           },
         }
-      ).then( async function (response) {
-        data =  await response.json();
+      ).then( async (response) => {
+        data = await response.json().catch((error) => {console.log(error)});
         return data;
-      }).catch(function (error) {
-        console.log(error);
-      });
+      })
     } catch (error) {
       console.log(error);
     }
@@ -160,12 +149,10 @@ const apiController = (function () {
             Authorization: `Bearer ${token}`,
           },
         }
-      ).then( async function (response) {
-        data =  await response.json();
+      ).then( async (response) => {
+        data = await response.json().catch((error) => {console.log(error)});
         return data;
-      }).catch(function (error) {
-        console.log(error);
-      });
+      })
     } catch (error) {
       console.log(error);
     }
@@ -186,13 +173,11 @@ const apiController = (function () {
           Authorization: `Bearer ${token}`,
         },
         body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
-      }).then( async function (response) {
-        data =  await response.json();
+      }).then( async (response) => {
+        data = await response.json().catch((error) => {console.log(error)});
         console.log("Playing", data);
         return data;
-      }).catch(function (error) {
-        console.log(error);
-      });
+      })
     } catch (error) {
       console.log(error);
     }
@@ -393,10 +378,12 @@ const appController = (function (apiCtrl, uiCtrl) {
       let token = uiCtrl.getStoredToken().token;
       //fetch genres
       try {
-        const genreObj = await apiCtrl.getGenres(token);
-        // console.log(genreObj);
-        //populate drop-down menu with genres
-        genreObj.forEach((element) => uiCtrl.assignGenre(element, element));
+        await apiCtrl.getGenres(token)
+          .then((data) => {
+          console.log(data);
+          //populate drop-down menu with genres
+          data.forEach((element) => uiCtrl.assignGenre(element, element));
+        }).catch((error) => console.log(error));
       } catch (error) {
         console.log(error);
       };
