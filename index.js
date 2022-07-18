@@ -5,8 +5,6 @@
 // require dotenv to load environment variables
 import 'dotenv/config';
 
-import 'cors';
-
 // create a new instance of JSDOM for node server to render DOM objects
 import * as jsdom from 'jsdom';
 const JSDOM = jsdom.JSDOM;
@@ -355,7 +353,6 @@ const appController = (function (apiCtrl, uiCtrl) {
 
     //---onLoad----//
     const genrePopulate = async () => {
-      console.log("genre populate");
       //retrieve token
       let token = uiCtrl.getStoredToken().token;
       //fetch genres
@@ -373,7 +370,6 @@ const appController = (function (apiCtrl, uiCtrl) {
     const musicPopulate = async () => {
       //retrieve token
       let token = uiCtrl.getStoredToken().token;
-      console.log("music populate");
 
       //fetch playlist info for each playlist
       const data = await apiCtrl.getMyPlaylists(token).catch((error) => console.log(error));

@@ -28,12 +28,12 @@ console.log("server started...");
 // explicityly specify css files
 app.use(express.static(__dirname));
 
-app.get("/", (req, res) => {
+app.get("/", (res) => {
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.sendFile(__dirname + "./index.html");
 });
 
 // listen to port
 app.listen(configration.port, () => {
-	console.log(`server running at port ${configration.port}`);
+	console.log(`server running in ${env} at port ${configration.port}`);
 });
