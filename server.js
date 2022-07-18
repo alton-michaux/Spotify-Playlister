@@ -1,6 +1,5 @@
 // require dotenv to load environment variables
-import * as dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config'
 
 // require express to create a server
 import * as express from 'express';
