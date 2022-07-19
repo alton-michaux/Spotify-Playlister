@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha js/server.js",
-    "build": "browserify index.js -o --standalone MusicModules > bundle.js && browserify index.js -o bundle.js",
+    "build": "node index.js",
     "start:development": "cross-env NODE_ENV=development nodemon server.js",
     "start:production": "cross-env NODE_ENV=production nodemon server.js"
   },
@@ -29,7 +29,7 @@
     "chai": "^4.3.4",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
-    "mocha": "^10.0.0"
+    "mocha": "^6.2.3"
   },
   "dependencies": {
     "acorn": "^7.4.1",
@@ -47,14 +47,13 @@
     "brorand": "^1.1.0",
     "browser-pack": "^6.1.0",
     "browser-resolve": "^2.0.0",
-    "browserify": "^17.0.0",
     "buffer-from": "^1.1.1",
     "buffer-xor": "^1.0.3",
     "builtin-status-codes": "^3.0.0",
     "cached-path-relative": "^1.1.0",
     "call-bind": "^1.0.2",
     "chalk": "^4.1.2",
-    "chokidar": "^3.5.3",
+    "chokidar": "^0.9.0",
     "cipher-base": "^1.0.4",
     "combine-source-map": "^0.8.0",
     "concat-stream": "^1.6.2",
@@ -138,6 +137,7 @@
     "nanoid": "^3.3.3",
     "node-fetch": "^3.2.8",
     "node-html-parser": "^5.3.3",
+    "nodemon": "^1.4.1",
     "npm": "^8.14.0",
     "object-assign": "^4.1.1",
     "object-inspect": "^1.9.0",

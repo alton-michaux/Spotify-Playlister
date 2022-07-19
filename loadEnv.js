@@ -1,5 +1,11 @@
-import dotenv from 'dotenv';
+//-----------------------------------//
+//--------Node Setup Module----------//
+//-----------------------------------//
+
+import * as dotenv from 'dotenv';
 dotenv.config()
+
+import 'cors';
 
 // create a new instance of JSDOM for node server to render DOM objects
 import * as jsdom from 'jsdom';

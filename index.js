@@ -1,7 +1,3 @@
-//-----------------------------------//
-//--------Node Setup Module----------//
-//-----------------------------------//
-
 // require dotenv to load environment variables
 import './loadEnv.js';
 

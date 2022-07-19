@@ -4,14 +4,14 @@ import './loadEnv.js'
 // require express to create a server
 import * as express from 'express';
 
-const app = express.default();
-
 // load config file
 import * as config from "./config/config.json" assert {type: 'json'};
 
 // import path modules to convert __dirname to a path
 import path from 'path';
 import {fileURLToPath} from 'url';
+
+const app = express.default();
 
 // assign the path to the current directory
 const __filename = fileURLToPath(import.meta.url);
