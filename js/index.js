@@ -1,10 +1,7 @@
 //-----------------------------------//
 //-----API Controller Module---------//
 //-----------------------------------//
-const apiController = (function () { 
-const clientID = "4986258db999480dbcb94669e69535ad";
-const clientSecret = "50a5f956f0f84b278d3d90745c3308b5";
-const userID = "12172782523";
+const apiController = (function () {
 
   //get access token
   const getToken = async () => {
@@ -16,7 +13,7 @@ const userID = "12172782523";
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization:
-              "Basic " + btoa(clientID + ":" + clientSecret),
+              "Basic " + btoa(CLIENT_ID + ":" + CLIENT_SECRET),
           },
           body: "grant_type=client_credentials",
         }
@@ -61,7 +58,7 @@ const userID = "12172782523";
       const limit = 21;
 
       const result = await fetch(
-        `https://api.spotify.com/v1/users/${userID}/playlists?limit=${limit}&offset=0`,
+        `https://api.spotify.com/v1/users/${USER_ID}/playlists?limit=${limit}&offset=0`,
         {
           method: "GET",
           headers: {
