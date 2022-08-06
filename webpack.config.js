@@ -11,8 +11,15 @@ module.exports = {
     module: {
         rules: [
             {   test: /\.js$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
-            {   test: /\.css$/, use: { loader: "'style-loader', 'css-loader'" } },
-            {   test: /\.scss$/, use: { loader: "'style-loader', 'css-loader', 'sass-loader'" } },
+            {   test: /\.css$/, use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' }
+            ]},
+            {   test: /\.scss$/, use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' },
+                    { loader: 'sass-loader' }
+            ]},
         ]
     },
     devServer: {
