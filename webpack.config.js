@@ -7,20 +7,20 @@ module.exports = {
     output: {
         filename: 'bundle.js'
     },
-    devtool: 'source-maps',
+    devtool: 'source-map',
     module: {
         rules: [
-            {   test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-            {   test: /\.css$/, loader: ['style-loader', 'css-loader'] },
-            {   test: /\.scss$/, loader: ['style-loader', 'css-loader', 'sass-loader'] },
+            {   test: /\.js$/, use: { loader: 'babel-loader' }, exclude: /node_modules/ },
+            {   test: /\.css$/, use: { loader: "'style-loader', 'css-loader'" } },
+            {   test: /\.scss$/, use: { loader: "'style-loader', 'css-loader', 'sass-loader'" } },
         ]
     },
-    devserver: {
-        contentBase: './src',
+    devServer: {
+        static: './src',
         hot: true,
         open: true,
         port: 5000,
-        watchContentBase: true
+        watchFiles: [ './dist/**/*.js' ]
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),    // Hot Module Replacement
