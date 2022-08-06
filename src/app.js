@@ -1,10 +1,9 @@
+// require('./load');
+
 //-----------------------------------//
 //-----API Controller Module---------//
 //-----------------------------------//
-const apiController = (function () { 
-const clientID = "4986258db999480dbcb94669e69535ad";
-const clientSecret = "50a5f956f0f84b278d3d90745c3308b5";
-const userID = "12172782523";
+const apiController = (function () {
 console.log(process.env.CLIENT_ID);
   //get access token
   const getToken = async () => {
@@ -16,7 +15,7 @@ console.log(process.env.CLIENT_ID);
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization:
-              "Basic " + btoa(clientID + ":" + clientSecret),
+              "Basic " + btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET),
           },
           body: "grant_type=client_credentials",
         }
@@ -61,7 +60,7 @@ console.log(process.env.CLIENT_ID);
       const limit = 21;
 
       const result = await fetch(
-        `https://api.spotify.com/v1/users/${userID}/playlists?limit=${limit}&offset=0`,
+        `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
         {
           method: "GET",
           headers: {
