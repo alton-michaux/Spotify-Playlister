@@ -3,6 +3,7 @@ import '../src/index.css';
 //-----API Controller Module---------//
 //-----------------------------------//
 const apiController = (function () {
+  console.log(process.env)
   //get access token
   async function getToken() {
     const result = await fetch('https://accounts.spotify.com/api/token', {
