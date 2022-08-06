@@ -2,10 +2,12 @@
   "name": "my-playlist-app",
   "version": "0.0.1",
   "description": "A web app to display my spotify collection and collect music submissions",
-  "main": "js/bundle.js",
+  "main": "src/app.js",
   "scripts": {
     "test": "mocha js/index.js",
-    "build": "browserify js/index.js -o js/bundle.js"
+    "build": "webpack",
+    "serve": "webpack-dev-server --mode=development --config webpack.config.js",
+    "deploy": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -25,7 +27,23 @@
   "devDependencies": {
     "browserify": "^17.0.0",
     "chai": "^4.3.4",
+    "css-loader": "^6.7.1",
     "dotenv": "^8.2.0",
-    "mocha": "^8.3.2"
+    "mocha": "^8.3.2",
+    "style-loader": "^3.3.1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
+    "babel-loader": "^8.2.5",
+    "cors": "^2.8.5",
+    "dotenv-webpack": "^8.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "jsdom": "^20.0.0",
+    "node-fetch": "^3.2.10",
+    "node-sass": "^7.0.1",
+    "url-loader": "^4.1.1",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.3"
   }
 }

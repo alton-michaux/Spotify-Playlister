@@ -1,4 +1,6 @@
 [build]
   base = "/"
-  publish = ""
+  publish = "/dist/"
   command = ""
+[dev]
+  publish = ""
