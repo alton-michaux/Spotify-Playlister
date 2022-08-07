@@ -1,3 +1,2242 @@
-/*! For license information please see bundle.js.LICENSE.txt */
-(()=>{"use strict";var n,e,t={541:(n,e,t)=>{function r(n){return r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(n){return typeof n}:function(n){return n&&"function"==typeof Symbol&&n.constructor===Symbol&&n!==Symbol.prototype?"symbol":typeof n},r(n)}function o(){o=function(){return n};var n={},e=Object.prototype,t=e.hasOwnProperty,i="function"==typeof Symbol?Symbol:{},a=i.iterator||"@@iterator",c=i.asyncIterator||"@@asyncIterator",s=i.toStringTag||"@@toStringTag";function l(n,e,t){return Object.defineProperty(n,e,{value:t,enumerable:!0,configurable:!0,writable:!0}),n[e]}try{l({},"")}catch(n){l=function(n,e,t){return n[e]=t}}function u(n,e,t,r){var o=e&&e.prototype instanceof d?e:d,i=Object.create(o.prototype),a=new B(r||[]);return i._invoke=function(n,e,t){var r="suspendedStart";return function(o,i){if("executing"===r)throw new Error("Generator is already running");if("completed"===r){if("throw"===o)throw i;return{value:void 0,done:!0}}for(t.method=o,t.arg=i;;){var a=t.delegate;if(a){var c=b(a,t);if(c){if(c===A)continue;return c}}if("next"===t.method)t.sent=t._sent=t.arg;else if("throw"===t.method){if("suspendedStart"===r)throw r="completed",t.arg;t.dispatchException(t.arg)}else"return"===t.method&&t.abrupt("return",t.arg);r="executing";var s=p(n,e,t);if("normal"===s.type){if(r=t.done?"completed":"suspendedYield",s.arg===A)continue;return{value:s.arg,done:t.done}}"throw"===s.type&&(r="completed",t.method="throw",t.arg=s.arg)}}}(n,t,a),i}function p(n,e,t){try{return{type:"normal",arg:n.call(e,t)}}catch(n){return{type:"throw",arg:n}}}n.wrap=u;var A={};function d(){}function f(){}function h(){}var m={};l(m,a,(function(){return this}));var g=Object.getPrototypeOf,y=g&&g(g(k([])));y&&y!==e&&t.call(y,a)&&(m=y);var E=h.prototype=d.prototype=Object.create(m);function v(n){["next","throw","return"].forEach((function(e){l(n,e,(function(n){return this._invoke(e,n)}))}))}function C(n,e){function o(i,a,c,s){var l=p(n[i],n,a);if("throw"!==l.type){var u=l.arg,A=u.value;return A&&"object"==r(A)&&t.call(A,"__await")?e.resolve(A.__await).then((function(n){o("next",n,c,s)}),(function(n){o("throw",n,c,s)})):e.resolve(A).then((function(n){u.value=n,c(u)}),(function(n){return o("throw",n,c,s)}))}s(l.arg)}var i;this._invoke=function(n,t){function r(){return new e((function(e,r){o(n,t,e,r)}))}return i=i?i.then(r,r):r()}}function b(n,e){var t=n.iterator[e.method];if(void 0===t){if(e.delegate=null,"throw"===e.method){if(n.iterator.return&&(e.method="return",e.arg=void 0,b(n,e),"throw"===e.method))return A;e.method="throw",e.arg=new TypeError("The iterator does not provide a 'throw' method")}return A}var r=p(t,n.iterator,e.arg);if("throw"===r.type)return e.method="throw",e.arg=r.arg,e.delegate=null,A;var o=r.arg;return o?o.done?(e[n.resultName]=o.value,e.next=n.nextLoc,"return"!==e.method&&(e.method="next",e.arg=void 0),e.delegate=null,A):o:(e.method="throw",e.arg=new TypeError("iterator result is not an object"),e.delegate=null,A)}function x(n){var e={tryLoc:n[0]};1 in n&&(e.catchLoc=n[1]),2 in n&&(e.finallyLoc=n[2],e.afterLoc=n[3]),this.tryEntries.push(e)}function w(n){var e=n.completion||{};e.type="normal",delete e.arg,n.completion=e}function B(n){this.tryEntries=[{tryLoc:"root"}],n.forEach(x,this),this.reset(!0)}function k(n){if(n){var e=n[a];if(e)return e.call(n);if("function"==typeof n.next)return n;if(!isNaN(n.length)){var r=-1,o=function e(){for(;++r<n.length;)if(t.call(n,r))return e.value=n[r],e.done=!1,e;return e.value=void 0,e.done=!0,e};return o.next=o}}return{next:I}}function I(){return{value:void 0,done:!0}}return f.prototype=h,l(E,"constructor",h),l(h,"constructor",f),f.displayName=l(h,s,"GeneratorFunction"),n.isGeneratorFunction=function(n){var e="function"==typeof n&&n.constructor;return!!e&&(e===f||"GeneratorFunction"===(e.displayName||e.name))},n.mark=function(n){return Object.setPrototypeOf?Object.setPrototypeOf(n,h):(n.__proto__=h,l(n,s,"GeneratorFunction")),n.prototype=Object.create(E),n},n.awrap=function(n){return{__await:n}},v(C.prototype),l(C.prototype,c,(function(){return this})),n.AsyncIterator=C,n.async=function(e,t,r,o,i){void 0===i&&(i=Promise);var a=new C(u(e,t,r,o),i);return n.isGeneratorFunction(t)?a:a.next().then((function(n){return n.done?n.value:a.next()}))},v(E),l(E,s,"Generator"),l(E,a,(function(){return this})),l(E,"toString",(function(){return"[object Generator]"})),n.keys=function(n){var e=[];for(var t in n)e.push(t);return e.reverse(),function t(){for(;e.length;){var r=e.pop();if(r in n)return t.value=r,t.done=!1,t}return t.done=!0,t}},n.values=k,B.prototype={constructor:B,reset:function(n){if(this.prev=0,this.next=0,this.sent=this._sent=void 0,this.done=!1,this.delegate=null,this.method="next",this.arg=void 0,this.tryEntries.forEach(w),!n)for(var e in this)"t"===e.charAt(0)&&t.call(this,e)&&!isNaN(+e.slice(1))&&(this[e]=void 0)},stop:function(){this.done=!0;var n=this.tryEntries[0].completion;if("throw"===n.type)throw n.arg;return this.rval},dispatchException:function(n){if(this.done)throw n;var e=this;function r(t,r){return a.type="throw",a.arg=n,e.next=t,r&&(e.method="next",e.arg=void 0),!!r}for(var o=this.tryEntries.length-1;o>=0;--o){var i=this.tryEntries[o],a=i.completion;if("root"===i.tryLoc)return r("end");if(i.tryLoc<=this.prev){var c=t.call(i,"catchLoc"),s=t.call(i,"finallyLoc");if(c&&s){if(this.prev<i.catchLoc)return r(i.catchLoc,!0);if(this.prev<i.finallyLoc)return r(i.finallyLoc)}else if(c){if(this.prev<i.catchLoc)return r(i.catchLoc,!0)}else{if(!s)throw new Error("try statement without catch or finally");if(this.prev<i.finallyLoc)return r(i.finallyLoc)}}}},abrupt:function(n,e){for(var r=this.tryEntries.length-1;r>=0;--r){var o=this.tryEntries[r];if(o.tryLoc<=this.prev&&t.call(o,"finallyLoc")&&this.prev<o.finallyLoc){var i=o;break}}i&&("break"===n||"continue"===n)&&i.tryLoc<=e&&e<=i.finallyLoc&&(i=null);var a=i?i.completion:{};return a.type=n,a.arg=e,i?(this.method="next",this.next=i.finallyLoc,A):this.complete(a)},complete:function(n,e){if("throw"===n.type)throw n.arg;return"break"===n.type||"continue"===n.type?this.next=n.arg:"return"===n.type?(this.rval=this.arg=n.arg,this.method="return",this.next="end"):"normal"===n.type&&e&&(this.next=e),A},finish:function(n){for(var e=this.tryEntries.length-1;e>=0;--e){var t=this.tryEntries[e];if(t.finallyLoc===n)return this.complete(t.completion,t.afterLoc),w(t),A}},catch:function(n){for(var e=this.tryEntries.length-1;e>=0;--e){var t=this.tryEntries[e];if(t.tryLoc===n){var r=t.completion;if("throw"===r.type){var o=r.arg;w(t)}return o}}throw new Error("illegal catch attempt")},delegateYield:function(n,e,t){return this.delegate={iterator:k(n),resultName:e,nextLoc:t},"next"===this.method&&(this.arg=void 0),A}},n}function a(n,e,t,r,o,i,a){try{var c=n[i](a),s=c.value}catch(n){return void t(n)}c.done?e(s):Promise.resolve(s).then(r,o)}function c(n){return function(){var e=this,t=arguments;return new Promise((function(r,o){var i=n.apply(e,t);function c(n){a(i,r,o,c,s,"next",n)}function s(n){a(i,r,o,c,s,"throw",n)}c(void 0)}))}}t(548);var s,l,u,p,A,d,f,h,m,g,y,E=function(){function n(){return(n=c(o().mark((function n(){var e,t;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return n.next=2,fetch("https://accounts.spotify.com/api/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded",Authorization:"Basic "+btoa("4986258db999480dbcb94669e69535ad:50a5f956f0f84b278d3d90745c3308b5")},body:"grant_type=client_credentials"});case 2:return e=n.sent,n.next=5,e.json().catch((function(n){console.log(n)}));case 5:return t=n.sent,n.abrupt("return",t.access_token);case 7:case"end":return n.stop()}}),n)})))).apply(this,arguments)}function e(){return e=c(o().mark((function n(e){var t;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return console.log("fetching genres..."),n.next=3,fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds",{method:"GET",headers:{Accept:"application/json","Content-Type":"application/json",Authorization:"Bearer ".concat(e)}}).then(function(){var n=c(o().mark((function n(e){var t;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return n.next=2,e.json().catch((function(n){console.log(n)}));case 2:return t=n.sent,n.abrupt("return",t.genres);case 4:case"end":return n.stop()}}),n)})));return function(e){return n.apply(this,arguments)}}());case 3:return t=n.sent,n.abrupt("return",t);case 5:case"end":return n.stop()}}),n)}))),e.apply(this,arguments)}function t(){return t=c(o().mark((function n(e){var t;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return console.log("fetching playlists..."),n.next=4,fetch("https://api.spotify.com/v1/users/".concat("12172782523","/playlists?limit=").concat(21,"&offset=0"),{method:"GET",headers:{Accept:"application/json","Content-Type":"application/json",Authorization:"Bearer ".concat(e)}}).then(function(){var n=c(o().mark((function n(e){var t;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return n.next=2,e.json().catch((function(n){console.log(n)}));case 2:return t=n.sent,n.abrupt("return",t);case 4:case"end":return n.stop()}}),n)})));return function(e){return n.apply(this,arguments)}}());case 4:return t=n.sent,n.abrupt("return",t);case 6:case"end":return n.stop()}}),n)}))),t.apply(this,arguments)}function r(){return r=c(o().mark((function n(e,t){var r;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return console.log("fetching playlist..."),n.next=3,fetch("https://api.spotify.com/v1/playlists/".concat(e),{method:"GET",headers:{Accept:"application/json","Content-Type":"application/json",Authorization:"Bearer ".concat(t)}}).then(function(){var n=c(o().mark((function n(e){return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return n.next=2,e.json().catch((function(n){console.log(n)}));case 2:return data=n.sent,n.abrupt("return",data);case 4:case"end":return n.stop()}}),n)})));return function(e){return n.apply(this,arguments)}}());case 3:return r=n.sent,n.abrupt("return",r);case 5:case"end":return n.stop()}}),n)}))),r.apply(this,arguments)}function i(){return i=c(o().mark((function n(e,t){var r;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return console.log("fetching playlist track list..."),n.next=3,fetch("https://api.spotify.com/v1/playlists/".concat(e,"/tracks"),{method:"GET",headers:{Accept:"application/json","Content-Type":"application/json",Authorization:"Bearer ".concat(t)}}).then(function(){var n=c(o().mark((function n(e){var t;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return n.next=2,e.json().catch((function(n){console.log(n)}));case 2:return t=n.sent,n.abrupt("return",t);case 4:case"end":return n.stop()}}),n)})));return function(e){return n.apply(this,arguments)}}());case 3:return r=n.sent,n.abrupt("return",r);case 5:case"end":return n.stop()}}),n)}))),i.apply(this,arguments)}function a(){return a=c(o().mark((function n(e,t){var r;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return console.log("fetching track info..."),n.next=3,fetch("https://api.spotify.com/v1/tracks/".concat(e),{method:"GET",headers:{Accept:"application/json","Content-Type":"application/json",Authorization:"Bearer ".concat(t)}}).then(function(){var n=c(o().mark((function n(e){var t;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return n.next=2,e.json().catch((function(n){console.log(n)}));case 2:return t=n.sent,n.abrupt("return",t);case 4:case"end":return n.stop()}}),n)})));return function(e){return n.apply(this,arguments)}}());case 3:return r=n.sent,n.abrupt("return",r);case 5:case"end":return n.stop()}}),n)}))),a.apply(this,arguments)}function s(){return s=c(o().mark((function n(e,t){var r;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return n.next=2,fetch("https://api.spotify.com/v1/me/player/play",{method:"PUT",headers:{Accept:"application/json","Content-Type":"application/json",Authorization:"Bearer ".concat(e)},body:'{"context_uri":"spotify:track:'.concat(t,'","offset":{"position":5},"position_ms":0}')}).then(function(){var n=c(o().mark((function n(e){return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return n.next=2,e.json().catch((function(n){console.log(n)}));case 2:return data=n.sent,console.log("Playing",data),n.abrupt("return",data);case 5:case"end":return n.stop()}}),n)})));return function(e){return n.apply(this,arguments)}}());case 2:return r=n.sent,n.abrupt("return",r);case 4:case"end":return n.stop()}}),n)}))),s.apply(this,arguments)}return console.log("MISSING_ENV_VAR"),{getToken:function(){return function(){return n.apply(this,arguments)}()},getGenres:function(n){return function(n){return e.apply(this,arguments)}(n)},getMyPlaylists:function(n){return function(n){return t.apply(this,arguments)}(n)},getPlaylistByID:function(n,e){return function(n,e){return r.apply(this,arguments)}(n,e)},getMyPlaylistsTrackList:function(n,e){return function(n,e){return i.apply(this,arguments)}(n,e)},getTracksInfo:function(n,e){return function(n,e){return a.apply(this,arguments)}(n,e)},playFunction:function(n,e){return function(n,e){return s.apply(this,arguments)}(n,e)}}}(),v=(s="#hidden-token","#login-div","#login-btn",l="#song-description","#prev",u="#current","#next",p="#playlist-title",A="#playlist-art","#now-playing","#skipBack","#play","#skipForward",d="#metadata-1",f="#metadata-2",h="#genre-select",{outputField:function(){return{songDetail:document.querySelector(l),hiddenDiv:document.querySelector("#login-div"),btnLogin:document.querySelector("#login-btn"),previousSong:document.querySelector("#prev"),currentSong:document.querySelector(u),nextSong:document.querySelector("#next"),title:document.querySelector(p),playlistArt:document.querySelector(A),nowPlaying:document.querySelector("#now-playing"),skipBack:document.querySelector("#skipBack"),play:document.querySelector("#play"),skipForward:document.querySelector("#skipForward"),playlistSongs:document.querySelector(d),playlistLibrary:document.querySelector(f),genreSelect:document.querySelector(h)}},assignGenre:function(n,e){var t='<option id="genre-item" value="'.concat(e,'">').concat(n,"</option>");document.querySelector(h).insertAdjacentHTML("beforeend",t)},assignTitle:function(n,e){var t='<div class="playlist-title">'.concat(e,'</div><input class="hidden-title" type="hidden" value=').concat(n,"></input>");document.querySelector(p).insertAdjacentHTML("beforeend",t)},assignPlaylistArt:function(n){var e='<div class="playlist-art-img" id="playlist-img">\n      <img src='.concat(n,' class="playlist-pic"/></div>');document.querySelector(A).insertAdjacentHTML("beforeend",e)},populatePlaylists:function(n,e,t){var r='<button class="playlist-btns" value='.concat(n,"><img src=").concat(e,' alt="').concat(t,'"/><div class="text">').concat(t,"</div></button>");document.querySelector(f).insertAdjacentHTML("beforeend",r)},populateTrackList:function(n,e,t,r,o,i){var a='<div class="track-items"><input class="uri" type="hidden" value='.concat(n,">").concat(e,". ").concat(t," by ").concat(r,'</input><button class="track-id playlist-items" value=').concat(i,'>PLAY</button><div class="track-length">').concat(Math.floor(o/1e3/60),":").concat(Math.floor(o/1e3%60).toFixed(0),"</div></div>");document.querySelector(d).insertAdjacentHTML("beforeend",a)},populateSongInfo:function(n,e,t){var r='<div class="song-info">Now Playing:<br>'.concat(n," by ").concat(e,"<br>from the Album:<br>").concat(t,"</div>");document.querySelector(l).insertAdjacentHTML("beforeend",r)},populateSongImage:function(n){var e='<img class="track-imgs" src='.concat(n,">");document.querySelector(u).insertAdjacentHTML("beforeend",e)},resetTrackArt:function(){this.outputField().currentSong.innerHTML=""},resetTrackDetail:function(){this.outputField().songDetail.innerHTML="",this.resetTrackArt()},resetTitle:function(){this.outputField().title.innerHTML="",this.resetTrackDetail()},resetPlaylistPic:function(){this.outputField().playlistArt.innerHTML="",this.resetTitle()},resetTracks:function(){this.outputField().playlistSongs.innerHTML="",this.resetPlaylistPic()},resetPlaylists:function(){this.outputField().playlistLibrary.innerHTML="",this.resetTracks()},storeToken:function(n){document.querySelector(s).value=n},getStoredToken:function(){return{token:document.querySelector(s).value}}});m=E,y=(g=v).outputField(),function(){var n=c(o().mark((function n(){var e,t,r,a,s,l,u;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return n.next=2,m.getToken().catch((function(n){console.log(n)}));case 2:e=n.sent,g.storeToken(e),t=function(){var n=c(o().mark((function n(){var e;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return e=g.getStoredToken().token,n.prev=1,n.next=4,m.getGenres(e).then((function(n){n.forEach((function(n){return g.assignGenre(n,n)}))})).catch((function(n){return console.log(n)}));case 4:n.next=9;break;case 6:n.prev=6,n.t0=n.catch(1),console.log(n.t0);case 9:case 10:case"end":return n.stop()}}),n,null,[[1,6]])})));return function(){return n.apply(this,arguments)}}(),r=function(){var n=c(o().mark((function n(){var e,t,r,i,a,c,s,l,u;return o().wrap((function(n){for(;;)switch(n.prev=n.next){case 0:return e=g.getStoredToken().token,n.next=3,m.getMyPlaylists(e).catch((function(n){return console.log(n)}));case 3:for(t=n.sent,r=t.items[3].name,i=t.items[3].id,g.assignTitle(i,r),g.assignPlaylistArt(t.items[3].images[0].url),a=0;a<t.items.length;a++)g.populatePlaylists(t.items[a].id,t.items[a].images[0].url,t.items[a].name);return n.next=12,m.getMyPlaylistsTrackList(t.items[3].id,e).catch((function(n){return console.log(n)}));case 12:for(c=n.sent,s=0;s<c.items.length;s++)g.populateTrackList(c.items[s].track.uri,s+1,c.items[s].track.name,c.items[s].track.artists[0].name,c.items[s].track.duration_ms,c.items[s].track.id);return n.next=16,m.getTracksInfo(c.items[0].track.id,e).catch((function(n){return console.log(n)}));case 16:return l=n.sent,g.populateSongInfo(l.name,l.artists[0].name,l.album.name),n.next=20,m.getTracksInfo(c.items[0].track.id,e).catch((function(n){return console.log(n)}));case 20:u=n.sent,g.populateSongImage(u.album.images[0].url),console.log("async ops complete");case 23:case"end":return n.stop()}}),n)})));return function(){return n.apply(this,arguments)}}(),a=function(){var n=g.getStoredToken().token,e=y.genreSelect;e.addEventListener("change",c(o().mark((function t(){var r,a,c,s,l;return o().wrap((function(t){for(;;)switch(t.prev=t.next){case 0:return g.resetPlaylists(),r=e.options[e.selectedIndex].value,t.prev=2,t.next=5,m.getMyPlaylists(n);case 5:for(a=t.sent,i=0;i<a.items.length;i++)a.items[i].description.split(" ").includes(r)&&(c=a.items[i].name,g.resetTracks(),g.assignTitle(r,c),g.assignPlaylistArt(a.items[i].images[0].url),g.populatePlaylists(a.items[i].id,a.items[i].images[0].url,a.items[i].name));t.next=12;break;case 9:t.prev=9,t.t0=t.catch(2),console.log(t.t0);case 12:return t.prev=13,t.next=16,m.getMyPlaylistsTrackList(playlist.items[i].id,n);case 16:s=t.sent,j=0;case 18:if(!(j<s.items.length)){t.next=28;break}return g.populateTrackList(s.items[j].track.uri,j+1,s.items[j].track.name,s.items[j].track.artists[0].name,s.items[j].track.duration_ms,s.items[i].track.id),t.next=22,m.getTracksInfo(s.items[j].track.id,n);case 22:l=t.sent,g.populateSongInfo(l.name,l.artists[0].name,l.album.name),g.populateSongImage(l.album.images[0].url);case 25:j++,t.next=18;break;case 28:t.next=33;break;case 30:t.prev=30,t.t1=t.catch(13),console.log(t.t1);case 33:case 34:case"end":return t.stop()}}),t,null,[[2,9],[13,30]])}))))},s=function(){var n=g.getStoredToken().token;y.playlistLibrary.addEventListener("click",function(){var e=c(o().mark((function e(t){var r,a,c,s;return o().wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return g.resetTracks(),r=t.target.value,e.prev=2,e.next=5,m.getPlaylistByID(r,n);case 5:return a=e.sent,g.assignPlaylistArt(a.images[0].url),g.assignTitle(a.id,a.name),e.next=10,m.getMyPlaylistsTrackList(r,n);case 10:c=e.sent,i=0;case 12:if(!(i<c.items.length)){e.next=22;break}return g.populateTrackList(c.items[i].track.uri,i+1,c.items[i].track.name,c.items[i].track.artists[0].name,c.items[i].track.duration_ms,c.items[i].track.id),e.next=16,m.getTracksInfo(c.items[i].track.id,n);case 16:s=e.sent,g.populateSongInfo(s.name,s.artists[0].name,s.album.name),g.populateSongImage(s.album.images[0].url);case 19:i++,e.next=12;break;case 22:e.next=27;break;case 24:e.prev=24,e.t0=e.catch(2),console.log(e.t0);case 27:case 28:case"end":return e.stop()}}),e,null,[[2,24]])})));return function(n){return e.apply(this,arguments)}}())},l=function(){var n=g.getStoredToken().token;y.playlistSongs.addEventListener("click",function(){var e=c(o().mark((function e(t){var r,i;return o().wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return g.resetTrackDetail(),r=t.target.value,e.prev=2,e.next=5,m.getTracksInfo(r,n);case 5:i=e.sent,g.populateSongInfo(i.name,i.artists[0].name,i.album.name),g.populateSongImage(i.album.images[0].url),e.next=14;break;case 11:e.prev=11,e.t0=e.catch(2),console.log(e.t0);case 14:return e.prev=15,e.next=18,m.playFunction(n,uri);case 18:e.sent,e.next=24;break;case 21:e.prev=21,e.t1=e.catch(15),console.log(e.t1);case 24:case 25:case"end":return e.stop()}}),e,null,[[2,11],[15,21]])})));return function(n){return e.apply(this,arguments)}}())},u=function(){var n=g.getStoredToken().token,e=y.play;y.skipForward,y.skipBack,e.addEventListener("click",c(o().mark((function e(){var t,r;return o().wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return t=y.playlistSongs.children,r=t[0].childNodes[0].defaultValue,e.prev=2,e.next=5,m.playFunction(n,r);case 5:e.next=10;break;case 7:e.prev=7,e.t0=e.catch(2),console.log(e.t0);case 10:case 11:case"end":return e.stop()}}),e,null,[[2,7]])}))))},r(),t(),a(),s(),u(),l();case 16:case"end":return n.stop()}}),n)})));return function(){return n.apply(this,arguments)}}()()},424:(n,e,t)=>{t.r(e),t.d(e,{default:()=>c});var r=t(537),o=t.n(r),i=t(645),a=t.n(i)()(o());a.push([n.id,'* {\n  box-sizing: border-box;\n  margin: 0;\n  padding: 0;\n  font-family: "Bebas Neue", cursive;\n}\n\nbody {\n  overflow: hidden;\n}\n\nnav {\n  position: sticky;\n  background-image: repeating-linear-gradient(#620f13, #87282d, #3e0003);\n  top: 0;\n  height: 2em;\n  box-shadow: rgb(102, 58, 58) -1px 2px 13px;\n  z-index: 1000;\n}\n\nspan {\n  margin-top: 4px;\n}\n\nselect {\n  position: sticky;\n  top: 0;\n}\n\nsection {\n  overflow-y: auto;\n}\n\nimg {\n  max-width: 100%;\n  height: auto;\n}\n\nfooter {\n  position: sticky;\n  background-image: repeating-linear-gradient(#620f13, #87282d, #3e0003);\n  height: 2em;\n  bottom: 0;\n  box-shadow: rgb(102, 58, 58) 0px 2px 15px;\n  z-index: 1000;\n}\n\n.login-div {\n  display: none;\n}\n\n.container {\n  display: grid;\n  min-height: calc(100vh - 32px);\n  min-width: 100%;\n  background-color: black;\n  grid-template-columns: auto;\n  grid-template-rows: repeat(3, auto);\n}\n\n.nav-list {\n  position: absolute;\n  top: 0;\n  left: 0;\n  background: rgb(56, 15, 15);\n  max-height: 400px;\n  width: 453px;\n  padding: 20px;\n  line-height: 1.5;\n  transform: translateY(-200px);\n  transition: transform 1s ease-in-out;\n  z-index: 1000;\n}\n\n.div.show,\nul.show {\n  transform: translateY(200);\n  transition: 0.8s;\n}\n\n.nav-item {\n  display: grid;\n  grid-template-columns: repeat(3, minmax(200px, 1fr));\n}\n\n.nav-box {\n  height: inherit;\n}\n\n.center-box {\n  margin-top: 10px;\n  text-align: center;\n  color: white;\n}\n\n.main-div {\n  display: grid;\n  height: 90vh;\n  grid-gap: 0.1%;\n  grid-template-columns: minmax(225px, 1.5fr) minmax(150px, 1fr) minmax(\n      200px,\n      2fr\n    );\n  background-color: black;\n  grid-template-rows: repeat(auto-fit, 1fr);\n}\n\n.center-items {\n  margin: 0;\n  width: 100%;\n}\n\n.container {\n  max-width: 1500px;\n  display: grid;\n}\n\n.play-img:hover {\n  cursor: pointer;\n  opacity: 50%;\n}\n\n.playlist-items {\n  height: 150px;\n  width: 125px;\n}\n\n.playlist-items:hover,\n.playlist-btns:hover {\n  cursor: pointer;\n  border: 0.5px #87282d double;\n  transform: scale(1.05);\n}\n\n.track-window {\n  display: grid;\n  grid-template-rows: 2fr 1fr;\n  max-height: 650px;\n}\n\n.side-box {\n  background-color: black;\n}\n\n.tracks {\n  border: 0.5px solid black;\n}\n\n.track-art {\n  display: grid;\n  grid-template-columns: 0.5fr 3fr 0.5fr;\n  margin-top: 10px;\n  height: 60vh;\n  border: 1px double #87282d;\n  border-radius: 2.5%;\n  background-image: repeating-linear-gradient(#620f13, #87282d, #3e0003);\n  box-shadow: rgb(102, 58, 58) -1px 2px 13px;\n}\n\n.current-track {\n  overflow: hidden;\n}\n\n.track-imgs {\n  height: 100%;\n  width: 100%;\n}\n\n.track-description {\n  height: 100%;\n  border-radius: 2.5%;\n  color: white;\n  text-align: center;\n}\n\n.song-info {\n  height: inherit;\n  padding-top: 6%;\n  font-size: 1.5em;\n  line-height: 1.3em;\n}\n\n.main-playlist {\n  display: grid;\n  grid-template-rows: repeat(3, 1fr);\n  width: inherit;\n}\n\n.center-items {\n  width: inherit;\n  height: inherit;\n}\n\n.main-playlist-items {\n  grid-gap: 3%;\n  height: 100%;\n  width: 100%;\n  border-radius: 2.5%;\n  box-shadow: rgb(102, 58, 58) 0px 5px 5px;\n  text-align: center;\n  padding: 0.5%;\n}\n\n.title-div {\n  padding: 4%;\n  margin-top: 2.5%;\n}\n\n.playlist-title {\n  color: white;\n  height: 100%;\n  width: 100%;\n  margin-top: 8%;\n}\n\n.playlist-art {\n  background-image: repeating-linear-gradient(#620f13, #87282d, #3e0003);\n  max-height: 350px;\n  width: 100%;\n  border-radius: 2.5%;\n  box-shadow: rgb(102, 58, 58) 0px 5px 5px;\n}\n\n.playlist-art-img {\n  max-height: inherit;\n}\n\n.playlist-art-img img {\n  max-height: inherit;\n}\n\n.playback-console {\n  display: flex;\n  justify-content: space-between;\n}\n\n.play-img {\n  margin: auto auto;\n  width: 10%;\n  background-color: black;\n  border: none;\n}\n\n.play-btn {\n  margin-top: 0.5em;\n}\n\n.play {\n  flex: 3 1 50px;\n}\n\n.metadata-playlist-container {\n  display: inline-grid;\n  grid-template-rows: repeat(2, 1fr);\n}\n\n.metadata-items {\n  display: inline-grid;\n  box-shadow: rgb(102, 58, 58) 0px 5px 5px;\n  margin: 0;\n}\n\n.track-items {\n  display: flex;\n  flex: 1 1 300px;\n  justify-content: space-between;\n  margin: 10px;\n  padding: 15px;\n  border: 1px double rgb(102, 58, 58);\n  box-shadow: rgb(102, 58, 58) -1px 2px 5px;\n  color: white;\n}\n\n.library {\n  height: 100%;\n}\n\n.drop-down {\n  position: sticky;\n  height: 10%;\n  padding: 10px;\n  background-image: repeating-linear-gradient(#620f13, #87282d, #3e0003);\n  z-index: 999;\n}\n\n.playlist-library {\n  display: inline-grid;\n  grid-template-columns: repeat(4, 1fr);\n  grid-gap: 1%;\n  width: 100%;\n  height: 100%;\n  padding: 1.5%;\n}\n\n.playlist-items {\n  position: relative;\n  color: white;\n  background-color: #87282d;\n  max-width: 75px;\n  max-height: 20px;\n  box-shadow: rgb(102, 58, 58) 0px 1px 1px;\n  justify-content: space-between;\n}\n\n.playlist-btns {\n  border: 1px solid #3e0003;\n  position: relative;\n  color: white;\n  background-color: black;\n  max-width: 100%;\n  justify-content: space-between;\n  box-shadow: rgb(102, 58, 58) -1px 2px 5px;\n}\n\n.text {\n  position: relative;\n  text-align: center;\n  justify-content: space-around;\n  bottom: 1em;\n  font-size: 12px;\n}\n\n@media screen and (max-width: 800px) {\n  body {\n    overflow-y: scroll;\n    height: 1fr;\n    border: 4px solid #87282d;\n  }\n\n  .container {\n    position: relative;\n    width: 1fr;\n    justify-content: center;\n    overflow-x: hidden;\n  }\n\n  .nav-item {\n    position: sticky;\n    top: 0;\n  }\n\n  .grid-items {\n    width: 100vw;\n    height: 1em;\n  }\n\n  .main-div {\n    grid-template-columns: minmax(100px, 1fr);\n    grid-template-rows: repeat(auto, minmax(10px, 1fr));\n    height: 100%;\n    margin: 0 auto;\n    width: 90vw;\n    justify-content: center;\n    z-index: 0;\n  }\n\n  .center-box {\n    margin: 1% 0;\n  }\n\n  .mobile-hide {\n    display: none;\n  }\n\n  .main-playlist {\n    grid-template-rows: repeat(2, 1fr);\n  }\n\n  .center-items {\n    width: 100%;\n    height: 100%;\n    margin: 10px auto;\n    padding: 10px;\n  }\n\n  .track-window {\n    padding: 3%;\n  }\n\n  .track-description {\n    padding: 0;\n  }\n\n  .title-div {\n    margin: 0 auto;\n    margin-bottom: 2.5%;\n    font-size: 1.5em;\n    box-shadow: none;\n    border-top: solid 1px #620f13;\n  }\n\n  .playback-console {\n    box-shadow: none;\n    border-bottom: solid 1px #620f13;\n  }\n\n  .track-art {\n    margin: 0 0;\n    position: relative;\n  }\n\n  .current-track {\n    position: absolute;\n    top: 5px;\n    left: 5px;\n    right: 5px;\n    bottom: 5px;\n  }\n\n  .track-length {\n    display: none;\n  }\n\n  .library {\n    height: 40em;\n  }\n\n  .playlist-library {\n    justify-content: center;\n  }\n\n  .metadata-playlist-container {\n    height: 43em;\n    margin: 0 auto;\n    justify-content: space-around;\n    margin-top: 5%;\n    margin-bottom: 10%;\n    grid-gap: 5%;\n  }\n\n  .metadata-items {\n    height: 100%;\n    border: solid 2px #620f13;\n    justify-content: center;\n    -ms-overflow-style: none;\n    scrollbar-width: none;\n    margin-top: 3%;\n    margin-bottom: 3%;\n    padding: 5%;\n  }\n\n  .metadata-items::-webkit-scrollbar {\n    display: none;\n  }\n\n  .footer {\n    position: relative;\n    bottom: 0;\n    height: 4fr;\n  }\n}\n',"",{version:3,sources:["webpack://./src/index.css"],names:[],mappings:"AAAA;EACE,sBAAsB;EACtB,SAAS;EACT,UAAU;EACV,kCAAkC;AACpC;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,gBAAgB;EAChB,sEAAsE;EACtE,MAAM;EACN,WAAW;EACX,0CAA0C;EAC1C,aAAa;AACf;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,gBAAgB;EAChB,MAAM;AACR;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,eAAe;EACf,YAAY;AACd;;AAEA;EACE,gBAAgB;EAChB,sEAAsE;EACtE,WAAW;EACX,SAAS;EACT,yCAAyC;EACzC,aAAa;AACf;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,eAAe;EACf,uBAAuB;EACvB,2BAA2B;EAC3B,mCAAmC;AACrC;;AAEA;EACE,kBAAkB;EAClB,MAAM;EACN,OAAO;EACP,2BAA2B;EAC3B,iBAAiB;EACjB,YAAY;EACZ,aAAa;EACb,gBAAgB;EAChB,6BAA6B;EAC7B,oCAAoC;EACpC,aAAa;AACf;;AAEA;;EAEE,0BAA0B;EAC1B,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,oDAAoD;AACtD;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;EAClB,YAAY;AACd;;AAEA;EACE,aAAa;EACb,YAAY;EACZ,cAAc;EACd;;;KAGG;EACH,uBAAuB;EACvB,yCAAyC;AAC3C;;AAEA;EACE,SAAS;EACT,WAAW;AACb;;AAEA;EACE,iBAAiB;EACjB,aAAa;AACf;;AAEA;EACE,eAAe;EACf,YAAY;AACd;;AAEA;EACE,aAAa;EACb,YAAY;AACd;;AAEA;;EAEE,eAAe;EACf,4BAA4B;EAC5B,sBAAsB;AACxB;;AAEA;EACE,aAAa;EACb,2BAA2B;EAC3B,iBAAiB;AACnB;;AAEA;EACE,uBAAuB;AACzB;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,aAAa;EACb,sCAAsC;EACtC,gBAAgB;EAChB,YAAY;EACZ,0BAA0B;EAC1B,mBAAmB;EACnB,sEAAsE;EACtE,0CAA0C;AAC5C;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,YAAY;EACZ,WAAW;AACb;;AAEA;EACE,YAAY;EACZ,mBAAmB;EACnB,YAAY;EACZ,kBAAkB;AACpB;;AAEA;EACE,eAAe;EACf,eAAe;EACf,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,aAAa;EACb,kCAAkC;EAClC,cAAc;AAChB;;AAEA;EACE,cAAc;EACd,eAAe;AACjB;;AAEA;EACE,YAAY;EACZ,YAAY;EACZ,WAAW;EACX,mBAAmB;EACnB,wCAAwC;EACxC,kBAAkB;EAClB,aAAa;AACf;;AAEA;EACE,WAAW;EACX,gBAAgB;AAClB;;AAEA;EACE,YAAY;EACZ,YAAY;EACZ,WAAW;EACX,cAAc;AAChB;;AAEA;EACE,sEAAsE;EACtE,iBAAiB;EACjB,WAAW;EACX,mBAAmB;EACnB,wCAAwC;AAC1C;;AAEA;EACE,mBAAmB;AACrB;;AAEA;EACE,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,8BAA8B;AAChC;;AAEA;EACE,iBAAiB;EACjB,UAAU;EACV,uBAAuB;EACvB,YAAY;AACd;;AAEA;EACE,iBAAiB;AACnB;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,oBAAoB;EACpB,kCAAkC;AACpC;;AAEA;EACE,oBAAoB;EACpB,wCAAwC;EACxC,SAAS;AACX;;AAEA;EACE,aAAa;EACb,eAAe;EACf,8BAA8B;EAC9B,YAAY;EACZ,aAAa;EACb,mCAAmC;EACnC,yCAAyC;EACzC,YAAY;AACd;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;EAChB,WAAW;EACX,aAAa;EACb,sEAAsE;EACtE,YAAY;AACd;;AAEA;EACE,oBAAoB;EACpB,qCAAqC;EACrC,YAAY;EACZ,WAAW;EACX,YAAY;EACZ,aAAa;AACf;;AAEA;EACE,kBAAkB;EAClB,YAAY;EACZ,yBAAyB;EACzB,eAAe;EACf,gBAAgB;EAChB,wCAAwC;EACxC,8BAA8B;AAChC;;AAEA;EACE,yBAAyB;EACzB,kBAAkB;EAClB,YAAY;EACZ,uBAAuB;EACvB,eAAe;EACf,8BAA8B;EAC9B,yCAAyC;AAC3C;;AAEA;EACE,kBAAkB;EAClB,kBAAkB;EAClB,6BAA6B;EAC7B,WAAW;EACX,eAAe;AACjB;;AAEA;EACE;IACE,kBAAkB;IAClB,WAAW;IACX,yBAAyB;EAC3B;;EAEA;IACE,kBAAkB;IAClB,UAAU;IACV,uBAAuB;IACvB,kBAAkB;EACpB;;EAEA;IACE,gBAAgB;IAChB,MAAM;EACR;;EAEA;IACE,YAAY;IACZ,WAAW;EACb;;EAEA;IACE,yCAAyC;IACzC,mDAAmD;IACnD,YAAY;IACZ,cAAc;IACd,WAAW;IACX,uBAAuB;IACvB,UAAU;EACZ;;EAEA;IACE,YAAY;EACd;;EAEA;IACE,aAAa;EACf;;EAEA;IACE,kCAAkC;EACpC;;EAEA;IACE,WAAW;IACX,YAAY;IACZ,iBAAiB;IACjB,aAAa;EACf;;EAEA;IACE,WAAW;EACb;;EAEA;IACE,UAAU;EACZ;;EAEA;IACE,cAAc;IACd,mBAAmB;IACnB,gBAAgB;IAChB,gBAAgB;IAChB,6BAA6B;EAC/B;;EAEA;IACE,gBAAgB;IAChB,gCAAgC;EAClC;;EAEA;IACE,WAAW;IACX,kBAAkB;EACpB;;EAEA;IACE,kBAAkB;IAClB,QAAQ;IACR,SAAS;IACT,UAAU;IACV,WAAW;EACb;;EAEA;IACE,aAAa;EACf;;EAEA;IACE,YAAY;EACd;;EAEA;IACE,uBAAuB;EACzB;;EAEA;IACE,YAAY;IACZ,cAAc;IACd,6BAA6B;IAC7B,cAAc;IACd,kBAAkB;IAClB,YAAY;EACd;;EAEA;IACE,YAAY;IACZ,yBAAyB;IACzB,uBAAuB;IACvB,wBAAwB;IACxB,qBAAqB;IACrB,cAAc;IACd,iBAAiB;IACjB,WAAW;EACb;;EAEA;IACE,aAAa;EACf;;EAEA;IACE,kBAAkB;IAClB,SAAS;IACT,WAAW;EACb;AACF",sourcesContent:['* {\n  box-sizing: border-box;\n  margin: 0;\n  padding: 0;\n  font-family: "Bebas Neue", cursive;\n}\n\nbody {\n  overflow: hidden;\n}\n\nnav {\n  position: sticky;\n  background-image: repeating-linear-gradient(#620f13, #87282d, #3e0003);\n  top: 0;\n  height: 2em;\n  box-shadow: rgb(102, 58, 58) -1px 2px 13px;\n  z-index: 1000;\n}\n\nspan {\n  margin-top: 4px;\n}\n\nselect {\n  position: sticky;\n  top: 0;\n}\n\nsection {\n  overflow-y: auto;\n}\n\nimg {\n  max-width: 100%;\n  height: auto;\n}\n\nfooter {\n  position: sticky;\n  background-image: repeating-linear-gradient(#620f13, #87282d, #3e0003);\n  height: 2em;\n  bottom: 0;\n  box-shadow: rgb(102, 58, 58) 0px 2px 15px;\n  z-index: 1000;\n}\n\n.login-div {\n  display: none;\n}\n\n.container {\n  display: grid;\n  min-height: calc(100vh - 32px);\n  min-width: 100%;\n  background-color: black;\n  grid-template-columns: auto;\n  grid-template-rows: repeat(3, auto);\n}\n\n.nav-list {\n  position: absolute;\n  top: 0;\n  left: 0;\n  background: rgb(56, 15, 15);\n  max-height: 400px;\n  width: 453px;\n  padding: 20px;\n  line-height: 1.5;\n  transform: translateY(-200px);\n  transition: transform 1s ease-in-out;\n  z-index: 1000;\n}\n\n.div.show,\nul.show {\n  transform: translateY(200);\n  transition: 0.8s;\n}\n\n.nav-item {\n  display: grid;\n  grid-template-columns: repeat(3, minmax(200px, 1fr));\n}\n\n.nav-box {\n  height: inherit;\n}\n\n.center-box {\n  margin-top: 10px;\n  text-align: center;\n  color: white;\n}\n\n.main-div {\n  display: grid;\n  height: 90vh;\n  grid-gap: 0.1%;\n  grid-template-columns: minmax(225px, 1.5fr) minmax(150px, 1fr) minmax(\n      200px,\n      2fr\n    );\n  background-color: black;\n  grid-template-rows: repeat(auto-fit, 1fr);\n}\n\n.center-items {\n  margin: 0;\n  width: 100%;\n}\n\n.container {\n  max-width: 1500px;\n  display: grid;\n}\n\n.play-img:hover {\n  cursor: pointer;\n  opacity: 50%;\n}\n\n.playlist-items {\n  height: 150px;\n  width: 125px;\n}\n\n.playlist-items:hover,\n.playlist-btns:hover {\n  cursor: pointer;\n  border: 0.5px #87282d double;\n  transform: scale(1.05);\n}\n\n.track-window {\n  display: grid;\n  grid-template-rows: 2fr 1fr;\n  max-height: 650px;\n}\n\n.side-box {\n  background-color: black;\n}\n\n.tracks {\n  border: 0.5px solid black;\n}\n\n.track-art {\n  display: grid;\n  grid-template-columns: 0.5fr 3fr 0.5fr;\n  margin-top: 10px;\n  height: 60vh;\n  border: 1px double #87282d;\n  border-radius: 2.5%;\n  background-image: repeating-linear-gradient(#620f13, #87282d, #3e0003);\n  box-shadow: rgb(102, 58, 58) -1px 2px 13px;\n}\n\n.current-track {\n  overflow: hidden;\n}\n\n.track-imgs {\n  height: 100%;\n  width: 100%;\n}\n\n.track-description {\n  height: 100%;\n  border-radius: 2.5%;\n  color: white;\n  text-align: center;\n}\n\n.song-info {\n  height: inherit;\n  padding-top: 6%;\n  font-size: 1.5em;\n  line-height: 1.3em;\n}\n\n.main-playlist {\n  display: grid;\n  grid-template-rows: repeat(3, 1fr);\n  width: inherit;\n}\n\n.center-items {\n  width: inherit;\n  height: inherit;\n}\n\n.main-playlist-items {\n  grid-gap: 3%;\n  height: 100%;\n  width: 100%;\n  border-radius: 2.5%;\n  box-shadow: rgb(102, 58, 58) 0px 5px 5px;\n  text-align: center;\n  padding: 0.5%;\n}\n\n.title-div {\n  padding: 4%;\n  margin-top: 2.5%;\n}\n\n.playlist-title {\n  color: white;\n  height: 100%;\n  width: 100%;\n  margin-top: 8%;\n}\n\n.playlist-art {\n  background-image: repeating-linear-gradient(#620f13, #87282d, #3e0003);\n  max-height: 350px;\n  width: 100%;\n  border-radius: 2.5%;\n  box-shadow: rgb(102, 58, 58) 0px 5px 5px;\n}\n\n.playlist-art-img {\n  max-height: inherit;\n}\n\n.playlist-art-img img {\n  max-height: inherit;\n}\n\n.playback-console {\n  display: flex;\n  justify-content: space-between;\n}\n\n.play-img {\n  margin: auto auto;\n  width: 10%;\n  background-color: black;\n  border: none;\n}\n\n.play-btn {\n  margin-top: 0.5em;\n}\n\n.play {\n  flex: 3 1 50px;\n}\n\n.metadata-playlist-container {\n  display: inline-grid;\n  grid-template-rows: repeat(2, 1fr);\n}\n\n.metadata-items {\n  display: inline-grid;\n  box-shadow: rgb(102, 58, 58) 0px 5px 5px;\n  margin: 0;\n}\n\n.track-items {\n  display: flex;\n  flex: 1 1 300px;\n  justify-content: space-between;\n  margin: 10px;\n  padding: 15px;\n  border: 1px double rgb(102, 58, 58);\n  box-shadow: rgb(102, 58, 58) -1px 2px 5px;\n  color: white;\n}\n\n.library {\n  height: 100%;\n}\n\n.drop-down {\n  position: sticky;\n  height: 10%;\n  padding: 10px;\n  background-image: repeating-linear-gradient(#620f13, #87282d, #3e0003);\n  z-index: 999;\n}\n\n.playlist-library {\n  display: inline-grid;\n  grid-template-columns: repeat(4, 1fr);\n  grid-gap: 1%;\n  width: 100%;\n  height: 100%;\n  padding: 1.5%;\n}\n\n.playlist-items {\n  position: relative;\n  color: white;\n  background-color: #87282d;\n  max-width: 75px;\n  max-height: 20px;\n  box-shadow: rgb(102, 58, 58) 0px 1px 1px;\n  justify-content: space-between;\n}\n\n.playlist-btns {\n  border: 1px solid #3e0003;\n  position: relative;\n  color: white;\n  background-color: black;\n  max-width: 100%;\n  justify-content: space-between;\n  box-shadow: rgb(102, 58, 58) -1px 2px 5px;\n}\n\n.text {\n  position: relative;\n  text-align: center;\n  justify-content: space-around;\n  bottom: 1em;\n  font-size: 12px;\n}\n\n@media screen and (max-width: 800px) {\n  body {\n    overflow-y: scroll;\n    height: 1fr;\n    border: 4px solid #87282d;\n  }\n\n  .container {\n    position: relative;\n    width: 1fr;\n    justify-content: center;\n    overflow-x: hidden;\n  }\n\n  .nav-item {\n    position: sticky;\n    top: 0;\n  }\n\n  .grid-items {\n    width: 100vw;\n    height: 1em;\n  }\n\n  .main-div {\n    grid-template-columns: minmax(100px, 1fr);\n    grid-template-rows: repeat(auto, minmax(10px, 1fr));\n    height: 100%;\n    margin: 0 auto;\n    width: 90vw;\n    justify-content: center;\n    z-index: 0;\n  }\n\n  .center-box {\n    margin: 1% 0;\n  }\n\n  .mobile-hide {\n    display: none;\n  }\n\n  .main-playlist {\n    grid-template-rows: repeat(2, 1fr);\n  }\n\n  .center-items {\n    width: 100%;\n    height: 100%;\n    margin: 10px auto;\n    padding: 10px;\n  }\n\n  .track-window {\n    padding: 3%;\n  }\n\n  .track-description {\n    padding: 0;\n  }\n\n  .title-div {\n    margin: 0 auto;\n    margin-bottom: 2.5%;\n    font-size: 1.5em;\n    box-shadow: none;\n    border-top: solid 1px #620f13;\n  }\n\n  .playback-console {\n    box-shadow: none;\n    border-bottom: solid 1px #620f13;\n  }\n\n  .track-art {\n    margin: 0 0;\n    position: relative;\n  }\n\n  .current-track {\n    position: absolute;\n    top: 5px;\n    left: 5px;\n    right: 5px;\n    bottom: 5px;\n  }\n\n  .track-length {\n    display: none;\n  }\n\n  .library {\n    height: 40em;\n  }\n\n  .playlist-library {\n    justify-content: center;\n  }\n\n  .metadata-playlist-container {\n    height: 43em;\n    margin: 0 auto;\n    justify-content: space-around;\n    margin-top: 5%;\n    margin-bottom: 10%;\n    grid-gap: 5%;\n  }\n\n  .metadata-items {\n    height: 100%;\n    border: solid 2px #620f13;\n    justify-content: center;\n    -ms-overflow-style: none;\n    scrollbar-width: none;\n    margin-top: 3%;\n    margin-bottom: 3%;\n    padding: 5%;\n  }\n\n  .metadata-items::-webkit-scrollbar {\n    display: none;\n  }\n\n  .footer {\n    position: relative;\n    bottom: 0;\n    height: 4fr;\n  }\n}\n'],sourceRoot:""}]);const c=a},645:n=>{n.exports=function(n){var e=[];return e.toString=function(){return this.map((function(e){var t="",r=void 0!==e[5];return e[4]&&(t+="@supports (".concat(e[4],") {")),e[2]&&(t+="@media ".concat(e[2]," {")),r&&(t+="@layer".concat(e[5].length>0?" ".concat(e[5]):""," {")),t+=n(e),r&&(t+="}"),e[2]&&(t+="}"),e[4]&&(t+="}"),t})).join("")},e.i=function(n,t,r,o,i){"string"==typeof n&&(n=[[null,n,void 0]]);var a={};if(r)for(var c=0;c<this.length;c++){var s=this[c][0];null!=s&&(a[s]=!0)}for(var l=0;l<n.length;l++){var u=[].concat(n[l]);r&&a[u[0]]||(void 0!==i&&(void 0===u[5]||(u[1]="@layer".concat(u[5].length>0?" ".concat(u[5]):""," {").concat(u[1],"}")),u[5]=i),t&&(u[2]?(u[1]="@media ".concat(u[2]," {").concat(u[1],"}"),u[2]=t):u[2]=t),o&&(u[4]?(u[1]="@supports (".concat(u[4],") {").concat(u[1],"}"),u[4]=o):u[4]="".concat(o)),e.push(u))}},e}},537:n=>{n.exports=function(n){var e=n[1],t=n[3];if(!t)return e;if("function"==typeof btoa){var r=btoa(unescape(encodeURIComponent(JSON.stringify(t)))),o="sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(r),i="/*# ".concat(o," */"),a=t.sources.map((function(n){return"/*# sourceURL=".concat(t.sourceRoot||"").concat(n," */")}));return[e].concat(a).concat([i]).join("\n")}return[e].join("\n")}},548:(n,e,t)=>{var r=t(379),o=t.n(r),i=t(795),a=t.n(i),c=t(569),s=t.n(c),l=t(565),u=t.n(l),p=t(216),A=t.n(p),d=t(589),f=t.n(d),h=t(424),m={};m.styleTagTransform=f(),m.setAttributes=u(),m.insert=s().bind(null,"head"),m.domAPI=a(),m.insertStyleElement=A();var g=o()(h.default,m);if(!h.default.locals||n.hot.invalidate){var y=!h.default.locals,E=y?h:h.default.locals;n.hot.accept(424,(e=>{h=t(424),function(n,e,t){if(!n&&e||n&&!e)return!1;var r;for(r in n)if((!t||"default"!==r)&&n[r]!==e[r])return!1;for(r in e)if(!(t&&"default"===r||n[r]))return!1;return!0}(E,y?h:h.default.locals,y)?(E=y?h:h.default.locals,g(h.default)):n.hot.invalidate()}))}n.hot.dispose((function(){g()})),h.default&&h.default.locals&&h.default.locals},379:n=>{var e=[];function t(n){for(var t=-1,r=0;r<e.length;r++)if(e[r].identifier===n){t=r;break}return t}function r(n,r){for(var i={},a=[],c=0;c<n.length;c++){var s=n[c],l=r.base?s[0]+r.base:s[0],u=i[l]||0,p="".concat(l," ").concat(u);i[l]=u+1;var A=t(p),d={css:s[1],media:s[2],sourceMap:s[3],supports:s[4],layer:s[5]};if(-1!==A)e[A].references++,e[A].updater(d);else{var f=o(d,r);r.byIndex=c,e.splice(c,0,{identifier:p,updater:f,references:1})}a.push(p)}return a}function o(n,e){var t=e.domAPI(e);return t.update(n),function(e){if(e){if(e.css===n.css&&e.media===n.media&&e.sourceMap===n.sourceMap&&e.supports===n.supports&&e.layer===n.layer)return;t.update(n=e)}else t.remove()}}n.exports=function(n,o){var i=r(n=n||[],o=o||{});return function(n){n=n||[];for(var a=0;a<i.length;a++){var c=t(i[a]);e[c].references--}for(var s=r(n,o),l=0;l<i.length;l++){var u=t(i[l]);0===e[u].references&&(e[u].updater(),e.splice(u,1))}i=s}}},569:n=>{var e={};n.exports=function(n,t){var r=function(n){if(void 0===e[n]){var t=document.querySelector(n);if(window.HTMLIFrameElement&&t instanceof window.HTMLIFrameElement)try{t=t.contentDocument.head}catch(n){t=null}e[n]=t}return e[n]}(n);if(!r)throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");r.appendChild(t)}},216:n=>{n.exports=function(n){var e=document.createElement("style");return n.setAttributes(e,n.attributes),n.insert(e,n.options),e}},565:(n,e,t)=>{n.exports=function(n){var e=t.nc;e&&n.setAttribute("nonce",e)}},795:n=>{n.exports=function(n){var e=n.insertStyleElement(n);return{update:function(t){!function(n,e,t){var r="";t.supports&&(r+="@supports (".concat(t.supports,") {")),t.media&&(r+="@media ".concat(t.media," {"));var o=void 0!==t.layer;o&&(r+="@layer".concat(t.layer.length>0?" ".concat(t.layer):""," {")),r+=t.css,o&&(r+="}"),t.media&&(r+="}"),t.supports&&(r+="}");var i=t.sourceMap;i&&"undefined"!=typeof btoa&&(r+="\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(i))))," */")),e.styleTagTransform(r,n,e.options)}(e,n,t)},remove:function(){!function(n){if(null===n.parentNode)return!1;n.parentNode.removeChild(n)}(e)}}}},589:n=>{n.exports=function(n,e){if(e.styleSheet)e.styleSheet.cssText=n;else{for(;e.firstChild;)e.removeChild(e.firstChild);e.appendChild(document.createTextNode(n))}}}},r={};function o(n){var e=r[n];if(void 0!==e){if(void 0!==e.error)throw e.error;return e.exports}var i=r[n]={id:n,exports:{}};try{var a={id:n,module:i,factory:t[n],require:o};o.i.forEach((function(n){n(a)})),i=a.module,a.factory.call(i.exports,i,i.exports,a.require)}catch(n){throw i.error=n,n}return i.exports}o.m=t,o.c=r,o.i=[],o.n=n=>{var e=n&&n.__esModule?()=>n.default:()=>n;return o.d(e,{a:e}),e},o.d=(n,e)=>{for(var t in e)o.o(e,t)&&!o.o(n,t)&&Object.defineProperty(n,t,{enumerable:!0,get:e[t]})},o.hu=n=>n+"."+o.h()+".hot-update.js",o.hmrF=()=>"main."+o.h()+".hot-update.json",o.h=()=>"fb0d719a651b92411e47",o.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(n){if("object"==typeof window)return window}}(),o.o=(n,e)=>Object.prototype.hasOwnProperty.call(n,e),n={},e="my-playlist-app:",o.l=(t,r,i,a)=>{if(n[t])n[t].push(r);else{var c,s;if(void 0!==i)for(var l=document.getElementsByTagName("script"),u=0;u<l.length;u++){var p=l[u];if(p.getAttribute("src")==t||p.getAttribute("data-webpack")==e+i){c=p;break}}c||(s=!0,(c=document.createElement("script")).charset="utf-8",c.timeout=120,o.nc&&c.setAttribute("nonce",o.nc),c.setAttribute("data-webpack",e+i),c.src=t),n[t]=[r];var A=(e,r)=>{c.onerror=c.onload=null,clearTimeout(d);var o=n[t];if(delete n[t],c.parentNode&&c.parentNode.removeChild(c),o&&o.forEach((n=>n(r))),e)return e(r)},d=setTimeout(A.bind(null,void 0,{type:"timeout",target:c}),12e4);c.onerror=A.bind(null,c.onerror),c.onload=A.bind(null,c.onload),s&&document.head.appendChild(c)}},o.r=n=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(n,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(n,"__esModule",{value:!0})},(()=>{var n,e,t,r={},i=o.c,a=[],c=[],s="idle",l=0,u=[];function p(n){s=n;for(var e=[],t=0;t<c.length;t++)e[t]=c[t].call(null,n);return Promise.all(e)}function A(){0==--l&&p("ready").then((function(){if(0===l){var n=u;u=[];for(var e=0;e<n.length;e++)n[e]()}}))}function d(n){if("idle"!==s)throw new Error("check() is only allowed in idle status");return p("check").then(o.hmrM).then((function(t){return t?p("prepare").then((function(){var r=[];return e=[],Promise.all(Object.keys(o.hmrC).reduce((function(n,i){return o.hmrC[i](t.c,t.r,t.m,n,e,r),n}),[])).then((function(){return e=function(){return n?h(n):p("ready").then((function(){return r}))},0===l?e():new Promise((function(n){u.push((function(){n(e())}))}));var e}))})):p(m()?"ready":"idle").then((function(){return null}))}))}function f(n){return"ready"!==s?Promise.resolve().then((function(){throw new Error("apply() is only allowed in ready status (state: "+s+")")})):h(n)}function h(n){n=n||{},m();var r=e.map((function(e){return e(n)}));e=void 0;var o=r.map((function(n){return n.error})).filter(Boolean);if(o.length>0)return p("abort").then((function(){throw o[0]}));var i=p("dispose");r.forEach((function(n){n.dispose&&n.dispose()}));var a,c=p("apply"),s=function(n){a||(a=n)},l=[];return r.forEach((function(n){if(n.apply){var e=n.apply(s);if(e)for(var t=0;t<e.length;t++)l.push(e[t])}})),Promise.all([i,c]).then((function(){return a?p("fail").then((function(){throw a})):t?h(n).then((function(n){return l.forEach((function(e){n.indexOf(e)<0&&n.push(e)})),n})):p("idle").then((function(){return l}))}))}function m(){if(t)return e||(e=[]),Object.keys(o.hmrI).forEach((function(n){t.forEach((function(t){o.hmrI[n](t,e)}))})),t=void 0,!0}o.hmrD=r,o.i.push((function(u){var h,m,g,y,E=u.module,v=function(e,t){var r=i[t];if(!r)return e;var o=function(o){if(r.hot.active){if(i[o]){var c=i[o].parents;-1===c.indexOf(t)&&c.push(t)}else a=[t],n=o;-1===r.children.indexOf(o)&&r.children.push(o)}else console.warn("[HMR] unexpected require("+o+") from disposed module "+t),a=[];return e(o)},c=function(n){return{configurable:!0,enumerable:!0,get:function(){return e[n]},set:function(t){e[n]=t}}};for(var u in e)Object.prototype.hasOwnProperty.call(e,u)&&"e"!==u&&Object.defineProperty(o,u,c(u));return o.e=function(n){return function(n){switch(s){case"ready":p("prepare");case"prepare":return l++,n.then(A,A),n;default:return n}}(e.e(n))},o}(u.require,u.id);E.hot=(h=u.id,m=E,y={_acceptedDependencies:{},_acceptedErrorHandlers:{},_declinedDependencies:{},_selfAccepted:!1,_selfDeclined:!1,_selfInvalidated:!1,_disposeHandlers:[],_main:g=n!==h,_requireSelf:function(){a=m.parents.slice(),n=g?void 0:h,o(h)},active:!0,accept:function(n,e,t){if(void 0===n)y._selfAccepted=!0;else if("function"==typeof n)y._selfAccepted=n;else if("object"==typeof n&&null!==n)for(var r=0;r<n.length;r++)y._acceptedDependencies[n[r]]=e||function(){},y._acceptedErrorHandlers[n[r]]=t;else y._acceptedDependencies[n]=e||function(){},y._acceptedErrorHandlers[n]=t},decline:function(n){if(void 0===n)y._selfDeclined=!0;else if("object"==typeof n&&null!==n)for(var e=0;e<n.length;e++)y._declinedDependencies[n[e]]=!0;else y._declinedDependencies[n]=!0},dispose:function(n){y._disposeHandlers.push(n)},addDisposeHandler:function(n){y._disposeHandlers.push(n)},removeDisposeHandler:function(n){var e=y._disposeHandlers.indexOf(n);e>=0&&y._disposeHandlers.splice(e,1)},invalidate:function(){switch(this._selfInvalidated=!0,s){case"idle":e=[],Object.keys(o.hmrI).forEach((function(n){o.hmrI[n](h,e)})),p("ready");break;case"ready":Object.keys(o.hmrI).forEach((function(n){o.hmrI[n](h,e)}));break;case"prepare":case"check":case"dispose":case"apply":(t=t||[]).push(h)}},check:d,apply:f,status:function(n){if(!n)return s;c.push(n)},addStatusHandler:function(n){c.push(n)},removeStatusHandler:function(n){var e=c.indexOf(n);e>=0&&c.splice(e,1)},data:r[h]},n=void 0,y),E.parents=a,E.children=[],a=[],u.require=v})),o.hmrC={},o.hmrI={}})(),(()=>{var n;o.g.importScripts&&(n=o.g.location+"");var e=o.g.document;if(!n&&e&&(e.currentScript&&(n=e.currentScript.src),!n)){var t=e.getElementsByTagName("script");t.length&&(n=t[t.length-1].src)}if(!n)throw new Error("Automatic publicPath is not supported in this browser");n=n.replace(/#.*$/,"").replace(/\?.*$/,"").replace(/\/[^\/]+$/,"/"),o.p=n})(),(()=>{var n,e,t,r,i,a=o.hmrS_jsonp=o.hmrS_jsonp||{179:0},c={};function s(e,t){return n=t,new Promise(((n,t)=>{c[e]=n;var r=o.p+o.hu(e),i=new Error;o.l(r,(n=>{if(c[e]){c[e]=void 0;var r=n&&("load"===n.type?"missing":n.type),o=n&&n.target&&n.target.src;i.message="Loading hot update chunk "+e+" failed.\n("+r+": "+o+")",i.name="ChunkLoadError",i.type=r,i.request=o,t(i)}}))}))}function l(n){function c(n){for(var e=[n],t={},r=e.map((function(n){return{chain:[n],id:n}}));r.length>0;){var i=r.pop(),a=i.id,c=i.chain,l=o.c[a];if(l&&(!l.hot._selfAccepted||l.hot._selfInvalidated)){if(l.hot._selfDeclined)return{type:"self-declined",chain:c,moduleId:a};if(l.hot._main)return{type:"unaccepted",chain:c,moduleId:a};for(var u=0;u<l.parents.length;u++){var p=l.parents[u],A=o.c[p];if(A){if(A.hot._declinedDependencies[a])return{type:"declined",chain:c.concat([p]),moduleId:a,parentId:p};-1===e.indexOf(p)&&(A.hot._acceptedDependencies[a]?(t[p]||(t[p]=[]),s(t[p],[a])):(delete t[p],e.push(p),r.push({chain:c.concat([p]),id:p})))}}}}return{type:"accepted",moduleId:n,outdatedModules:e,outdatedDependencies:t}}function s(n,e){for(var t=0;t<e.length;t++){var r=e[t];-1===n.indexOf(r)&&n.push(r)}}o.f&&delete o.f.jsonpHmr,e=void 0;var l={},u=[],p={},A=function(n){console.warn("[HMR] unexpected require("+n.id+") to disposed module")};for(var d in t)if(o.o(t,d)){var f,h=t[d],m=!1,g=!1,y=!1,E="";switch((f=h?c(d):{type:"disposed",moduleId:d}).chain&&(E="\nUpdate propagation: "+f.chain.join(" -> ")),f.type){case"self-declined":n.onDeclined&&n.onDeclined(f),n.ignoreDeclined||(m=new Error("Aborted because of self decline: "+f.moduleId+E));break;case"declined":n.onDeclined&&n.onDeclined(f),n.ignoreDeclined||(m=new Error("Aborted because of declined dependency: "+f.moduleId+" in "+f.parentId+E));break;case"unaccepted":n.onUnaccepted&&n.onUnaccepted(f),n.ignoreUnaccepted||(m=new Error("Aborted because "+d+" is not accepted"+E));break;case"accepted":n.onAccepted&&n.onAccepted(f),g=!0;break;case"disposed":n.onDisposed&&n.onDisposed(f),y=!0;break;default:throw new Error("Unexception type "+f.type)}if(m)return{error:m};if(g)for(d in p[d]=h,s(u,f.outdatedModules),f.outdatedDependencies)o.o(f.outdatedDependencies,d)&&(l[d]||(l[d]=[]),s(l[d],f.outdatedDependencies[d]));y&&(s(u,[f.moduleId]),p[d]=A)}t=void 0;for(var v,C=[],b=0;b<u.length;b++){var x=u[b],w=o.c[x];w&&(w.hot._selfAccepted||w.hot._main)&&p[x]!==A&&!w.hot._selfInvalidated&&C.push({module:x,require:w.hot._requireSelf,errorHandler:w.hot._selfAccepted})}return{dispose:function(){var n;r.forEach((function(n){delete a[n]})),r=void 0;for(var e,t=u.slice();t.length>0;){var i=t.pop(),c=o.c[i];if(c){var s={},p=c.hot._disposeHandlers;for(b=0;b<p.length;b++)p[b].call(null,s);for(o.hmrD[i]=s,c.hot.active=!1,delete o.c[i],delete l[i],b=0;b<c.children.length;b++){var A=o.c[c.children[b]];A&&(n=A.parents.indexOf(i))>=0&&A.parents.splice(n,1)}}}for(var d in l)if(o.o(l,d)&&(c=o.c[d]))for(v=l[d],b=0;b<v.length;b++)e=v[b],(n=c.children.indexOf(e))>=0&&c.children.splice(n,1)},apply:function(e){for(var t in p)o.o(p,t)&&(o.m[t]=p[t]);for(var r=0;r<i.length;r++)i[r](o);for(var a in l)if(o.o(l,a)){var c=o.c[a];if(c){v=l[a];for(var s=[],A=[],d=[],f=0;f<v.length;f++){var h=v[f],m=c.hot._acceptedDependencies[h],g=c.hot._acceptedErrorHandlers[h];if(m){if(-1!==s.indexOf(m))continue;s.push(m),A.push(g),d.push(h)}}for(var y=0;y<s.length;y++)try{s[y].call(null,v)}catch(t){if("function"==typeof A[y])try{A[y](t,{moduleId:a,dependencyId:d[y]})}catch(r){n.onErrored&&n.onErrored({type:"accept-error-handler-errored",moduleId:a,dependencyId:d[y],error:r,originalError:t}),n.ignoreErrored||(e(r),e(t))}else n.onErrored&&n.onErrored({type:"accept-errored",moduleId:a,dependencyId:d[y],error:t}),n.ignoreErrored||e(t)}}}for(var E=0;E<C.length;E++){var b=C[E],x=b.module;try{b.require(x)}catch(t){if("function"==typeof b.errorHandler)try{b.errorHandler(t,{moduleId:x,module:o.c[x]})}catch(r){n.onErrored&&n.onErrored({type:"self-accept-error-handler-errored",moduleId:x,error:r,originalError:t}),n.ignoreErrored||(e(r),e(t))}else n.onErrored&&n.onErrored({type:"self-accept-errored",moduleId:x,error:t}),n.ignoreErrored||e(t)}}return u}}}self.webpackHotUpdatemy_playlist_app=(e,r,a)=>{for(var s in r)o.o(r,s)&&(t[s]=r[s],n&&n.push(s));a&&i.push(a),c[e]&&(c[e](),c[e]=void 0)},o.hmrI.jsonp=function(n,e){t||(t={},i=[],r=[],e.push(l)),o.o(t,n)||(t[n]=o.m[n])},o.hmrC.jsonp=function(n,c,u,p,A,d){A.push(l),e={},r=c,t=u.reduce((function(n,e){return n[e]=!1,n}),{}),i=[],n.forEach((function(n){o.o(a,n)&&void 0!==a[n]?(p.push(s(n,d)),e[n]=!0):e[n]=!1})),o.f&&(o.f.jsonpHmr=function(n,t){e&&o.o(e,n)&&!e[n]&&(t.push(s(n)),e[n]=!0)})},o.hmrM=()=>{if("undefined"==typeof fetch)throw new Error("No browser support: need fetch API");return fetch(o.p+o.hmrF()).then((n=>{if(404!==n.status){if(!n.ok)throw new Error("Failed to fetch update manifest "+n.statusText);return n.json()}}))}})(),o.nc=void 0,o(541)})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/app.js":
+/*!********************!*\
+  !*** ./src/app.js ***!
+  \********************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+__webpack_require__.e(/*! import() */ "src_index_css").then(__webpack_require__.bind(__webpack_require__, /*! ./src/index.css */ "./src/index.css")); //-----------------------------------//
+//-----API Controller Module---------//
+//-----------------------------------//
+
+var apiController = function () {
+  //get access token
+  function _getToken2() {
+    return _getToken.apply(this, arguments);
+  }
+
+  function _getToken() {
+    _getToken = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var result, data;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return fetch('https://accounts.spotify.com/api/token', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'Authorization': 'Basic ' + btoa("4986258db999480dbcb94669e69535ad" + ':' + "50a5f956f0f84b278d3d90745c3308b5")
+                },
+                body: 'grant_type=client_credentials'
+              });
+
+            case 2:
+              result = _context.sent;
+              _context.next = 5;
+              return result.json()["catch"](function (error) {
+                console.log(error);
+              });
+
+            case 5:
+              data = _context.sent;
+              return _context.abrupt("return", data.access_token);
+
+            case 7:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+    return _getToken.apply(this, arguments);
+  }
+
+  ; //-----------------------------------//
+  //--------API Display Module---------//
+  //-----------------------------------//
+  //fetch genres from spotify for later sorting
+
+  function _getGenres2(_x) {
+    return _getGenres.apply(this, arguments);
+  }
+
+  function _getGenres() {
+    _getGenres = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(token) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              console.log('fetching genres...');
+              _context3.next = 3;
+              return fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer ".concat(token)
+                }
+              }).then( /*#__PURE__*/function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(response) {
+                  var data;
+                  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                    while (1) {
+                      switch (_context2.prev = _context2.next) {
+                        case 0:
+                          _context2.next = 2;
+                          return response.json()["catch"](function (error) {
+                            console.log(error);
+                          });
+
+                        case 2:
+                          data = _context2.sent;
+                          return _context2.abrupt("return", data.genres);
+
+                        case 4:
+                        case "end":
+                          return _context2.stop();
+                      }
+                    }
+                  }, _callee2);
+                }));
+
+                return function (_x11) {
+                  return _ref.apply(this, arguments);
+                };
+              }());
+
+            case 3:
+              response = _context3.sent;
+              return _context3.abrupt("return", response);
+
+            case 5:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+    return _getGenres.apply(this, arguments);
+  }
+
+  ; //fetch user playlist information from api
+
+  function _getMyPlaylists2(_x2) {
+    return _getMyPlaylists.apply(this, arguments);
+  }
+
+  function _getMyPlaylists() {
+    _getMyPlaylists = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(token) {
+      var limit, response;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              console.log('fetching playlists...');
+              limit = 21;
+              _context5.next = 4;
+              return fetch("https://api.spotify.com/v1/users/".concat("12172782523", "/playlists?limit=").concat(limit, "&offset=0"), {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer ".concat(token)
+                }
+              }).then( /*#__PURE__*/function () {
+                var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(response) {
+                  var data;
+                  return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+                    while (1) {
+                      switch (_context4.prev = _context4.next) {
+                        case 0:
+                          _context4.next = 2;
+                          return response.json()["catch"](function (error) {
+                            console.log(error);
+                          });
+
+                        case 2:
+                          data = _context4.sent;
+                          return _context4.abrupt("return", data);
+
+                        case 4:
+                        case "end":
+                          return _context4.stop();
+                      }
+                    }
+                  }, _callee4);
+                }));
+
+                return function (_x12) {
+                  return _ref2.apply(this, arguments);
+                };
+              }());
+
+            case 4:
+              response = _context5.sent;
+              return _context5.abrupt("return", response);
+
+            case 6:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }));
+    return _getMyPlaylists.apply(this, arguments);
+  }
+
+  ; //fetch user playlist information from api
+
+  function _getPlaylistByID2(_x3, _x4) {
+    return _getPlaylistByID.apply(this, arguments);
+  }
+
+  function _getPlaylistByID() {
+    _getPlaylistByID = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(playlistID, token) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              console.log('fetching playlist...');
+              _context7.next = 3;
+              return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID), {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer ".concat(token)
+                }
+              }).then( /*#__PURE__*/function () {
+                var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(response) {
+                  return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+                    while (1) {
+                      switch (_context6.prev = _context6.next) {
+                        case 0:
+                          _context6.next = 2;
+                          return response.json()["catch"](function (error) {
+                            console.log(error);
+                          });
+
+                        case 2:
+                          data = _context6.sent;
+                          return _context6.abrupt("return", data);
+
+                        case 4:
+                        case "end":
+                          return _context6.stop();
+                      }
+                    }
+                  }, _callee6);
+                }));
+
+                return function (_x13) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+
+            case 3:
+              response = _context7.sent;
+              return _context7.abrupt("return", response);
+
+            case 5:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7);
+    }));
+    return _getPlaylistByID.apply(this, arguments);
+  }
+
+  ; //function used to fetch playlist track list
+
+  function _getMyPlaylistsTrackList2(_x5, _x6) {
+    return _getMyPlaylistsTrackList.apply(this, arguments);
+  }
+
+  function _getMyPlaylistsTrackList() {
+    _getMyPlaylistsTrackList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(playlistID, token) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+        while (1) {
+          switch (_context9.prev = _context9.next) {
+            case 0:
+              console.log('fetching playlist track list...');
+              _context9.next = 3;
+              return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID, "/tracks"), {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer ".concat(token)
+                }
+              }).then( /*#__PURE__*/function () {
+                var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(response) {
+                  var data;
+                  return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+                    while (1) {
+                      switch (_context8.prev = _context8.next) {
+                        case 0:
+                          _context8.next = 2;
+                          return response.json()["catch"](function (error) {
+                            console.log(error);
+                          });
+
+                        case 2:
+                          data = _context8.sent;
+                          return _context8.abrupt("return", data);
+
+                        case 4:
+                        case "end":
+                          return _context8.stop();
+                      }
+                    }
+                  }, _callee8);
+                }));
+
+                return function (_x14) {
+                  return _ref4.apply(this, arguments);
+                };
+              }());
+
+            case 3:
+              response = _context9.sent;
+              return _context9.abrupt("return", response);
+
+            case 5:
+            case "end":
+              return _context9.stop();
+          }
+        }
+      }, _callee9);
+    }));
+    return _getMyPlaylistsTrackList.apply(this, arguments);
+  }
+
+  ; //function used to fetch individual track info from playlists
+
+  function _getTracksInfo2(_x7, _x8) {
+    return _getTracksInfo.apply(this, arguments);
+  }
+
+  function _getTracksInfo() {
+    _getTracksInfo = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(trackID, token) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+        while (1) {
+          switch (_context11.prev = _context11.next) {
+            case 0:
+              console.log('fetching track info...');
+              _context11.next = 3;
+              return fetch("https://api.spotify.com/v1/tracks/".concat(trackID), {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer ".concat(token)
+                }
+              }).then( /*#__PURE__*/function () {
+                var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(response) {
+                  var data;
+                  return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+                    while (1) {
+                      switch (_context10.prev = _context10.next) {
+                        case 0:
+                          _context10.next = 2;
+                          return response.json()["catch"](function (error) {
+                            console.log(error);
+                          });
+
+                        case 2:
+                          data = _context10.sent;
+                          return _context10.abrupt("return", data);
+
+                        case 4:
+                        case "end":
+                          return _context10.stop();
+                      }
+                    }
+                  }, _callee10);
+                }));
+
+                return function (_x15) {
+                  return _ref5.apply(this, arguments);
+                };
+              }());
+
+            case 3:
+              response = _context11.sent;
+              return _context11.abrupt("return", response);
+
+            case 5:
+            case "end":
+              return _context11.stop();
+          }
+        }
+      }, _callee11);
+    }));
+    return _getTracksInfo.apply(this, arguments);
+  }
+
+  ; //-----------------------------------//
+  //--------API Function Module--------//
+  //-----------------------------------//
+  //fetch play/pause
+
+  function _playFunction2(_x9, _x10) {
+    return _playFunction.apply(this, arguments);
+  }
+
+  function _playFunction() {
+    _playFunction = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(token, uri) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+        while (1) {
+          switch (_context13.prev = _context13.next) {
+            case 0:
+              _context13.next = 2;
+              return fetch("https://api.spotify.com/v1/me/player/play", {
+                method: "PUT",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer ".concat(token)
+                },
+                body: "{\"context_uri\":\"spotify:track:".concat(uri, "\",\"offset\":{\"position\":5},\"position_ms\":0}")
+              }).then( /*#__PURE__*/function () {
+                var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(response) {
+                  return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+                    while (1) {
+                      switch (_context12.prev = _context12.next) {
+                        case 0:
+                          _context12.next = 2;
+                          return response.json()["catch"](function (error) {
+                            console.log(error);
+                          });
+
+                        case 2:
+                          data = _context12.sent;
+                          console.log("Playing", data);
+                          return _context12.abrupt("return", data);
+
+                        case 5:
+                        case "end":
+                          return _context12.stop();
+                      }
+                    }
+                  }, _callee12);
+                }));
+
+                return function (_x16) {
+                  return _ref6.apply(this, arguments);
+                };
+              }());
+
+            case 2:
+              response = _context13.sent;
+              return _context13.abrupt("return", response);
+
+            case 4:
+            case "end":
+              return _context13.stop();
+          }
+        }
+      }, _callee13);
+    }));
+    return _playFunction.apply(this, arguments);
+  }
+
+  ; //-----------------------------------//
+  //-------------Returns---------------//
+  //-----------------------------------//
+
+  return {
+    getToken: function getToken() {
+      return _getToken2();
+    },
+    getGenres: function getGenres(token) {
+      return _getGenres2(token);
+    },
+    getMyPlaylists: function getMyPlaylists(token) {
+      return _getMyPlaylists2(token);
+    },
+    getPlaylistByID: function getPlaylistByID(playlistID, token) {
+      return _getPlaylistByID2(playlistID, token);
+    },
+    getMyPlaylistsTrackList: function getMyPlaylistsTrackList(playlistID, token) {
+      return _getMyPlaylistsTrackList2(playlistID, token);
+    },
+    getTracksInfo: function getTracksInfo(trackID, token) {
+      return _getTracksInfo2(trackID, token);
+    },
+    playFunction: function playFunction(token, uri) {
+      return _playFunction2(token, uri);
+    }
+  };
+}(); //-----------------------------------//
+//-------UI Selector Module----------//
+//-----------------------------------//
+
+
+var uiController = function () {
+  //store html selectors in an object for outputField() method
+  var domElements = {
+    hToken: "#hidden-token",
+    hlogin: "#login-div",
+    btnLogin: "#login-btn",
+    songDetail: "#song-description",
+    previousSong: "#prev",
+    currentSong: "#current",
+    nextSong: "#next",
+    title: "#playlist-title",
+    playlistArt: "#playlist-art",
+    nowPlaying: "#now-playing",
+    skipBack: "#skipBack",
+    play: "#play",
+    skipForward: "#skipForward",
+    playlistContents: "#metadata-1",
+    otherPlaylists: "#metadata-2",
+    genreSelect: "#genre-select"
+  };
+  return {
+    //create a method to callback selectors
+    outputField: function outputField() {
+      return {
+        songDetail: document.querySelector(domElements.songDetail),
+        hiddenDiv: document.querySelector(domElements.hlogin),
+        btnLogin: document.querySelector(domElements.btnLogin),
+        previousSong: document.querySelector(domElements.previousSong),
+        currentSong: document.querySelector(domElements.currentSong),
+        nextSong: document.querySelector(domElements.nextSong),
+        title: document.querySelector(domElements.title),
+        playlistArt: document.querySelector(domElements.playlistArt),
+        nowPlaying: document.querySelector(domElements.nowPlaying),
+        skipBack: document.querySelector(domElements.skipBack),
+        play: document.querySelector(domElements.play),
+        skipForward: document.querySelector(domElements.skipForward),
+        playlistSongs: document.querySelector(domElements.playlistContents),
+        playlistLibrary: document.querySelector(domElements.otherPlaylists),
+        genreSelect: document.querySelector(domElements.genreSelect)
+      };
+    },
+    //general ui info population methods
+    assignGenre: function assignGenre(text, value) {
+      var html = "<option id=\"genre-item\" value=\"".concat(value, "\">").concat(text, "</option>");
+      document.querySelector(domElements.genreSelect).insertAdjacentHTML("beforeend", html);
+    },
+    assignTitle: function assignTitle(id, text) {
+      var html = "<div class=\"playlist-title\">".concat(text, "</div><input class=\"hidden-title\" type=\"hidden\" value=").concat(id, "></input>");
+      document.querySelector(domElements.title).insertAdjacentHTML("beforeend", html);
+    },
+    assignPlaylistArt: function assignPlaylistArt(img) {
+      var image = "<div class=\"playlist-art-img\" id=\"playlist-img\">\n      <img src=".concat(img, " class=\"playlist-pic\"/></div>");
+      document.querySelector(domElements.playlistArt).insertAdjacentHTML("beforeend", image);
+    },
+    populatePlaylists: function populatePlaylists(id, url, text) {
+      var html = "<button class=\"playlist-btns\" value=".concat(id, "><img src=").concat(url, " alt=\"").concat(text, "\"/><div class=\"text\">").concat(text, "</div></button>");
+      document.querySelector(domElements.otherPlaylists).insertAdjacentHTML("beforeend", html);
+    },
+    populateTrackList: function populateTrackList(uri, number, name, artist, length, id) {
+      var html = "<div class=\"track-items\"><input class=\"uri\" type=\"hidden\" value=".concat(uri, ">").concat(number, ". ").concat(name, " by ").concat(artist, "</input><button class=\"track-id playlist-items\" value=").concat(id, ">PLAY</button><div class=\"track-length\">").concat(Math.floor(length / 1000 / 60), ":").concat(Math.floor(length / 1000 % 60).toFixed(0), "</div></div>");
+      document.querySelector(domElements.playlistContents).insertAdjacentHTML("beforeend", html);
+    },
+    populateSongInfo: function populateSongInfo(name, artist, album) {
+      var html = "<div class=\"song-info\">Now Playing:<br>".concat(name, " by ").concat(artist, "<br>from the Album:<br>").concat(album, "</div>");
+      document.querySelector(domElements.songDetail).insertAdjacentHTML("beforeend", html);
+    },
+    populateSongImage: function populateSongImage(img) {
+      var html = "<img class=\"track-imgs\" src=".concat(img, ">");
+      document.querySelector(domElements.currentSong).insertAdjacentHTML("beforeend", html);
+    },
+    resetTrackArt: function resetTrackArt() {
+      this.outputField().currentSong.innerHTML = "";
+    },
+    resetTrackDetail: function resetTrackDetail() {
+      this.outputField().songDetail.innerHTML = "";
+      this.resetTrackArt();
+    },
+    resetTitle: function resetTitle() {
+      this.outputField().title.innerHTML = "";
+      this.resetTrackDetail();
+    },
+    resetPlaylistPic: function resetPlaylistPic() {
+      this.outputField().playlistArt.innerHTML = "";
+      this.resetTitle();
+    },
+    resetTracks: function resetTracks() {
+      this.outputField().playlistSongs.innerHTML = "";
+      this.resetPlaylistPic();
+    },
+    resetPlaylists: function resetPlaylists() {
+      this.outputField().playlistLibrary.innerHTML = "";
+      this.resetTracks();
+    },
+    storeToken: function storeToken(value) {
+      document.querySelector(domElements.hToken).value = value;
+    },
+    getStoredToken: function getStoredToken() {
+      return {
+        token: document.querySelector(domElements.hToken).value
+      };
+    }
+  };
+}(); //-----------------------------------//
+//-------App Control Module----------//
+//-----------------------------------//
+
+
+var appController = function (apiCtrl, uiCtrl) {
+  //get object reference for DOM outputs
+  var domOutput = uiCtrl.outputField();
+
+  var asyncOps = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20() {
+      var token, genrePopulate, musicPopulate, genreListener, playlistListener, tracklistListener, trackPlayListener;
+      return _regeneratorRuntime().wrap(function _callee20$(_context20) {
+        while (1) {
+          switch (_context20.prev = _context20.next) {
+            case 0:
+              _context20.next = 2;
+              return apiCtrl.getToken()["catch"](function (err) {
+                console.log(err);
+              });
+
+            case 2:
+              token = _context20.sent;
+              //retrieve token and store it in hidden html element
+              uiCtrl.storeToken(token); //----Populate HTML Information------//
+              //---onLoad----//
+
+              genrePopulate = /*#__PURE__*/function () {
+                var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14() {
+                  var token;
+                  return _regeneratorRuntime().wrap(function _callee14$(_context14) {
+                    while (1) {
+                      switch (_context14.prev = _context14.next) {
+                        case 0:
+                          //retrieve token
+                          token = uiCtrl.getStoredToken().token; //fetch genres
+
+                          _context14.prev = 1;
+                          _context14.next = 4;
+                          return apiCtrl.getGenres(token).then(function (data) {
+                            //populate drop-down menu with genres
+                            data.forEach(function (element) {
+                              return uiCtrl.assignGenre(element, element);
+                            });
+                          })["catch"](function (error) {
+                            return console.log(error);
+                          });
+
+                        case 4:
+                          _context14.next = 9;
+                          break;
+
+                        case 6:
+                          _context14.prev = 6;
+                          _context14.t0 = _context14["catch"](1);
+                          console.log(_context14.t0);
+
+                        case 9:
+                          ;
+
+                        case 10:
+                        case "end":
+                          return _context14.stop();
+                      }
+                    }
+                  }, _callee14, null, [[1, 6]]);
+                }));
+
+                return function genrePopulate() {
+                  return _ref8.apply(this, arguments);
+                };
+              }();
+
+              musicPopulate = /*#__PURE__*/function () {
+                var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15() {
+                  var token, data, title, id, _i, newData, _i2, newerData, newestData;
+
+                  return _regeneratorRuntime().wrap(function _callee15$(_context15) {
+                    while (1) {
+                      switch (_context15.prev = _context15.next) {
+                        case 0:
+                          //retrieve token
+                          token = uiCtrl.getStoredToken().token; //fetch playlist info for each playlist
+
+                          _context15.next = 3;
+                          return apiCtrl.getMyPlaylists(token)["catch"](function (error) {
+                            return console.log(error);
+                          });
+
+                        case 3:
+                          data = _context15.sent;
+                          //populate title
+                          title = data.items[3].name;
+                          id = data.items[3].id;
+                          uiCtrl.assignTitle(id, title); //place image on center div
+
+                          uiCtrl.assignPlaylistArt(data.items[3].images[0].url); //populate playlist selection library
+
+                          for (_i = 0; _i < data.items.length; _i++) {
+                            uiCtrl.populatePlaylists(data.items[_i].id, data.items[_i].images[0].url, data.items[_i].name);
+                          }
+
+                          ; //fetch tracklist info for each track
+
+                          _context15.next = 12;
+                          return apiCtrl.getMyPlaylistsTrackList(data.items[3].id, token)["catch"](function (error) {
+                            return console.log(error);
+                          });
+
+                        case 12:
+                          newData = _context15.sent;
+
+                          for (_i2 = 0; _i2 < newData.items.length; _i2++) {
+                            //place html
+                            uiCtrl.populateTrackList(newData.items[_i2].track.uri, _i2 + 1, newData.items[_i2].track.name, newData.items[_i2].track.artists[0].name, newData.items[_i2].track.duration_ms, newData.items[_i2].track.id);
+                          } //fetch current song image
+
+
+                          _context15.next = 16;
+                          return apiCtrl.getTracksInfo(newData.items[0].track.id, token)["catch"](function (error) {
+                            return console.log(error);
+                          });
+
+                        case 16:
+                          newerData = _context15.sent;
+                          uiCtrl.populateSongInfo(newerData.name, newerData.artists[0].name, newerData.album.name);
+                          _context15.next = 20;
+                          return apiCtrl.getTracksInfo(newData.items[0].track.id, token)["catch"](function (error) {
+                            return console.log(error);
+                          });
+
+                        case 20:
+                          newestData = _context15.sent;
+                          //place song images
+                          uiCtrl.populateSongImage(newestData.album.images[0].url);
+                          console.log("async ops complete");
+
+                        case 23:
+                        case "end":
+                          return _context15.stop();
+                      }
+                    }
+                  }, _callee15);
+                }));
+
+                return function musicPopulate() {
+                  return _ref9.apply(this, arguments);
+                };
+              }(); //-----------------------------------//
+              //-------App Event Listeners---------//
+              //-----------------------------------//
+
+
+              genreListener = function genreListener() {
+                //retrieve token
+                var token = uiCtrl.getStoredToken().token;
+                var genreSelect = domOutput.genreSelect;
+                genreSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16() {
+                  var genreId, _playlist, description, title, newData, newerData;
+
+                  return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+                    while (1) {
+                      switch (_context16.prev = _context16.next) {
+                        case 0:
+                          uiCtrl.resetPlaylists();
+                          genreId = genreSelect.options[genreSelect.selectedIndex].value;
+                          _context16.prev = 2;
+                          _context16.next = 5;
+                          return apiCtrl.getMyPlaylists(token);
+
+                        case 5:
+                          _playlist = _context16.sent;
+
+                          for (i = 0; i < _playlist.items.length; i++) {
+                            description = _playlist.items[i].description;
+
+                            if (description.split(" ").includes(genreId)) {
+                              //populate title
+                              title = _playlist.items[i].name;
+                              uiCtrl.resetTracks();
+                              uiCtrl.assignTitle(genreId, title); //assign current playlist image to center div
+
+                              uiCtrl.assignPlaylistArt(_playlist.items[i].images[0].url); //assign current playlist(s)
+
+                              uiCtrl.populatePlaylists(_playlist.items[i].id, _playlist.items[i].images[0].url, _playlist.items[i].name);
+                            }
+                          }
+
+                          _context16.next = 12;
+                          break;
+
+                        case 9:
+                          _context16.prev = 9;
+                          _context16.t0 = _context16["catch"](2);
+                          console.log(_context16.t0);
+
+                        case 12:
+                          ;
+                          _context16.prev = 13;
+                          _context16.next = 16;
+                          return apiCtrl.getMyPlaylistsTrackList(playlist.items[i].id, token);
+
+                        case 16:
+                          newData = _context16.sent;
+                          j = 0;
+
+                        case 18:
+                          if (!(j < newData.items.length)) {
+                            _context16.next = 28;
+                            break;
+                          }
+
+                          //place current tracklist
+                          uiCtrl.populateTrackList(newData.items[j].track.uri, j + 1, newData.items[j].track.name, newData.items[j].track.artists[0].name, newData.items[j].track.duration_ms, newData.items[i].track.id); //fetch current song image
+
+                          _context16.next = 22;
+                          return apiCtrl.getTracksInfo(newData.items[j].track.id, token);
+
+                        case 22:
+                          newerData = _context16.sent;
+                          uiCtrl.populateSongInfo(newerData.name, newerData.artists[0].name, newerData.album.name);
+                          uiCtrl.populateSongImage(newerData.album.images[0].url);
+
+                        case 25:
+                          j++;
+                          _context16.next = 18;
+                          break;
+
+                        case 28:
+                          _context16.next = 33;
+                          break;
+
+                        case 30:
+                          _context16.prev = 30;
+                          _context16.t1 = _context16["catch"](13);
+                          console.log(_context16.t1);
+
+                        case 33:
+                          ;
+
+                        case 34:
+                        case "end":
+                          return _context16.stop();
+                      }
+                    }
+                  }, _callee16, null, [[2, 9], [13, 30]]);
+                })));
+              };
+
+              playlistListener = function playlistListener() {
+                //retrieve token
+                var token = uiCtrl.getStoredToken().token;
+                var playlistContainer = domOutput.playlistLibrary;
+                playlistContainer.addEventListener("click", /*#__PURE__*/function () {
+                  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(e) {
+                    var btnID, currentPlaylist, trackList, trackInfo;
+                    return _regeneratorRuntime().wrap(function _callee17$(_context17) {
+                      while (1) {
+                        switch (_context17.prev = _context17.next) {
+                          case 0:
+                            uiCtrl.resetTracks();
+                            btnID = e.target.value; // <----- there is a bug here, if user clicks image it will not work
+
+                            _context17.prev = 2;
+                            _context17.next = 5;
+                            return apiCtrl.getPlaylistByID(btnID, token);
+
+                          case 5:
+                            currentPlaylist = _context17.sent;
+                            uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
+                            uiCtrl.assignTitle(currentPlaylist.id, currentPlaylist.name);
+                            _context17.next = 10;
+                            return apiCtrl.getMyPlaylistsTrackList(btnID, token);
+
+                          case 10:
+                            trackList = _context17.sent;
+                            i = 0;
+
+                          case 12:
+                            if (!(i < trackList.items.length)) {
+                              _context17.next = 22;
+                              break;
+                            }
+
+                            uiCtrl.populateTrackList(trackList.items[i].track.uri, i + 1, trackList.items[i].track.name, trackList.items[i].track.artists[0].name, trackList.items[i].track.duration_ms, trackList.items[i].track.id); //fetch current song image
+
+                            _context17.next = 16;
+                            return apiCtrl.getTracksInfo(trackList.items[i].track.id, token);
+
+                          case 16:
+                            trackInfo = _context17.sent;
+                            uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
+                            uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+
+                          case 19:
+                            i++;
+                            _context17.next = 12;
+                            break;
+
+                          case 22:
+                            _context17.next = 27;
+                            break;
+
+                          case 24:
+                            _context17.prev = 24;
+                            _context17.t0 = _context17["catch"](2);
+                            console.log(_context17.t0);
+
+                          case 27:
+                            ;
+
+                          case 28:
+                          case "end":
+                            return _context17.stop();
+                        }
+                      }
+                    }, _callee17, null, [[2, 24]]);
+                  }));
+
+                  return function (_x17) {
+                    return _ref11.apply(this, arguments);
+                  };
+                }());
+              };
+
+              tracklistListener = function tracklistListener() {
+                //retrieve token
+                var token = uiCtrl.getStoredToken().token;
+                var songDiv = domOutput.playlistSongs;
+                songDiv.addEventListener("click", /*#__PURE__*/function () {
+                  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(e) {
+                    var trackID, trackInfo, _uri, trackPlay;
+
+                    return _regeneratorRuntime().wrap(function _callee18$(_context18) {
+                      while (1) {
+                        switch (_context18.prev = _context18.next) {
+                          case 0:
+                            uiCtrl.resetTrackDetail(); // const trackDiv = document.getElementsByClassName("track-items");
+                            // const uri = document.querySelector("uri");
+
+                            trackID = e.target.value;
+                            _context18.prev = 2;
+                            _context18.next = 5;
+                            return apiCtrl.getTracksInfo(trackID, token);
+
+                          case 5:
+                            trackInfo = _context18.sent;
+                            uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
+                            uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+                            _uri = trackInfo;
+                            _context18.next = 14;
+                            break;
+
+                          case 11:
+                            _context18.prev = 11;
+                            _context18.t0 = _context18["catch"](2);
+                            console.log(_context18.t0);
+
+                          case 14:
+                            ;
+                            _context18.prev = 15;
+                            _context18.next = 18;
+                            return apiCtrl.playFunction(token, uri);
+
+                          case 18:
+                            trackPlay = _context18.sent;
+                            _context18.next = 24;
+                            break;
+
+                          case 21:
+                            _context18.prev = 21;
+                            _context18.t1 = _context18["catch"](15);
+                            console.log(_context18.t1);
+
+                          case 24:
+                            ;
+
+                          case 25:
+                          case "end":
+                            return _context18.stop();
+                        }
+                      }
+                    }, _callee18, null, [[2, 11], [15, 21]]);
+                  }));
+
+                  return function (_x18) {
+                    return _ref12.apply(this, arguments);
+                  };
+                }());
+              };
+
+              trackPlayListener = function trackPlayListener() {
+                //retrieve token
+                var token = uiCtrl.getStoredToken().token;
+                var songPlay = domOutput.play;
+                var songSkip = domOutput.skipForward;
+                var songBack = domOutput.skipBack;
+                songPlay.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19() {
+                  var tracklist, uri;
+                  return _regeneratorRuntime().wrap(function _callee19$(_context19) {
+                    while (1) {
+                      switch (_context19.prev = _context19.next) {
+                        case 0:
+                          tracklist = domOutput.playlistSongs.children;
+                          uri = tracklist[0].childNodes[0].defaultValue;
+                          _context19.prev = 2;
+                          _context19.next = 5;
+                          return apiCtrl.playFunction(token, uri);
+
+                        case 5:
+                          _context19.next = 10;
+                          break;
+
+                        case 7:
+                          _context19.prev = 7;
+                          _context19.t0 = _context19["catch"](2);
+                          console.log(_context19.t0);
+
+                        case 10:
+                          ;
+
+                        case 11:
+                        case "end":
+                          return _context19.stop();
+                      }
+                    }
+                  }, _callee19, null, [[2, 7]]);
+                })));
+              };
+
+              musicPopulate();
+              genrePopulate();
+              genreListener();
+              playlistListener();
+              trackPlayListener();
+              tracklistListener();
+
+            case 16:
+            case "end":
+              return _context20.stop();
+          }
+        }
+      }, _callee20);
+    }));
+
+    return function asyncOps() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
+
+  asyncOps();
+}(apiController, uiController);
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			if (cachedModule.error !== undefined) throw cachedModule.error;
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			id: moduleId,
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		try {
+/******/ 			var execOptions = { id: moduleId, module: module, factory: __webpack_modules__[moduleId], require: __webpack_require__ };
+/******/ 			__webpack_require__.i.forEach(function(handler) { handler(execOptions); });
+/******/ 			module = execOptions.module;
+/******/ 			execOptions.factory.call(module.exports, module, module.exports, execOptions.require);
+/******/ 		} catch(e) {
+/******/ 			module.error = e;
+/******/ 			throw e;
+/******/ 		}
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = __webpack_module_cache__;
+/******/ 	
+/******/ 	// expose the module execution interceptor
+/******/ 	__webpack_require__.i = [];
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/ensure chunk */
+/******/ 	(() => {
+/******/ 		__webpack_require__.f = {};
+/******/ 		// This file contains only the entry chunk.
+/******/ 		// The chunk loading function for additional chunks
+/******/ 		__webpack_require__.e = (chunkId) => {
+/******/ 			return Promise.all(Object.keys(__webpack_require__.f).reduce((promises, key) => {
+/******/ 				__webpack_require__.f[key](chunkId, promises);
+/******/ 				return promises;
+/******/ 			}, []));
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/get javascript chunk filename */
+/******/ 	(() => {
+/******/ 		// This function allow to reference async chunks
+/******/ 		__webpack_require__.u = (chunkId) => {
+/******/ 			// return url for filenames based on template
+/******/ 			return "" + chunkId + ".bundle.js";
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/get javascript update chunk filename */
+/******/ 	(() => {
+/******/ 		// This function allow to reference all chunks
+/******/ 		__webpack_require__.hu = (chunkId) => {
+/******/ 			// return url for filenames based on template
+/******/ 			return "" + chunkId + "." + __webpack_require__.h() + ".hot-update.js";
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/get update manifest filename */
+/******/ 	(() => {
+/******/ 		__webpack_require__.hmrF = () => ("main." + __webpack_require__.h() + ".hot-update.json");
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/getFullHash */
+/******/ 	(() => {
+/******/ 		__webpack_require__.h = () => ("57105b9e3c85d2d0ccf9")
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/load script */
+/******/ 	(() => {
+/******/ 		var inProgress = {};
+/******/ 		var dataWebpackPrefix = "my-playlist-app:";
+/******/ 		// loadScript function to load a script via script tag
+/******/ 		__webpack_require__.l = (url, done, key, chunkId) => {
+/******/ 			if(inProgress[url]) { inProgress[url].push(done); return; }
+/******/ 			var script, needAttach;
+/******/ 			if(key !== undefined) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				for(var i = 0; i < scripts.length; i++) {
+/******/ 					var s = scripts[i];
+/******/ 					if(s.getAttribute("src") == url || s.getAttribute("data-webpack") == dataWebpackPrefix + key) { script = s; break; }
+/******/ 				}
+/******/ 			}
+/******/ 			if(!script) {
+/******/ 				needAttach = true;
+/******/ 				script = document.createElement('script');
+/******/ 		
+/******/ 				script.charset = 'utf-8';
+/******/ 				script.timeout = 120;
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
+/******/ 				script.src = url;
+/******/ 			}
+/******/ 			inProgress[url] = [done];
+/******/ 			var onScriptComplete = (prev, event) => {
+/******/ 				// avoid mem leaks in IE.
+/******/ 				script.onerror = script.onload = null;
+/******/ 				clearTimeout(timeout);
+/******/ 				var doneFns = inProgress[url];
+/******/ 				delete inProgress[url];
+/******/ 				script.parentNode && script.parentNode.removeChild(script);
+/******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
+/******/ 				if(prev) return prev(event);
+/******/ 			}
+/******/ 			;
+/******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
+/******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
+/******/ 			script.onload = onScriptComplete.bind(null, script.onload);
+/******/ 			needAttach && document.head.appendChild(script);
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hot module replacement */
+/******/ 	(() => {
+/******/ 		var currentModuleData = {};
+/******/ 		var installedModules = __webpack_require__.c;
+/******/ 		
+/******/ 		// module and require creation
+/******/ 		var currentChildModule;
+/******/ 		var currentParents = [];
+/******/ 		
+/******/ 		// status
+/******/ 		var registeredStatusHandlers = [];
+/******/ 		var currentStatus = "idle";
+/******/ 		
+/******/ 		// while downloading
+/******/ 		var blockingPromises = 0;
+/******/ 		var blockingPromisesWaiting = [];
+/******/ 		
+/******/ 		// The update info
+/******/ 		var currentUpdateApplyHandlers;
+/******/ 		var queuedInvalidatedModules;
+/******/ 		
+/******/ 		// eslint-disable-next-line no-unused-vars
+/******/ 		__webpack_require__.hmrD = currentModuleData;
+/******/ 		
+/******/ 		__webpack_require__.i.push(function (options) {
+/******/ 			var module = options.module;
+/******/ 			var require = createRequire(options.require, options.id);
+/******/ 			module.hot = createModuleHotObject(options.id, module);
+/******/ 			module.parents = currentParents;
+/******/ 			module.children = [];
+/******/ 			currentParents = [];
+/******/ 			options.require = require;
+/******/ 		});
+/******/ 		
+/******/ 		__webpack_require__.hmrC = {};
+/******/ 		__webpack_require__.hmrI = {};
+/******/ 		
+/******/ 		function createRequire(require, moduleId) {
+/******/ 			var me = installedModules[moduleId];
+/******/ 			if (!me) return require;
+/******/ 			var fn = function (request) {
+/******/ 				if (me.hot.active) {
+/******/ 					if (installedModules[request]) {
+/******/ 						var parents = installedModules[request].parents;
+/******/ 						if (parents.indexOf(moduleId) === -1) {
+/******/ 							parents.push(moduleId);
+/******/ 						}
+/******/ 					} else {
+/******/ 						currentParents = [moduleId];
+/******/ 						currentChildModule = request;
+/******/ 					}
+/******/ 					if (me.children.indexOf(request) === -1) {
+/******/ 						me.children.push(request);
+/******/ 					}
+/******/ 				} else {
+/******/ 					console.warn(
+/******/ 						"[HMR] unexpected require(" +
+/******/ 							request +
+/******/ 							") from disposed module " +
+/******/ 							moduleId
+/******/ 					);
+/******/ 					currentParents = [];
+/******/ 				}
+/******/ 				return require(request);
+/******/ 			};
+/******/ 			var createPropertyDescriptor = function (name) {
+/******/ 				return {
+/******/ 					configurable: true,
+/******/ 					enumerable: true,
+/******/ 					get: function () {
+/******/ 						return require[name];
+/******/ 					},
+/******/ 					set: function (value) {
+/******/ 						require[name] = value;
+/******/ 					}
+/******/ 				};
+/******/ 			};
+/******/ 			for (var name in require) {
+/******/ 				if (Object.prototype.hasOwnProperty.call(require, name) && name !== "e") {
+/******/ 					Object.defineProperty(fn, name, createPropertyDescriptor(name));
+/******/ 				}
+/******/ 			}
+/******/ 			fn.e = function (chunkId) {
+/******/ 				return trackBlockingPromise(require.e(chunkId));
+/******/ 			};
+/******/ 			return fn;
+/******/ 		}
+/******/ 		
+/******/ 		function createModuleHotObject(moduleId, me) {
+/******/ 			var _main = currentChildModule !== moduleId;
+/******/ 			var hot = {
+/******/ 				// private stuff
+/******/ 				_acceptedDependencies: {},
+/******/ 				_acceptedErrorHandlers: {},
+/******/ 				_declinedDependencies: {},
+/******/ 				_selfAccepted: false,
+/******/ 				_selfDeclined: false,
+/******/ 				_selfInvalidated: false,
+/******/ 				_disposeHandlers: [],
+/******/ 				_main: _main,
+/******/ 				_requireSelf: function () {
+/******/ 					currentParents = me.parents.slice();
+/******/ 					currentChildModule = _main ? undefined : moduleId;
+/******/ 					__webpack_require__(moduleId);
+/******/ 				},
+/******/ 		
+/******/ 				// Module API
+/******/ 				active: true,
+/******/ 				accept: function (dep, callback, errorHandler) {
+/******/ 					if (dep === undefined) hot._selfAccepted = true;
+/******/ 					else if (typeof dep === "function") hot._selfAccepted = dep;
+/******/ 					else if (typeof dep === "object" && dep !== null) {
+/******/ 						for (var i = 0; i < dep.length; i++) {
+/******/ 							hot._acceptedDependencies[dep[i]] = callback || function () {};
+/******/ 							hot._acceptedErrorHandlers[dep[i]] = errorHandler;
+/******/ 						}
+/******/ 					} else {
+/******/ 						hot._acceptedDependencies[dep] = callback || function () {};
+/******/ 						hot._acceptedErrorHandlers[dep] = errorHandler;
+/******/ 					}
+/******/ 				},
+/******/ 				decline: function (dep) {
+/******/ 					if (dep === undefined) hot._selfDeclined = true;
+/******/ 					else if (typeof dep === "object" && dep !== null)
+/******/ 						for (var i = 0; i < dep.length; i++)
+/******/ 							hot._declinedDependencies[dep[i]] = true;
+/******/ 					else hot._declinedDependencies[dep] = true;
+/******/ 				},
+/******/ 				dispose: function (callback) {
+/******/ 					hot._disposeHandlers.push(callback);
+/******/ 				},
+/******/ 				addDisposeHandler: function (callback) {
+/******/ 					hot._disposeHandlers.push(callback);
+/******/ 				},
+/******/ 				removeDisposeHandler: function (callback) {
+/******/ 					var idx = hot._disposeHandlers.indexOf(callback);
+/******/ 					if (idx >= 0) hot._disposeHandlers.splice(idx, 1);
+/******/ 				},
+/******/ 				invalidate: function () {
+/******/ 					this._selfInvalidated = true;
+/******/ 					switch (currentStatus) {
+/******/ 						case "idle":
+/******/ 							currentUpdateApplyHandlers = [];
+/******/ 							Object.keys(__webpack_require__.hmrI).forEach(function (key) {
+/******/ 								__webpack_require__.hmrI[key](
+/******/ 									moduleId,
+/******/ 									currentUpdateApplyHandlers
+/******/ 								);
+/******/ 							});
+/******/ 							setStatus("ready");
+/******/ 							break;
+/******/ 						case "ready":
+/******/ 							Object.keys(__webpack_require__.hmrI).forEach(function (key) {
+/******/ 								__webpack_require__.hmrI[key](
+/******/ 									moduleId,
+/******/ 									currentUpdateApplyHandlers
+/******/ 								);
+/******/ 							});
+/******/ 							break;
+/******/ 						case "prepare":
+/******/ 						case "check":
+/******/ 						case "dispose":
+/******/ 						case "apply":
+/******/ 							(queuedInvalidatedModules = queuedInvalidatedModules || []).push(
+/******/ 								moduleId
+/******/ 							);
+/******/ 							break;
+/******/ 						default:
+/******/ 							// ignore requests in error states
+/******/ 							break;
+/******/ 					}
+/******/ 				},
+/******/ 		
+/******/ 				// Management API
+/******/ 				check: hotCheck,
+/******/ 				apply: hotApply,
+/******/ 				status: function (l) {
+/******/ 					if (!l) return currentStatus;
+/******/ 					registeredStatusHandlers.push(l);
+/******/ 				},
+/******/ 				addStatusHandler: function (l) {
+/******/ 					registeredStatusHandlers.push(l);
+/******/ 				},
+/******/ 				removeStatusHandler: function (l) {
+/******/ 					var idx = registeredStatusHandlers.indexOf(l);
+/******/ 					if (idx >= 0) registeredStatusHandlers.splice(idx, 1);
+/******/ 				},
+/******/ 		
+/******/ 				//inherit from previous dispose call
+/******/ 				data: currentModuleData[moduleId]
+/******/ 			};
+/******/ 			currentChildModule = undefined;
+/******/ 			return hot;
+/******/ 		}
+/******/ 		
+/******/ 		function setStatus(newStatus) {
+/******/ 			currentStatus = newStatus;
+/******/ 			var results = [];
+/******/ 		
+/******/ 			for (var i = 0; i < registeredStatusHandlers.length; i++)
+/******/ 				results[i] = registeredStatusHandlers[i].call(null, newStatus);
+/******/ 		
+/******/ 			return Promise.all(results);
+/******/ 		}
+/******/ 		
+/******/ 		function unblock() {
+/******/ 			if (--blockingPromises === 0) {
+/******/ 				setStatus("ready").then(function () {
+/******/ 					if (blockingPromises === 0) {
+/******/ 						var list = blockingPromisesWaiting;
+/******/ 						blockingPromisesWaiting = [];
+/******/ 						for (var i = 0; i < list.length; i++) {
+/******/ 							list[i]();
+/******/ 						}
+/******/ 					}
+/******/ 				});
+/******/ 			}
+/******/ 		}
+/******/ 		
+/******/ 		function trackBlockingPromise(promise) {
+/******/ 			switch (currentStatus) {
+/******/ 				case "ready":
+/******/ 					setStatus("prepare");
+/******/ 				/* fallthrough */
+/******/ 				case "prepare":
+/******/ 					blockingPromises++;
+/******/ 					promise.then(unblock, unblock);
+/******/ 					return promise;
+/******/ 				default:
+/******/ 					return promise;
+/******/ 			}
+/******/ 		}
+/******/ 		
+/******/ 		function waitForBlockingPromises(fn) {
+/******/ 			if (blockingPromises === 0) return fn();
+/******/ 			return new Promise(function (resolve) {
+/******/ 				blockingPromisesWaiting.push(function () {
+/******/ 					resolve(fn());
+/******/ 				});
+/******/ 			});
+/******/ 		}
+/******/ 		
+/******/ 		function hotCheck(applyOnUpdate) {
+/******/ 			if (currentStatus !== "idle") {
+/******/ 				throw new Error("check() is only allowed in idle status");
+/******/ 			}
+/******/ 			return setStatus("check")
+/******/ 				.then(__webpack_require__.hmrM)
+/******/ 				.then(function (update) {
+/******/ 					if (!update) {
+/******/ 						return setStatus(applyInvalidatedModules() ? "ready" : "idle").then(
+/******/ 							function () {
+/******/ 								return null;
+/******/ 							}
+/******/ 						);
+/******/ 					}
+/******/ 		
+/******/ 					return setStatus("prepare").then(function () {
+/******/ 						var updatedModules = [];
+/******/ 						currentUpdateApplyHandlers = [];
+/******/ 		
+/******/ 						return Promise.all(
+/******/ 							Object.keys(__webpack_require__.hmrC).reduce(function (
+/******/ 								promises,
+/******/ 								key
+/******/ 							) {
+/******/ 								__webpack_require__.hmrC[key](
+/******/ 									update.c,
+/******/ 									update.r,
+/******/ 									update.m,
+/******/ 									promises,
+/******/ 									currentUpdateApplyHandlers,
+/******/ 									updatedModules
+/******/ 								);
+/******/ 								return promises;
+/******/ 							},
+/******/ 							[])
+/******/ 						).then(function () {
+/******/ 							return waitForBlockingPromises(function () {
+/******/ 								if (applyOnUpdate) {
+/******/ 									return internalApply(applyOnUpdate);
+/******/ 								} else {
+/******/ 									return setStatus("ready").then(function () {
+/******/ 										return updatedModules;
+/******/ 									});
+/******/ 								}
+/******/ 							});
+/******/ 						});
+/******/ 					});
+/******/ 				});
+/******/ 		}
+/******/ 		
+/******/ 		function hotApply(options) {
+/******/ 			if (currentStatus !== "ready") {
+/******/ 				return Promise.resolve().then(function () {
+/******/ 					throw new Error(
+/******/ 						"apply() is only allowed in ready status (state: " +
+/******/ 							currentStatus +
+/******/ 							")"
+/******/ 					);
+/******/ 				});
+/******/ 			}
+/******/ 			return internalApply(options);
+/******/ 		}
+/******/ 		
+/******/ 		function internalApply(options) {
+/******/ 			options = options || {};
+/******/ 		
+/******/ 			applyInvalidatedModules();
+/******/ 		
+/******/ 			var results = currentUpdateApplyHandlers.map(function (handler) {
+/******/ 				return handler(options);
+/******/ 			});
+/******/ 			currentUpdateApplyHandlers = undefined;
+/******/ 		
+/******/ 			var errors = results
+/******/ 				.map(function (r) {
+/******/ 					return r.error;
+/******/ 				})
+/******/ 				.filter(Boolean);
+/******/ 		
+/******/ 			if (errors.length > 0) {
+/******/ 				return setStatus("abort").then(function () {
+/******/ 					throw errors[0];
+/******/ 				});
+/******/ 			}
+/******/ 		
+/******/ 			// Now in "dispose" phase
+/******/ 			var disposePromise = setStatus("dispose");
+/******/ 		
+/******/ 			results.forEach(function (result) {
+/******/ 				if (result.dispose) result.dispose();
+/******/ 			});
+/******/ 		
+/******/ 			// Now in "apply" phase
+/******/ 			var applyPromise = setStatus("apply");
+/******/ 		
+/******/ 			var error;
+/******/ 			var reportError = function (err) {
+/******/ 				if (!error) error = err;
+/******/ 			};
+/******/ 		
+/******/ 			var outdatedModules = [];
+/******/ 			results.forEach(function (result) {
+/******/ 				if (result.apply) {
+/******/ 					var modules = result.apply(reportError);
+/******/ 					if (modules) {
+/******/ 						for (var i = 0; i < modules.length; i++) {
+/******/ 							outdatedModules.push(modules[i]);
+/******/ 						}
+/******/ 					}
+/******/ 				}
+/******/ 			});
+/******/ 		
+/******/ 			return Promise.all([disposePromise, applyPromise]).then(function () {
+/******/ 				// handle errors in accept handlers and self accepted module load
+/******/ 				if (error) {
+/******/ 					return setStatus("fail").then(function () {
+/******/ 						throw error;
+/******/ 					});
+/******/ 				}
+/******/ 		
+/******/ 				if (queuedInvalidatedModules) {
+/******/ 					return internalApply(options).then(function (list) {
+/******/ 						outdatedModules.forEach(function (moduleId) {
+/******/ 							if (list.indexOf(moduleId) < 0) list.push(moduleId);
+/******/ 						});
+/******/ 						return list;
+/******/ 					});
+/******/ 				}
+/******/ 		
+/******/ 				return setStatus("idle").then(function () {
+/******/ 					return outdatedModules;
+/******/ 				});
+/******/ 			});
+/******/ 		}
+/******/ 		
+/******/ 		function applyInvalidatedModules() {
+/******/ 			if (queuedInvalidatedModules) {
+/******/ 				if (!currentUpdateApplyHandlers) currentUpdateApplyHandlers = [];
+/******/ 				Object.keys(__webpack_require__.hmrI).forEach(function (key) {
+/******/ 					queuedInvalidatedModules.forEach(function (moduleId) {
+/******/ 						__webpack_require__.hmrI[key](
+/******/ 							moduleId,
+/******/ 							currentUpdateApplyHandlers
+/******/ 						);
+/******/ 					});
+/******/ 				});
+/******/ 				queuedInvalidatedModules = undefined;
+/******/ 				return true;
+/******/ 			}
+/******/ 		}
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = __webpack_require__.hmrS_jsonp = __webpack_require__.hmrS_jsonp || {
+/******/ 			"main": 0
+/******/ 		};
+/******/ 		
+/******/ 		__webpack_require__.f.j = (chunkId, promises) => {
+/******/ 				// JSONP chunk loading for javascript
+/******/ 				var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
+/******/ 				if(installedChunkData !== 0) { // 0 means "already installed".
+/******/ 		
+/******/ 					// a Promise means "currently loading".
+/******/ 					if(installedChunkData) {
+/******/ 						promises.push(installedChunkData[2]);
+/******/ 					} else {
+/******/ 						if(true) { // all chunks have JS
+/******/ 							// setup Promise in chunk cache
+/******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
+/******/ 							promises.push(installedChunkData[2] = promise);
+/******/ 		
+/******/ 							// start chunk loading
+/******/ 							var url = __webpack_require__.p + __webpack_require__.u(chunkId);
+/******/ 							// create error before stack unwound to get useful stacktrace later
+/******/ 							var error = new Error();
+/******/ 							var loadingEnded = (event) => {
+/******/ 								if(__webpack_require__.o(installedChunks, chunkId)) {
+/******/ 									installedChunkData = installedChunks[chunkId];
+/******/ 									if(installedChunkData !== 0) installedChunks[chunkId] = undefined;
+/******/ 									if(installedChunkData) {
+/******/ 										var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 										var realSrc = event && event.target && event.target.src;
+/******/ 										error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+/******/ 										error.name = 'ChunkLoadError';
+/******/ 										error.type = errorType;
+/******/ 										error.request = realSrc;
+/******/ 										installedChunkData[1](error);
+/******/ 									}
+/******/ 								}
+/******/ 							};
+/******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
+/******/ 						} else installedChunks[chunkId] = 0;
+/******/ 					}
+/******/ 				}
+/******/ 		};
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		var currentUpdatedModulesList;
+/******/ 		var waitingUpdateResolves = {};
+/******/ 		function loadUpdateChunk(chunkId, updatedModulesList) {
+/******/ 			currentUpdatedModulesList = updatedModulesList;
+/******/ 			return new Promise((resolve, reject) => {
+/******/ 				waitingUpdateResolves[chunkId] = resolve;
+/******/ 				// start update chunk loading
+/******/ 				var url = __webpack_require__.p + __webpack_require__.hu(chunkId);
+/******/ 				// create error before stack unwound to get useful stacktrace later
+/******/ 				var error = new Error();
+/******/ 				var loadingEnded = (event) => {
+/******/ 					if(waitingUpdateResolves[chunkId]) {
+/******/ 						waitingUpdateResolves[chunkId] = undefined
+/******/ 						var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 						var realSrc = event && event.target && event.target.src;
+/******/ 						error.message = 'Loading hot update chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+/******/ 						error.name = 'ChunkLoadError';
+/******/ 						error.type = errorType;
+/******/ 						error.request = realSrc;
+/******/ 						reject(error);
+/******/ 					}
+/******/ 				};
+/******/ 				__webpack_require__.l(url, loadingEnded);
+/******/ 			});
+/******/ 		}
+/******/ 		
+/******/ 		self["webpackHotUpdatemy_playlist_app"] = (chunkId, moreModules, runtime) => {
+/******/ 			for(var moduleId in moreModules) {
+/******/ 				if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 					currentUpdate[moduleId] = moreModules[moduleId];
+/******/ 					if(currentUpdatedModulesList) currentUpdatedModulesList.push(moduleId);
+/******/ 				}
+/******/ 			}
+/******/ 			if(runtime) currentUpdateRuntime.push(runtime);
+/******/ 			if(waitingUpdateResolves[chunkId]) {
+/******/ 				waitingUpdateResolves[chunkId]();
+/******/ 				waitingUpdateResolves[chunkId] = undefined;
+/******/ 			}
+/******/ 		};
+/******/ 		
+/******/ 		var currentUpdateChunks;
+/******/ 		var currentUpdate;
+/******/ 		var currentUpdateRemovedChunks;
+/******/ 		var currentUpdateRuntime;
+/******/ 		function applyHandler(options) {
+/******/ 			if (__webpack_require__.f) delete __webpack_require__.f.jsonpHmr;
+/******/ 			currentUpdateChunks = undefined;
+/******/ 			function getAffectedModuleEffects(updateModuleId) {
+/******/ 				var outdatedModules = [updateModuleId];
+/******/ 				var outdatedDependencies = {};
+/******/ 		
+/******/ 				var queue = outdatedModules.map(function (id) {
+/******/ 					return {
+/******/ 						chain: [id],
+/******/ 						id: id
+/******/ 					};
+/******/ 				});
+/******/ 				while (queue.length > 0) {
+/******/ 					var queueItem = queue.pop();
+/******/ 					var moduleId = queueItem.id;
+/******/ 					var chain = queueItem.chain;
+/******/ 					var module = __webpack_require__.c[moduleId];
+/******/ 					if (
+/******/ 						!module ||
+/******/ 						(module.hot._selfAccepted && !module.hot._selfInvalidated)
+/******/ 					)
+/******/ 						continue;
+/******/ 					if (module.hot._selfDeclined) {
+/******/ 						return {
+/******/ 							type: "self-declined",
+/******/ 							chain: chain,
+/******/ 							moduleId: moduleId
+/******/ 						};
+/******/ 					}
+/******/ 					if (module.hot._main) {
+/******/ 						return {
+/******/ 							type: "unaccepted",
+/******/ 							chain: chain,
+/******/ 							moduleId: moduleId
+/******/ 						};
+/******/ 					}
+/******/ 					for (var i = 0; i < module.parents.length; i++) {
+/******/ 						var parentId = module.parents[i];
+/******/ 						var parent = __webpack_require__.c[parentId];
+/******/ 						if (!parent) continue;
+/******/ 						if (parent.hot._declinedDependencies[moduleId]) {
+/******/ 							return {
+/******/ 								type: "declined",
+/******/ 								chain: chain.concat([parentId]),
+/******/ 								moduleId: moduleId,
+/******/ 								parentId: parentId
+/******/ 							};
+/******/ 						}
+/******/ 						if (outdatedModules.indexOf(parentId) !== -1) continue;
+/******/ 						if (parent.hot._acceptedDependencies[moduleId]) {
+/******/ 							if (!outdatedDependencies[parentId])
+/******/ 								outdatedDependencies[parentId] = [];
+/******/ 							addAllToSet(outdatedDependencies[parentId], [moduleId]);
+/******/ 							continue;
+/******/ 						}
+/******/ 						delete outdatedDependencies[parentId];
+/******/ 						outdatedModules.push(parentId);
+/******/ 						queue.push({
+/******/ 							chain: chain.concat([parentId]),
+/******/ 							id: parentId
+/******/ 						});
+/******/ 					}
+/******/ 				}
+/******/ 		
+/******/ 				return {
+/******/ 					type: "accepted",
+/******/ 					moduleId: updateModuleId,
+/******/ 					outdatedModules: outdatedModules,
+/******/ 					outdatedDependencies: outdatedDependencies
+/******/ 				};
+/******/ 			}
+/******/ 		
+/******/ 			function addAllToSet(a, b) {
+/******/ 				for (var i = 0; i < b.length; i++) {
+/******/ 					var item = b[i];
+/******/ 					if (a.indexOf(item) === -1) a.push(item);
+/******/ 				}
+/******/ 			}
+/******/ 		
+/******/ 			// at begin all updates modules are outdated
+/******/ 			// the "outdated" status can propagate to parents if they don't accept the children
+/******/ 			var outdatedDependencies = {};
+/******/ 			var outdatedModules = [];
+/******/ 			var appliedUpdate = {};
+/******/ 		
+/******/ 			var warnUnexpectedRequire = function warnUnexpectedRequire(module) {
+/******/ 				console.warn(
+/******/ 					"[HMR] unexpected require(" + module.id + ") to disposed module"
+/******/ 				);
+/******/ 			};
+/******/ 		
+/******/ 			for (var moduleId in currentUpdate) {
+/******/ 				if (__webpack_require__.o(currentUpdate, moduleId)) {
+/******/ 					var newModuleFactory = currentUpdate[moduleId];
+/******/ 					/** @type {TODO} */
+/******/ 					var result;
+/******/ 					if (newModuleFactory) {
+/******/ 						result = getAffectedModuleEffects(moduleId);
+/******/ 					} else {
+/******/ 						result = {
+/******/ 							type: "disposed",
+/******/ 							moduleId: moduleId
+/******/ 						};
+/******/ 					}
+/******/ 					/** @type {Error|false} */
+/******/ 					var abortError = false;
+/******/ 					var doApply = false;
+/******/ 					var doDispose = false;
+/******/ 					var chainInfo = "";
+/******/ 					if (result.chain) {
+/******/ 						chainInfo = "\nUpdate propagation: " + result.chain.join(" -> ");
+/******/ 					}
+/******/ 					switch (result.type) {
+/******/ 						case "self-declined":
+/******/ 							if (options.onDeclined) options.onDeclined(result);
+/******/ 							if (!options.ignoreDeclined)
+/******/ 								abortError = new Error(
+/******/ 									"Aborted because of self decline: " +
+/******/ 										result.moduleId +
+/******/ 										chainInfo
+/******/ 								);
+/******/ 							break;
+/******/ 						case "declined":
+/******/ 							if (options.onDeclined) options.onDeclined(result);
+/******/ 							if (!options.ignoreDeclined)
+/******/ 								abortError = new Error(
+/******/ 									"Aborted because of declined dependency: " +
+/******/ 										result.moduleId +
+/******/ 										" in " +
+/******/ 										result.parentId +
+/******/ 										chainInfo
+/******/ 								);
+/******/ 							break;
+/******/ 						case "unaccepted":
+/******/ 							if (options.onUnaccepted) options.onUnaccepted(result);
+/******/ 							if (!options.ignoreUnaccepted)
+/******/ 								abortError = new Error(
+/******/ 									"Aborted because " + moduleId + " is not accepted" + chainInfo
+/******/ 								);
+/******/ 							break;
+/******/ 						case "accepted":
+/******/ 							if (options.onAccepted) options.onAccepted(result);
+/******/ 							doApply = true;
+/******/ 							break;
+/******/ 						case "disposed":
+/******/ 							if (options.onDisposed) options.onDisposed(result);
+/******/ 							doDispose = true;
+/******/ 							break;
+/******/ 						default:
+/******/ 							throw new Error("Unexception type " + result.type);
+/******/ 					}
+/******/ 					if (abortError) {
+/******/ 						return {
+/******/ 							error: abortError
+/******/ 						};
+/******/ 					}
+/******/ 					if (doApply) {
+/******/ 						appliedUpdate[moduleId] = newModuleFactory;
+/******/ 						addAllToSet(outdatedModules, result.outdatedModules);
+/******/ 						for (moduleId in result.outdatedDependencies) {
+/******/ 							if (__webpack_require__.o(result.outdatedDependencies, moduleId)) {
+/******/ 								if (!outdatedDependencies[moduleId])
+/******/ 									outdatedDependencies[moduleId] = [];
+/******/ 								addAllToSet(
+/******/ 									outdatedDependencies[moduleId],
+/******/ 									result.outdatedDependencies[moduleId]
+/******/ 								);
+/******/ 							}
+/******/ 						}
+/******/ 					}
+/******/ 					if (doDispose) {
+/******/ 						addAllToSet(outdatedModules, [result.moduleId]);
+/******/ 						appliedUpdate[moduleId] = warnUnexpectedRequire;
+/******/ 					}
+/******/ 				}
+/******/ 			}
+/******/ 			currentUpdate = undefined;
+/******/ 		
+/******/ 			// Store self accepted outdated modules to require them later by the module system
+/******/ 			var outdatedSelfAcceptedModules = [];
+/******/ 			for (var j = 0; j < outdatedModules.length; j++) {
+/******/ 				var outdatedModuleId = outdatedModules[j];
+/******/ 				var module = __webpack_require__.c[outdatedModuleId];
+/******/ 				if (
+/******/ 					module &&
+/******/ 					(module.hot._selfAccepted || module.hot._main) &&
+/******/ 					// removed self-accepted modules should not be required
+/******/ 					appliedUpdate[outdatedModuleId] !== warnUnexpectedRequire &&
+/******/ 					// when called invalidate self-accepting is not possible
+/******/ 					!module.hot._selfInvalidated
+/******/ 				) {
+/******/ 					outdatedSelfAcceptedModules.push({
+/******/ 						module: outdatedModuleId,
+/******/ 						require: module.hot._requireSelf,
+/******/ 						errorHandler: module.hot._selfAccepted
+/******/ 					});
+/******/ 				}
+/******/ 			}
+/******/ 		
+/******/ 			var moduleOutdatedDependencies;
+/******/ 		
+/******/ 			return {
+/******/ 				dispose: function () {
+/******/ 					currentUpdateRemovedChunks.forEach(function (chunkId) {
+/******/ 						delete installedChunks[chunkId];
+/******/ 					});
+/******/ 					currentUpdateRemovedChunks = undefined;
+/******/ 		
+/******/ 					var idx;
+/******/ 					var queue = outdatedModules.slice();
+/******/ 					while (queue.length > 0) {
+/******/ 						var moduleId = queue.pop();
+/******/ 						var module = __webpack_require__.c[moduleId];
+/******/ 						if (!module) continue;
+/******/ 		
+/******/ 						var data = {};
+/******/ 		
+/******/ 						// Call dispose handlers
+/******/ 						var disposeHandlers = module.hot._disposeHandlers;
+/******/ 						for (j = 0; j < disposeHandlers.length; j++) {
+/******/ 							disposeHandlers[j].call(null, data);
+/******/ 						}
+/******/ 						__webpack_require__.hmrD[moduleId] = data;
+/******/ 		
+/******/ 						// disable module (this disables requires from this module)
+/******/ 						module.hot.active = false;
+/******/ 		
+/******/ 						// remove module from cache
+/******/ 						delete __webpack_require__.c[moduleId];
+/******/ 		
+/******/ 						// when disposing there is no need to call dispose handler
+/******/ 						delete outdatedDependencies[moduleId];
+/******/ 		
+/******/ 						// remove "parents" references from all children
+/******/ 						for (j = 0; j < module.children.length; j++) {
+/******/ 							var child = __webpack_require__.c[module.children[j]];
+/******/ 							if (!child) continue;
+/******/ 							idx = child.parents.indexOf(moduleId);
+/******/ 							if (idx >= 0) {
+/******/ 								child.parents.splice(idx, 1);
+/******/ 							}
+/******/ 						}
+/******/ 					}
+/******/ 		
+/******/ 					// remove outdated dependency from module children
+/******/ 					var dependency;
+/******/ 					for (var outdatedModuleId in outdatedDependencies) {
+/******/ 						if (__webpack_require__.o(outdatedDependencies, outdatedModuleId)) {
+/******/ 							module = __webpack_require__.c[outdatedModuleId];
+/******/ 							if (module) {
+/******/ 								moduleOutdatedDependencies =
+/******/ 									outdatedDependencies[outdatedModuleId];
+/******/ 								for (j = 0; j < moduleOutdatedDependencies.length; j++) {
+/******/ 									dependency = moduleOutdatedDependencies[j];
+/******/ 									idx = module.children.indexOf(dependency);
+/******/ 									if (idx >= 0) module.children.splice(idx, 1);
+/******/ 								}
+/******/ 							}
+/******/ 						}
+/******/ 					}
+/******/ 				},
+/******/ 				apply: function (reportError) {
+/******/ 					// insert new code
+/******/ 					for (var updateModuleId in appliedUpdate) {
+/******/ 						if (__webpack_require__.o(appliedUpdate, updateModuleId)) {
+/******/ 							__webpack_require__.m[updateModuleId] = appliedUpdate[updateModuleId];
+/******/ 						}
+/******/ 					}
+/******/ 		
+/******/ 					// run new runtime modules
+/******/ 					for (var i = 0; i < currentUpdateRuntime.length; i++) {
+/******/ 						currentUpdateRuntime[i](__webpack_require__);
+/******/ 					}
+/******/ 		
+/******/ 					// call accept handlers
+/******/ 					for (var outdatedModuleId in outdatedDependencies) {
+/******/ 						if (__webpack_require__.o(outdatedDependencies, outdatedModuleId)) {
+/******/ 							var module = __webpack_require__.c[outdatedModuleId];
+/******/ 							if (module) {
+/******/ 								moduleOutdatedDependencies =
+/******/ 									outdatedDependencies[outdatedModuleId];
+/******/ 								var callbacks = [];
+/******/ 								var errorHandlers = [];
+/******/ 								var dependenciesForCallbacks = [];
+/******/ 								for (var j = 0; j < moduleOutdatedDependencies.length; j++) {
+/******/ 									var dependency = moduleOutdatedDependencies[j];
+/******/ 									var acceptCallback =
+/******/ 										module.hot._acceptedDependencies[dependency];
+/******/ 									var errorHandler =
+/******/ 										module.hot._acceptedErrorHandlers[dependency];
+/******/ 									if (acceptCallback) {
+/******/ 										if (callbacks.indexOf(acceptCallback) !== -1) continue;
+/******/ 										callbacks.push(acceptCallback);
+/******/ 										errorHandlers.push(errorHandler);
+/******/ 										dependenciesForCallbacks.push(dependency);
+/******/ 									}
+/******/ 								}
+/******/ 								for (var k = 0; k < callbacks.length; k++) {
+/******/ 									try {
+/******/ 										callbacks[k].call(null, moduleOutdatedDependencies);
+/******/ 									} catch (err) {
+/******/ 										if (typeof errorHandlers[k] === "function") {
+/******/ 											try {
+/******/ 												errorHandlers[k](err, {
+/******/ 													moduleId: outdatedModuleId,
+/******/ 													dependencyId: dependenciesForCallbacks[k]
+/******/ 												});
+/******/ 											} catch (err2) {
+/******/ 												if (options.onErrored) {
+/******/ 													options.onErrored({
+/******/ 														type: "accept-error-handler-errored",
+/******/ 														moduleId: outdatedModuleId,
+/******/ 														dependencyId: dependenciesForCallbacks[k],
+/******/ 														error: err2,
+/******/ 														originalError: err
+/******/ 													});
+/******/ 												}
+/******/ 												if (!options.ignoreErrored) {
+/******/ 													reportError(err2);
+/******/ 													reportError(err);
+/******/ 												}
+/******/ 											}
+/******/ 										} else {
+/******/ 											if (options.onErrored) {
+/******/ 												options.onErrored({
+/******/ 													type: "accept-errored",
+/******/ 													moduleId: outdatedModuleId,
+/******/ 													dependencyId: dependenciesForCallbacks[k],
+/******/ 													error: err
+/******/ 												});
+/******/ 											}
+/******/ 											if (!options.ignoreErrored) {
+/******/ 												reportError(err);
+/******/ 											}
+/******/ 										}
+/******/ 									}
+/******/ 								}
+/******/ 							}
+/******/ 						}
+/******/ 					}
+/******/ 		
+/******/ 					// Load self accepted modules
+/******/ 					for (var o = 0; o < outdatedSelfAcceptedModules.length; o++) {
+/******/ 						var item = outdatedSelfAcceptedModules[o];
+/******/ 						var moduleId = item.module;
+/******/ 						try {
+/******/ 							item.require(moduleId);
+/******/ 						} catch (err) {
+/******/ 							if (typeof item.errorHandler === "function") {
+/******/ 								try {
+/******/ 									item.errorHandler(err, {
+/******/ 										moduleId: moduleId,
+/******/ 										module: __webpack_require__.c[moduleId]
+/******/ 									});
+/******/ 								} catch (err2) {
+/******/ 									if (options.onErrored) {
+/******/ 										options.onErrored({
+/******/ 											type: "self-accept-error-handler-errored",
+/******/ 											moduleId: moduleId,
+/******/ 											error: err2,
+/******/ 											originalError: err
+/******/ 										});
+/******/ 									}
+/******/ 									if (!options.ignoreErrored) {
+/******/ 										reportError(err2);
+/******/ 										reportError(err);
+/******/ 									}
+/******/ 								}
+/******/ 							} else {
+/******/ 								if (options.onErrored) {
+/******/ 									options.onErrored({
+/******/ 										type: "self-accept-errored",
+/******/ 										moduleId: moduleId,
+/******/ 										error: err
+/******/ 									});
+/******/ 								}
+/******/ 								if (!options.ignoreErrored) {
+/******/ 									reportError(err);
+/******/ 								}
+/******/ 							}
+/******/ 						}
+/******/ 					}
+/******/ 		
+/******/ 					return outdatedModules;
+/******/ 				}
+/******/ 			};
+/******/ 		}
+/******/ 		__webpack_require__.hmrI.jsonp = function (moduleId, applyHandlers) {
+/******/ 			if (!currentUpdate) {
+/******/ 				currentUpdate = {};
+/******/ 				currentUpdateRuntime = [];
+/******/ 				currentUpdateRemovedChunks = [];
+/******/ 				applyHandlers.push(applyHandler);
+/******/ 			}
+/******/ 			if (!__webpack_require__.o(currentUpdate, moduleId)) {
+/******/ 				currentUpdate[moduleId] = __webpack_require__.m[moduleId];
+/******/ 			}
+/******/ 		};
+/******/ 		__webpack_require__.hmrC.jsonp = function (
+/******/ 			chunkIds,
+/******/ 			removedChunks,
+/******/ 			removedModules,
+/******/ 			promises,
+/******/ 			applyHandlers,
+/******/ 			updatedModulesList
+/******/ 		) {
+/******/ 			applyHandlers.push(applyHandler);
+/******/ 			currentUpdateChunks = {};
+/******/ 			currentUpdateRemovedChunks = removedChunks;
+/******/ 			currentUpdate = removedModules.reduce(function (obj, key) {
+/******/ 				obj[key] = false;
+/******/ 				return obj;
+/******/ 			}, {});
+/******/ 			currentUpdateRuntime = [];
+/******/ 			chunkIds.forEach(function (chunkId) {
+/******/ 				if (
+/******/ 					__webpack_require__.o(installedChunks, chunkId) &&
+/******/ 					installedChunks[chunkId] !== undefined
+/******/ 				) {
+/******/ 					promises.push(loadUpdateChunk(chunkId, updatedModulesList));
+/******/ 					currentUpdateChunks[chunkId] = true;
+/******/ 				} else {
+/******/ 					currentUpdateChunks[chunkId] = false;
+/******/ 				}
+/******/ 			});
+/******/ 			if (__webpack_require__.f) {
+/******/ 				__webpack_require__.f.jsonpHmr = function (chunkId, promises) {
+/******/ 					if (
+/******/ 						currentUpdateChunks &&
+/******/ 						__webpack_require__.o(currentUpdateChunks, chunkId) &&
+/******/ 						!currentUpdateChunks[chunkId]
+/******/ 					) {
+/******/ 						promises.push(loadUpdateChunk(chunkId));
+/******/ 						currentUpdateChunks[chunkId] = true;
+/******/ 					}
+/******/ 				};
+/******/ 			}
+/******/ 		};
+/******/ 		
+/******/ 		__webpack_require__.hmrM = () => {
+/******/ 			if (typeof fetch === "undefined") throw new Error("No browser support: need fetch API");
+/******/ 			return fetch(__webpack_require__.p + __webpack_require__.hmrF()).then((response) => {
+/******/ 				if(response.status === 404) return; // no update available
+/******/ 				if(!response.ok) throw new Error("Failed to fetch update manifest " + response.statusText);
+/******/ 				return response.json();
+/******/ 			});
+/******/ 		};
+/******/ 		
+/******/ 		// no on chunks loaded
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkId] = 0;
+/******/ 			}
+/******/ 		
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkmy_playlist_app"] = self["webpackChunkmy_playlist_app"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/nonce */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nc = undefined;
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// module cache are used so entry inlining is disabled
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/app.js");
+/******/ 	
+/******/ })()
+;
 //# sourceMappingURL=bundle.js.map

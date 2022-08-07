@@ -3,8 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-    entry: './src/app.js',
+    mode: 'development',
+    entry: __dirname + '/src/app.js',
     output: {
+        path: __dirname + '/dist',
         filename: 'bundle.js'
     },
     devtool: 'source-map',
@@ -23,11 +25,11 @@ module.exports = {
         ]
     },
     devServer: {
-        static: './src',
+        static: __dirname + './src',
         hot: true,
         open: true,
         port: 5000,
-        watchFiles: [ './dist/**/*.js' ]
+        watchFiles: [ __dirname + './dist/**/*.js' ]
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),    // Hot Module Replacement
