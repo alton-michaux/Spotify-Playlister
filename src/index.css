@@ -328,6 +328,7 @@ ul.show {
     width: 1fr;
     justify-content: center;
     overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   .nav-item {
