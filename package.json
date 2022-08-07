@@ -37,7 +37,6 @@
     "dotenv-webpack": "^8.0.0",
     "html-webpack-plugin": "^5.5.0",
     "node-sass": "^7.0.1",
-    "path": "^0.12.7",
     "url-loader": "^4.1.1",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.9.3"
