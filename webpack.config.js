@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
     mode: 'development',
@@ -36,10 +37,11 @@ module.exports = {
     plugins: [
         new webpack.HotModuleReplacementPlugin(),    // Hot Module Replacement
         new HtmlWebpackPlugin({
-            template: './dist/index.html',
+            template: './src/index.html',
             filename: 'index.html',
             inject: 'body'
         }),
-        new Dotenv()
+        new Dotenv(),
+        new CleanWebpackPlugin(['dist']) 
     ]
 }
