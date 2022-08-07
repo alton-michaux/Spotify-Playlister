@@ -3,4 +3,4 @@
   publish = "/dist/"
   command = ""
 [dev]
-  publish = ""
+  publish = "/dist/"

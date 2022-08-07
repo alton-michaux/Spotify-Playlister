@@ -1,10 +1,15 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
-    entry: './src/app.js',
+    mode: 'development',
+    entry: {
+        main: __dirname + '/src/app.js'
+    },
     output: {
+        path: __dirname + '/dist',
         filename: 'bundle.js'
     },
     devtool: 'source-map',
@@ -19,15 +24,15 @@ module.exports = {
                     { loader: 'style-loader' },
                     { loader: 'css-loader' },
                     { loader: 'sass-loader' }
-            ]},
+            ]}
         ]
     },
     devServer: {
-        static: './src',
+        static: __dirname + './src',
         hot: true,
         open: true,
         port: 5000,
-        watchFiles: [ './dist/**/*.js' ]
+        watchFiles: [ __dirname + './dist/**/*.js' ]
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),    // Hot Module Replacement
@@ -36,6 +41,12 @@ module.exports = {
             filename: 'index.html',
             inject: 'body'
         }),
-        new Dotenv()
+        new Dotenv(
+            {
+                path: './.env',
+                safe: true
+            }
+        ),
+        new CleanWebpackPlugin(['dist']) 
     ]
 }

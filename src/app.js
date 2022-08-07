@@ -1,4 +1,4 @@
-import '../src/index.css';
+import (__dirname + '/index.css');
 //-----------------------------------//
 //-----API Controller Module---------//
 //-----------------------------------//
