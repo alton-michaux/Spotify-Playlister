@@ -1,6 +1,6 @@
 [build]
-  base = "/"
+  base = "/src/"
   publish = "/dist/"
-  command = ""
+  command = "npm run deploy"
 [dev]
-  publish = ""
+  publish = "/dist/"
