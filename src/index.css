@@ -225,10 +225,6 @@ ul.show {
   max-height: inherit;
 }
 
-.playlist-art-img img {
-  max-height: inherit;
-}
-
 .playback-console {
   display: flex;
   justify-content: space-between;
