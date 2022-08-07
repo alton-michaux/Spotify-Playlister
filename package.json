@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha src/index.js",
     "build": "webpack",
-    "serve": "webpack-dev-server --mode=development",
+    "serve": "webpack-dev-server --mode=development --config webpack.config.js",
     "deploy": "npm run build"
   },
   "repository": {
