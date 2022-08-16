@@ -546,7 +546,7 @@ var uiController = function () {
       document.querySelector(domElements.playlistArt).insertAdjacentHTML("beforeend", image);
     },
     populatePlaylists: function populatePlaylists(id, url, text) {
-      var html = "<button class=\"playlist-btns\" value=".concat(id, "><img src=").concat(url, " alt=\"").concat(text, "\"/><div class=\"text\">").concat(text, "</div></button>");
+      var html = "<button class=\"playlist-btns\" value=".concat(id, " style=\"z-index:1;\"><img src=").concat(url, " alt=\"").concat(text, "\" style=\"z-index:-1;\"/><div class=\"text\">").concat(text, "</div></button>");
       document.querySelector(domElements.otherPlaylists).insertAdjacentHTML("beforeend", html);
     },
     populateTrackList: function populateTrackList(uri, number, name, artist, length, id) {
@@ -854,62 +854,63 @@ var appController = function (apiCtrl, uiCtrl) {
                         switch (_context17.prev = _context17.next) {
                           case 0:
                             uiCtrl.resetTracks();
-                            btnID = e.target.value; // <----- there is a bug here, if user clicks image it will not work
+                            btnID = e.target.value || e.target.parentElement.value; // <----- there is a bug here, if user clicks image it will not work
 
-                            _context17.prev = 2;
-                            _context17.next = 5;
+                            console.log(e.target);
+                            _context17.prev = 3;
+                            _context17.next = 6;
                             return apiCtrl.getPlaylistByID(btnID, token);
 
-                          case 5:
+                          case 6:
                             currentPlaylist = _context17.sent;
                             uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
                             uiCtrl.assignTitle(currentPlaylist.id, currentPlaylist.name);
-                            _context17.next = 10;
+                            _context17.next = 11;
                             return apiCtrl.getMyPlaylistsTrackList(btnID, token);
 
-                          case 10:
+                          case 11:
                             trackList = _context17.sent;
                             i = 0;
 
-                          case 12:
+                          case 13:
                             if (!(i < trackList.items.length)) {
-                              _context17.next = 22;
+                              _context17.next = 23;
                               break;
                             }
 
                             uiCtrl.populateTrackList(trackList.items[i].track.uri, i + 1, trackList.items[i].track.name, trackList.items[i].track.artists[0].name, trackList.items[i].track.duration_ms, trackList.items[i].track.id); //fetch current song image
 
-                            _context17.next = 16;
+                            _context17.next = 17;
                             return apiCtrl.getTracksInfo(trackList.items[i].track.id, token);
 
-                          case 16:
+                          case 17:
                             trackInfo = _context17.sent;
                             uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
                             uiCtrl.populateSongImage(trackInfo.album.images[0].url);
 
-                          case 19:
+                          case 20:
                             i++;
-                            _context17.next = 12;
+                            _context17.next = 13;
                             break;
 
-                          case 22:
-                            _context17.next = 27;
+                          case 23:
+                            _context17.next = 28;
                             break;
 
-                          case 24:
-                            _context17.prev = 24;
-                            _context17.t0 = _context17["catch"](2);
+                          case 25:
+                            _context17.prev = 25;
+                            _context17.t0 = _context17["catch"](3);
                             console.log(_context17.t0);
 
-                          case 27:
+                          case 28:
                             ;
 
-                          case 28:
+                          case 29:
                           case "end":
                             return _context17.stop();
                         }
                       }
-                    }, _callee17, null, [[2, 24]]);
+                    }, _callee17, null, [[3, 25]]);
                   }));
 
                   return function (_x17) {
@@ -1155,7 +1156,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("009139af39e71c660675")
+/******/ 		__webpack_require__.h = () => ("67b2d0e536bb20705970")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

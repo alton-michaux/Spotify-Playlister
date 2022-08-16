@@ -244,7 +244,7 @@ const uiController = (function () {
     },
 
     populatePlaylists(id, url, text) {
-      const html = `<button class="playlist-btns" value=${id}><img src=${url} alt="${text}"/><div class="text">${text}</div></button>`;
+      const html = `<button class="playlist-btns" value=${id} style="z-index:1;"><img src=${url} alt="${text}" style="z-index:-1;"/><div class="text">${text}</div></button>`;
       document
         .querySelector(domElements.otherPlaylists)
         .insertAdjacentHTML("beforeend", html);
@@ -471,7 +471,8 @@ const appController = (function (apiCtrl, uiCtrl) {
       const playlistContainer = domOutput.playlistLibrary;
       playlistContainer.addEventListener("click", async (e) => {
         uiCtrl.resetTracks();
-        const btnID = e.target.value; // <----- there is a bug here, if user clicks image it will not work
+        const btnID = e.target.value || e.target.parentElement.value; // <----- there is a bug here, if user clicks image it will not work
+        console.log(e.target)
         try {
           const currentPlaylist = await apiCtrl.getPlaylistByID(btnID, token);
           uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
