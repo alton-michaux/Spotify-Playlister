@@ -244,14 +244,14 @@ const uiController = (function () {
     },
 
     populatePlaylists(id, url, text) {
-      const html = `<button class="playlist-btns" value=${id}><img src=${url} alt="${text}"/><div class="text">${text}</div></button>`;
+      const html = `<button class="playlist-btns" value=${id} style="z-index:1;"><img src=${url} alt="${text}" style="z-index:-1;"/><div class="text">${text}</div></button>`;
       document
         .querySelector(domElements.otherPlaylists)
         .insertAdjacentHTML("beforeend", html);
     },
 
     populateTrackList(uri, number, name, artist, length, id) {
-      const html = `<div class="track-items"><input class="uri" type="hidden" value=${uri}>${number}. ${name} by ${artist}</input><button class="track-id playlist-items" value=${id}>PLAY</button><div class="track-length">${Math.floor(
+      const html = `<div class="track-items"><input class="uri" type="hidden" value=${uri}>${number}. ${name} by ${artist}</input><button class="track-id playlist-items" value=${id}>SELECT</button><div class="track-length">${Math.floor(
         length / 1000 / 60
       )}:${Math.floor((length / 1000) % 60).toFixed(0)}</div></div>`;
       document
@@ -260,7 +260,7 @@ const uiController = (function () {
     },
 
     populateSongInfo(name, artist, album) {
-      const html = `<div class="song-info">Now Playing:<br>${name} by ${artist}<br>from the Album:<br>${album}</div>`;
+      const html = `<div class="song-info">Now Viewing:<br>${name} by ${artist}<br>from the Album:<br>${album}</div>`;
       document
         .querySelector(domElements.songDetail)
         .insertAdjacentHTML("beforeend", html);
@@ -471,7 +471,8 @@ const appController = (function (apiCtrl, uiCtrl) {
       const playlistContainer = domOutput.playlistLibrary;
       playlistContainer.addEventListener("click", async (e) => {
         uiCtrl.resetTracks();
-        const btnID = e.target.value; // <----- there is a bug here, if user clicks image it will not work
+        const btnID = e.target.value || e.target.parentElement.value; // <----- there is a bug here, if user clicks image it will not work
+        console.log(e.target)
         try {
           const currentPlaylist = await apiCtrl.getPlaylistByID(btnID, token);
           uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
@@ -510,8 +511,8 @@ const appController = (function (apiCtrl, uiCtrl) {
       const songDiv = domOutput.playlistSongs;
       songDiv.addEventListener("click", async (e) => {
         uiCtrl.resetTrackDetail();
-        // const trackDiv = document.getElementsByClassName("track-items");
-        // const uri = document.querySelector("uri");
+        const trackDiv = document.getElementsByClassName("track-items");
+        const uri = document.querySelector("uri");
         const trackID = e.target.value;
 
         try {
