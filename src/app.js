@@ -47,6 +47,7 @@ const uiController = (function () {
     //general ui info population methods
     displayLoadingMessage() {
       this.outputField().loader.style.backgroundColor = 'yellow'
+      this.outputField().loader.style.opacity = .7;
       this.outputField().loader.style.color = 'black'
       this.outputField().loader.innerHTML = "LOADING..."
       this.outputField().loader.classList.add('display');
