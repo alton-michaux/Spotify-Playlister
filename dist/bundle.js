@@ -783,9 +783,7 @@ var appController = function (apiCtrl, uiCtrl) {
                           token = uiCtrl.getStoredToken().token; // fetch playlist info for each playlist
 
                           _context16.next = 3;
-                          return apiCtrl.getMyPlaylists(token)["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
+                          return apiCtrl.getMyPlaylists(token);
 
                         case 3:
                           data = _context16.sent;
@@ -802,9 +800,7 @@ var appController = function (apiCtrl, uiCtrl) {
 
                           ;
                           _context16.next = 12;
-                          return apiCtrl.getMyPlaylistsTrackList(data.items[3].id, token)["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
+                          return apiCtrl.getMyPlaylistsTrackList(data.items[3].id, token);
 
                         case 12:
                           trackList = _context16.sent;
@@ -814,17 +810,13 @@ var appController = function (apiCtrl, uiCtrl) {
                           }
 
                           _context16.next = 16;
-                          return apiCtrl.getTracksInfo(trackList.items[0].track.id, token)["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
+                          return apiCtrl.getTracksInfo(trackList.items[0].track.id, token);
 
                         case 16:
                           songInfo = _context16.sent;
                           uiCtrl.populateSongInfo(songInfo.name, songInfo.artists[0].name, songInfo.album.name);
                           _context16.next = 20;
-                          return apiCtrl.getTracksInfo(trackList.items[0].track.id, token)["catch"](function (error) {
-                            return uiCtrl.displayError(error);
-                          });
+                          return apiCtrl.getTracksInfo(trackList.items[0].track.id, token);
 
                         case 20:
                           songImage = _context16.sent;
@@ -858,9 +850,7 @@ var appController = function (apiCtrl, uiCtrl) {
                           genreId = genreSelect.options[genreSelect.selectedIndex].value;
                           _context17.prev = 2;
                           _context17.next = 5;
-                          return apiCtrl.getMyPlaylists(token)["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
+                          return apiCtrl.getMyPlaylists(token);
 
                         case 5:
                           _playlist = _context17.sent;
@@ -959,18 +949,14 @@ var appController = function (apiCtrl, uiCtrl) {
                             btnID = e.target.value || e.target.parentElement.value;
                             _context18.prev = 2;
                             _context18.next = 5;
-                            return apiCtrl.getPlaylistByID(btnID, token)["catch"](function (error) {
-                              uiCtrl.displayError(error);
-                            });
+                            return apiCtrl.getPlaylistByID(btnID, token);
 
                           case 5:
                             currentPlaylist = _context18.sent;
                             uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
                             uiCtrl.assignTitle(currentPlaylist.id, currentPlaylist.name);
                             _context18.next = 10;
-                            return apiCtrl.getMyPlaylistsTrackList(btnID, token)["catch"](function (error) {
-                              uiCtrl.displayError(error);
-                            });
+                            return apiCtrl.getMyPlaylistsTrackList(btnID, token);
 
                           case 10:
                             trackList = _context18.sent;
@@ -985,9 +971,7 @@ var appController = function (apiCtrl, uiCtrl) {
                             uiCtrl.populateTrackList(trackList.items[i].track.uri, i + 1, trackList.items[i].track.name, trackList.items[i].track.artists[0].name, trackList.items[i].track.duration_ms, trackList.items[i].track.id); //fetch current song image
 
                             _context18.next = 16;
-                            return apiCtrl.getTracksInfo(trackList.items[i].track.id, token)["catch"](function (error) {
-                              uiCtrl.displayError(error);
-                            });
+                            return apiCtrl.getTracksInfo(trackList.items[i].track.id, token);
 
                           case 16:
                             trackInfo = _context18.sent;
@@ -1043,9 +1027,7 @@ var appController = function (apiCtrl, uiCtrl) {
                             trackID = e.target.value;
                             _context19.prev = 4;
                             _context19.next = 7;
-                            return apiCtrl.getTracksInfo(trackID, token)["catch"](function (error) {
-                              uiCtrl.displayError(error);
-                            });
+                            return apiCtrl.getTracksInfo(trackID, token);
 
                           case 7:
                             trackInfo = _context19.sent;
@@ -1064,9 +1046,7 @@ var appController = function (apiCtrl, uiCtrl) {
                             ;
                             _context19.prev = 17;
                             _context19.next = 20;
-                            return apiCtrl.playFunction(token, uri)["catch"](function (error) {
-                              uiCtrl.displayError(error);
-                            });
+                            return apiCtrl.playFunction(token, uri);
 
                           case 20:
                             trackPlay = _context19.sent;
@@ -1111,9 +1091,7 @@ var appController = function (apiCtrl, uiCtrl) {
                           uri = tracklist[0].childNodes[0].defaultValue;
                           _context20.prev = 2;
                           _context20.next = 5;
-                          return apiCtrl.playFunction(token, uri)["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
+                          return apiCtrl.playFunction(token, uri);
 
                         case 5:
                           _context20.next = 10;
@@ -1268,7 +1246,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("fc1927de64203d476aa1")
+/******/ 		__webpack_require__.h = () => ("d7c9c54fe1f31da32f86")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
