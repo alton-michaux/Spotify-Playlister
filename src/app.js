@@ -46,31 +46,31 @@ const uiController = (function () {
     },
     //general ui info population methods
     displayLoadingMessage() {
-      domElements.loader.style.backgroundColor = 'yellow'
-      domElements.loader.style.color = 'black'
-      domElements.loader.innerHTML = "LOADING..."
-      domElements.loader.classList.add('display');
-      timeoutSet() // set timeout to hide loading message
+      this.outputField().loader.style.backgroundColor = 'yellow'
+      this.outputField().loader.style.color = 'black'
+      this.outputField().loader.innerHTML = "LOADING..."
+      this.outputField().loader.classList.add('display');
+      this.timeoutSet() // set timeout to hide loading message
     },
     
     hideLoadingMessage() {
-      domElements.loader.classList.remove('display');
+      this.outputField().loader.classList.remove('display');
     },
     
     displayError(error) {
-      domElements.loader.style.backgroundColor = 'red'
-      domElements.loader.style.color = 'white'
-      domElements.loader.innerHTML = ""
-      domElements.loader.innerHTML = error
-      domElements.loader.classList.add('display');
-      timeoutSet()
+      this.outputField().loader.style.backgroundColor = 'red'
+      this.outputField().loader.style.color = 'white'
+      this.outputField().loader.innerHTML = ""
+      this.outputField().loader.innerHTML = error
+      this.outputField().loader.classList.add('display');
+      this.timeoutSet()
       throw new Error(error)
     },
 
     timeoutSet() {
       setTimeout(() => {
-        hideLoadingMessage()
-        } , 5000);  // 1000ms = 1s
+        this.hideLoadingMessage()
+        } , 10000);  // 1000ms = 1s
     },
 
     assignGenre(text, value) {
@@ -166,11 +166,12 @@ const uiController = (function () {
   };
 })();
 
+
 const apiController = (function (uiCtrl) {
   //get access token
   async function getToken() {
     uiCtrl.displayLoadingMessage();
-    await fetch('https://accounts.spotify.com/api/token', {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
           'Content-Type' : 'application/x-www-form-urlencoded', 
@@ -178,10 +179,10 @@ const apiController = (function (uiCtrl) {
       },
       body: 'grant_type=client_credentials'
     })
-    .then((response) => {
+    .then(async (response) => {
 			if (response.ok) {
         uiCtrl.hideLoadingMessage()
-				const data = response.json()
+				const data = await response.json().catch( (error) => {uiCtrl.displayError(error)})
         return data.access_token;
 			}
 			uiCtrl.displayError(response.status)
@@ -189,11 +190,12 @@ const apiController = (function (uiCtrl) {
     .catch (error => {
       uiCtrl.displayError(error)
 		} )
+    return response
   };
 
   //fetch genres from spotify for later sorting
   async function getGenres(token) {
-    console.log('fetching genres...');
+    uiCtrl.displayLoadingMessage()
     const response = await fetch(
       `https://api.spotify.com/v1/recommendations/available-genre-seeds`,
       {
@@ -205,15 +207,21 @@ const apiController = (function (uiCtrl) {
         },
       }
     ).then( async (response) => {
-      const data = await response.json().catch( (error) => {console.log(error)});
-      return data.genres;
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        const data = await response.json().catch( (error) => {uiCtrl.displayError(error)})
+        return data.genres;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch (error => {
+      uiCtrl.displayError(error);
     })
-    return response;
+    return response
   };
 
   //fetch user playlist information from api
   async function getMyPlaylists(token) {
-    console.log('fetching playlists...');
+    uiCtrl.displayLoadingMessage()
     const limit = 21;
 
     const response = await fetch(
@@ -227,10 +235,15 @@ const apiController = (function (uiCtrl) {
         },
       }
     ).then( async (response) => {
-      const data = await response.json().catch((error) => {console.log(error)});
-      return data;
+      if (response.ok) {
+        const data = await response.json().catch((error) => {console.log(error)});
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch (error => {
+      uiCtrl.displayError(error)
     })
-    return response;
+    return response
   };
 
   //fetch user playlist information from api
@@ -335,6 +348,7 @@ const apiController = (function (uiCtrl) {
     },
   };
 })(uiController);
+
 
 const appController = (function (apiCtrl, uiCtrl) {
   //get object reference for DOM outputs
@@ -486,7 +500,6 @@ const appController = (function (apiCtrl, uiCtrl) {
       playlistContainer.addEventListener("click", async (e) => {
         uiCtrl.resetTracks();
         const btnID = e.target.value || e.target.parentElement.value; // <----- there is a bug here, if user clicks image it will not work
-        console.log(e.target)
         try {
           const currentPlaylist = await apiCtrl.getPlaylistByID(btnID, token);
           uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
