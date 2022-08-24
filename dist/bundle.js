@@ -85,7 +85,7 @@ var uiController = function () {
 
       setTimeout(function () {
         _this.hideLoadingMessage();
-      }, 10000); // 1000ms = 1s
+      }, 30000); // 1000ms = 1s
     },
     assignGenre: function assignGenre(text, value) {
       var html = "<option id=\"genre-item\" value=\"".concat(value, "\">").concat(text, "</option>");
@@ -393,7 +393,7 @@ var apiController = function (uiCtrl) {
         while (1) {
           switch (_context8.prev = _context8.next) {
             case 0:
-              console.log('fetching playlist...');
+              uiCtrl.displayLoadingMessage();
               _context8.next = 3;
               return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID), {
                 method: "GET",
@@ -408,16 +408,25 @@ var apiController = function (uiCtrl) {
                     while (1) {
                       switch (_context7.prev = _context7.next) {
                         case 0:
-                          _context7.next = 2;
+                          if (!response.ok) {
+                            _context7.next = 6;
+                            break;
+                          }
+
+                          uiCtrl.hideLoadingMessage();
+                          _context7.next = 4;
                           return response.json()["catch"](function (error) {
-                            console.log(error);
+                            uiCtrl.displayError(error);
                           });
 
-                        case 2:
+                        case 4:
                           data = _context7.sent;
                           return _context7.abrupt("return", data);
 
-                        case 4:
+                        case 6:
+                          uiCtrl.displayError(response.status);
+
+                        case 7:
                         case "end":
                           return _context7.stop();
                       }
@@ -428,7 +437,9 @@ var apiController = function (uiCtrl) {
                 return function (_x14) {
                   return _ref4.apply(this, arguments);
                 };
-              }());
+              }())["catch"](function (error) {
+                uiCtrl.displayError(error);
+              });
 
             case 3:
               response = _context8.sent;
@@ -457,7 +468,7 @@ var apiController = function (uiCtrl) {
         while (1) {
           switch (_context10.prev = _context10.next) {
             case 0:
-              console.log('fetching playlist track list...');
+              uiCtrl.displayLoadingMessage();
               _context10.next = 3;
               return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID, "/tracks"), {
                 method: "GET",
@@ -468,21 +479,31 @@ var apiController = function (uiCtrl) {
                 }
               }).then( /*#__PURE__*/function () {
                 var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(response) {
-                  var data;
+                  var _data4;
+
                   return _regeneratorRuntime().wrap(function _callee9$(_context9) {
                     while (1) {
                       switch (_context9.prev = _context9.next) {
                         case 0:
-                          _context9.next = 2;
+                          if (!response.ok) {
+                            _context9.next = 6;
+                            break;
+                          }
+
+                          uiCtrl.hideLoadingMessage();
+                          _context9.next = 4;
                           return response.json()["catch"](function (error) {
-                            console.log(error);
+                            uiCtrl.displayError(error);
                           });
 
-                        case 2:
-                          data = _context9.sent;
-                          return _context9.abrupt("return", data);
-
                         case 4:
+                          _data4 = _context9.sent;
+                          return _context9.abrupt("return", _data4);
+
+                        case 6:
+                          uiCtrl.displayError(response.status);
+
+                        case 7:
                         case "end":
                           return _context9.stop();
                       }
@@ -493,7 +514,9 @@ var apiController = function (uiCtrl) {
                 return function (_x15) {
                   return _ref5.apply(this, arguments);
                 };
-              }());
+              }())["catch"](function (error) {
+                uiCtrl.displayError(error);
+              });
 
             case 3:
               response = _context10.sent;
@@ -522,7 +545,7 @@ var apiController = function (uiCtrl) {
         while (1) {
           switch (_context12.prev = _context12.next) {
             case 0:
-              console.log('fetching track info...');
+              uiCtrl.displayLoadingMessage();
               _context12.next = 3;
               return fetch("https://api.spotify.com/v1/tracks/".concat(trackID), {
                 method: "GET",
@@ -533,21 +556,31 @@ var apiController = function (uiCtrl) {
                 }
               }).then( /*#__PURE__*/function () {
                 var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(response) {
-                  var data;
+                  var _data5;
+
                   return _regeneratorRuntime().wrap(function _callee11$(_context11) {
                     while (1) {
                       switch (_context11.prev = _context11.next) {
                         case 0:
-                          _context11.next = 2;
+                          if (!response.ok) {
+                            _context11.next = 6;
+                            break;
+                          }
+
+                          uiCtrl.hideLoadingMessage();
+                          _context11.next = 4;
                           return response.json()["catch"](function (error) {
-                            console.log(error);
+                            uiCtrl.displayError(error);
                           });
 
-                        case 2:
-                          data = _context11.sent;
-                          return _context11.abrupt("return", data);
-
                         case 4:
+                          _data5 = _context11.sent;
+                          return _context11.abrupt("return", _data5);
+
+                        case 6:
+                          uiCtrl.displayError(response.status);
+
+                        case 7:
                         case "end":
                           return _context11.stop();
                       }
@@ -558,7 +591,9 @@ var apiController = function (uiCtrl) {
                 return function (_x16) {
                   return _ref6.apply(this, arguments);
                 };
-              }());
+              }())["catch"](function (error) {
+                uiCtrl.displayError(error);
+              });
 
             case 3:
               response = _context12.sent;
@@ -587,7 +622,8 @@ var apiController = function (uiCtrl) {
         while (1) {
           switch (_context14.prev = _context14.next) {
             case 0:
-              _context14.next = 2;
+              uiCtrl.displayLoadingMessage();
+              _context14.next = 3;
               return fetch("https://api.spotify.com/v1/me/player/play", {
                 method: "PUT",
                 headers: {
@@ -602,17 +638,25 @@ var apiController = function (uiCtrl) {
                     while (1) {
                       switch (_context13.prev = _context13.next) {
                         case 0:
-                          _context13.next = 2;
+                          if (!response.ok) {
+                            _context13.next = 6;
+                            break;
+                          }
+
+                          uiCtrl.hideLoadingMessage();
+                          _context13.next = 4;
                           return response.json()["catch"](function (error) {
-                            console.log(error);
+                            uiCtrl.displayError(error);
                           });
 
-                        case 2:
+                        case 4:
                           data = _context13.sent;
-                          console.log("Playing", data);
                           return _context13.abrupt("return", data);
 
-                        case 5:
+                        case 6:
+                          uiCtrl.displayError(response.status);
+
+                        case 7:
                         case "end":
                           return _context13.stop();
                       }
@@ -623,13 +667,15 @@ var apiController = function (uiCtrl) {
                 return function (_x17) {
                   return _ref7.apply(this, arguments);
                 };
-              }());
+              }())["catch"](function (error) {
+                uiCtrl.displayError(error);
+              });
 
-            case 2:
+            case 3:
               response = _context14.sent;
               return _context14.abrupt("return", response);
 
-            case 4:
+            case 5:
             case "end":
               return _context14.stop();
           }
@@ -1217,7 +1263,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("4275dcadd0867b4deb78")
+/******/ 		__webpack_require__.h = () => ("9bddce2a2b59a61c0979")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

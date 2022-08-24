@@ -70,7 +70,7 @@ const uiController = (function () {
     timeoutSet() {
       setTimeout(() => {
         this.hideLoadingMessage()
-        } , 10000);  // 1000ms = 1s
+        } , 30000);  // 1000ms = 1s
     },
 
     assignGenre(text, value) {
@@ -248,7 +248,7 @@ const apiController = (function (uiCtrl) {
 
   //fetch user playlist information from api
   async function getPlaylistByID(playlistID, token) {
-    console.log('fetching playlist...');
+    uiCtrl.displayLoadingMessage()
     const response = await fetch(
       `https://api.spotify.com/v1/playlists/${playlistID}`,
       {
@@ -260,15 +260,21 @@ const apiController = (function (uiCtrl) {
         },
       }
     ).then( async (response) => {
-      data = await response.json().catch((error) => {console.log(error)});
-      return data;
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        data = await response.json().catch((error) => {uiCtrl.displayError(error)});
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch (error => {
+      uiCtrl.displayError(error)
     })
     return response;
   };
 
   //function used to fetch playlist track list
   async function getMyPlaylistsTrackList(playlistID, token) {
-    console.log('fetching playlist track list...');
+    uiCtrl.displayLoadingMessage()
     const response = await fetch(
       `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
       {
@@ -280,15 +286,21 @@ const apiController = (function (uiCtrl) {
         },
       }
     ).then( async (response) => {
-      const data = await response.json().catch((error) => {console.log(error)});
-      return data;
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        const data = await response.json().catch((error) => {uiCtrl.displayError(error)});
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch(error => {
+      uiCtrl.displayError(error)
     })
     return response;
   };
 
   //function used to fetch individual track info from playlists
   async function getTracksInfo(trackID, token) {
-    console.log('fetching track info...');
+    uiCtrl.displayLoadingMessage()
     const response = await fetch(
       `https://api.spotify.com/v1/tracks/${trackID}`,
       {
@@ -300,14 +312,21 @@ const apiController = (function (uiCtrl) {
         },
       }
     ).then( async (response) => {
-      const data = await response.json().catch((error) => {console.log(error)});
-      return data;
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        const data = await response.json().catch((error) => {uiCtrl.displayError(error)});
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch(error => {
+      uiCtrl.displayError(error)
     })
     return response;
   };
 
   //fetch play/pause
   async function playFunction(token, uri) {
+    uiCtrl.displayLoadingMessage()
     const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
       method: "PUT",
       headers: {
@@ -317,9 +336,14 @@ const apiController = (function (uiCtrl) {
       },
       body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
     }).then( async (response) => {
-      data = await response.json().catch((error) => {console.log(error)});
-      console.log("Playing", data);
-      return data;
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        data = await response.json().catch((error) => {uiCtrl.displayError(error)});
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch(error => {
+      uiCtrl.displayError(error)
     })
     return response;
   };
