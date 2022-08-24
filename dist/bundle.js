@@ -63,6 +63,7 @@ var uiController = function () {
     //general ui info population methods
     displayLoadingMessage: function displayLoadingMessage() {
       this.outputField().loader.style.backgroundColor = 'yellow';
+      this.outputField().loader.style.opacity = .7;
       this.outputField().loader.style.color = 'black';
       this.outputField().loader.innerHTML = "LOADING...";
       this.outputField().loader.classList.add('display');
@@ -1267,7 +1268,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("7adb80b44ca41c6b2502")
+/******/ 		__webpack_require__.h = () => ("23c43ddddc608777137b")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
