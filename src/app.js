@@ -197,6 +197,7 @@ const uiController = (function () {
     playlistContents: "#metadata-1",
     otherPlaylists: "#metadata-2",
     genreSelect: "#genre-select",
+    loader: "#loading"
   };
 
   return {
@@ -218,8 +219,32 @@ const uiController = (function () {
         playlistSongs: document.querySelector(domElements.playlistContents),
         playlistLibrary: document.querySelector(domElements.otherPlaylists),
         genreSelect: document.querySelector(domElements.genreSelect),
+        loader: document.querySelector(domElements.loader)
       };
     },
+
+    displayLoadingMessage() {
+      domElements.loader.style.backgroundColor = 'yellow'
+      domElements.loader.style.color = 'black'
+      domElements.loader.innerHTML = "LOADING..."
+      domElements.loader.classList.add('display');
+      timeoutSet() // set timeout to hide loading message
+    },
+    
+    hideLoadingMessage() {
+      domElements.loader.classList.remove('display');
+    },
+    
+    displayError(error) {
+      domElements.loader.style.backgroundColor = 'red'
+      domElements.loader.style.color = 'white'
+      domElements.loader.innerHTML = ""
+      domElements.loader.innerHTML = error
+      domElements.loader.classList.add('display');
+      timeoutSet()
+      throw new Error(error)
+    },
+
     //general ui info population methods
     assignGenre(text, value) {
       const html = `<option id="genre-item" value="${value}">${text}</option>`;
