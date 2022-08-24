@@ -15,11 +15,139 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-__webpack_require__.e(/*! import() */ "src_index_css").then(__webpack_require__.bind(__webpack_require__, /*! ./src/index.css */ "./src/index.css")); //-----------------------------------//
-//-----API Controller Module---------//
-//-----------------------------------//
+__webpack_require__.e(/*! import() */ "src_index_css").then(__webpack_require__.bind(__webpack_require__, /*! ./src/index.css */ "./src/index.css"));
 
-var apiController = function () {
+var uiController = function () {
+  //store html selectors in an object for outputField() method
+  var domElements = {
+    hToken: "#hidden-token",
+    hlogin: "#login-div",
+    btnLogin: "#login-btn",
+    songDetail: "#song-description",
+    previousSong: "#prev",
+    currentSong: "#current",
+    nextSong: "#next",
+    title: "#playlist-title",
+    playlistArt: "#playlist-art",
+    nowPlaying: "#now-playing",
+    skipBack: "#skipBack",
+    play: "#play",
+    skipForward: "#skipForward",
+    playlistContents: "#metadata-1",
+    otherPlaylists: "#metadata-2",
+    genreSelect: "#genre-select",
+    loader: "#loading"
+  };
+  return {
+    //create a method to callback selectors
+    outputField: function outputField() {
+      return {
+        songDetail: document.querySelector(domElements.songDetail),
+        hiddenDiv: document.querySelector(domElements.hlogin),
+        btnLogin: document.querySelector(domElements.btnLogin),
+        previousSong: document.querySelector(domElements.previousSong),
+        currentSong: document.querySelector(domElements.currentSong),
+        nextSong: document.querySelector(domElements.nextSong),
+        title: document.querySelector(domElements.title),
+        playlistArt: document.querySelector(domElements.playlistArt),
+        nowPlaying: document.querySelector(domElements.nowPlaying),
+        skipBack: document.querySelector(domElements.skipBack),
+        play: document.querySelector(domElements.play),
+        skipForward: document.querySelector(domElements.skipForward),
+        playlistSongs: document.querySelector(domElements.playlistContents),
+        playlistLibrary: document.querySelector(domElements.otherPlaylists),
+        genreSelect: document.querySelector(domElements.genreSelect),
+        loader: document.querySelector(domElements.loader)
+      };
+    },
+    //general ui info population methods
+    displayLoadingMessage: function displayLoadingMessage() {
+      domElements.loader.style.backgroundColor = 'yellow';
+      domElements.loader.style.color = 'black';
+      domElements.loader.innerHTML = "LOADING...";
+      domElements.loader.classList.add('display');
+      timeoutSet(); // set timeout to hide loading message
+    },
+    hideLoadingMessage: function hideLoadingMessage() {
+      domElements.loader.classList.remove('display');
+    },
+    displayError: function displayError(error) {
+      domElements.loader.style.backgroundColor = 'red';
+      domElements.loader.style.color = 'white';
+      domElements.loader.innerHTML = "";
+      domElements.loader.innerHTML = error;
+      domElements.loader.classList.add('display');
+      timeoutSet();
+      throw new Error(error);
+    },
+    timeoutSet: function timeoutSet() {
+      setTimeout(function () {
+        hideLoadingMessage();
+      }, 5000); // 1000ms = 1s
+    },
+    assignGenre: function assignGenre(text, value) {
+      var html = "<option id=\"genre-item\" value=\"".concat(value, "\">").concat(text, "</option>");
+      document.querySelector(domElements.genreSelect).insertAdjacentHTML("beforeend", html);
+    },
+    assignTitle: function assignTitle(id, text) {
+      var html = "<div class=\"playlist-title\">".concat(text, "</div><input class=\"hidden-title\" type=\"hidden\" value=").concat(id, "></input>");
+      document.querySelector(domElements.title).insertAdjacentHTML("beforeend", html);
+    },
+    assignPlaylistArt: function assignPlaylistArt(img) {
+      var image = "<div class=\"playlist-art-img\" id=\"playlist-img\">\n      <img src=".concat(img, " class=\"playlist-pic\"/></div>");
+      document.querySelector(domElements.playlistArt).insertAdjacentHTML("beforeend", image);
+    },
+    populatePlaylists: function populatePlaylists(id, url, text) {
+      var html = "<button class=\"playlist-btns\" value=".concat(id, " style=\"z-index:1;\"><img src=").concat(url, " alt=\"").concat(text, "\" style=\"z-index:-1;\"/><div class=\"text\">").concat(text, "</div></button>");
+      document.querySelector(domElements.otherPlaylists).insertAdjacentHTML("beforeend", html);
+    },
+    populateTrackList: function populateTrackList(uri, number, name, artist, length, id) {
+      var html = "<div class=\"track-items\"><input class=\"uri\" type=\"hidden\" value=".concat(uri, ">").concat(number, ". ").concat(name, " by ").concat(artist, "</input><button class=\"track-id playlist-items\" value=").concat(id, ">SELECT</button><div class=\"track-length\">").concat(Math.floor(length / 1000 / 60), ":").concat(Math.floor(length / 1000 % 60).toFixed(0), "</div></div>");
+      document.querySelector(domElements.playlistContents).insertAdjacentHTML("beforeend", html);
+    },
+    populateSongInfo: function populateSongInfo(name, artist, album) {
+      var html = "<div class=\"song-info\">Now Viewing:<br>".concat(name, " by ").concat(artist, "<br>from the Album:<br>").concat(album, "</div>");
+      document.querySelector(domElements.songDetail).insertAdjacentHTML("beforeend", html);
+    },
+    populateSongImage: function populateSongImage(img) {
+      var html = "<img class=\"track-imgs\" src=".concat(img, ">");
+      document.querySelector(domElements.currentSong).insertAdjacentHTML("beforeend", html);
+    },
+    resetTrackArt: function resetTrackArt() {
+      this.outputField().currentSong.innerHTML = "";
+    },
+    resetTrackDetail: function resetTrackDetail() {
+      this.outputField().songDetail.innerHTML = "";
+      this.resetTrackArt();
+    },
+    resetTitle: function resetTitle() {
+      this.outputField().title.innerHTML = "";
+      this.resetTrackDetail();
+    },
+    resetPlaylistPic: function resetPlaylistPic() {
+      this.outputField().playlistArt.innerHTML = "";
+      this.resetTitle();
+    },
+    resetTracks: function resetTracks() {
+      this.outputField().playlistSongs.innerHTML = "";
+      this.resetPlaylistPic();
+    },
+    resetPlaylists: function resetPlaylists() {
+      this.outputField().playlistLibrary.innerHTML = "";
+      this.resetTracks();
+    },
+    storeToken: function storeToken(value) {
+      document.querySelector(domElements.hToken).value = value;
+    },
+    getStoredToken: function getStoredToken() {
+      return {
+        token: document.querySelector(domElements.hToken).value
+      };
+    }
+  };
+}();
+
+var apiController = function (uiCtrl) {
   //get access token
   function _getToken2() {
     return _getToken.apply(this, arguments);
@@ -27,12 +155,12 @@ var apiController = function () {
 
   function _getToken() {
     _getToken = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var result, data;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              uiCtrl.displayLoadingMessage();
+              _context.next = 3;
               return fetch('https://accounts.spotify.com/api/token', {
                 method: 'POST',
                 headers: {
@@ -40,20 +168,21 @@ var apiController = function () {
                   'Authorization': 'Basic ' + btoa("4986258db999480dbcb94669e69535ad" + ':' + "50a5f956f0f84b278d3d90745c3308b5")
                 },
                 body: 'grant_type=client_credentials'
+              }).then(function (response) {
+                if (response.ok) {
+                  uiCtrl.hideLoadingMessage();
+
+                  var _data = response.json();
+
+                  return _data.access_token;
+                }
+
+                uiCtrl.displayError(response.status);
+              })["catch"](function (error) {
+                uiCtrl.displayError(error);
               });
 
-            case 2:
-              result = _context.sent;
-              _context.next = 5;
-              return result.json()["catch"](function (error) {
-                console.log(error);
-              });
-
-            case 5:
-              data = _context.sent;
-              return _context.abrupt("return", data.access_token);
-
-            case 7:
+            case 3:
             case "end":
               return _context.stop();
           }
@@ -63,10 +192,7 @@ var apiController = function () {
     return _getToken.apply(this, arguments);
   }
 
-  ; //-----------------------------------//
-  //--------API Display Module---------//
-  //-----------------------------------//
-  //fetch genres from spotify for later sorting
+  ; //fetch genres from spotify for later sorting
 
   function _getGenres2(_x) {
     return _getGenres.apply(this, arguments);
@@ -391,10 +517,7 @@ var apiController = function () {
     return _getTracksInfo.apply(this, arguments);
   }
 
-  ; //-----------------------------------//
-  //--------API Function Module--------//
-  //-----------------------------------//
-  //fetch play/pause
+  ; //fetch play/pause
 
   function _playFunction2(_x9, _x10) {
     return _playFunction.apply(this, arguments);
@@ -459,10 +582,7 @@ var apiController = function () {
     return _playFunction.apply(this, arguments);
   }
 
-  ; //-----------------------------------//
-  //-------------Returns---------------//
-  //-----------------------------------//
-
+  ;
   return {
     getToken: function getToken() {
       return _getToken2();
@@ -486,117 +606,7 @@ var apiController = function () {
       return _playFunction2(token, uri);
     }
   };
-}(); //-----------------------------------//
-//-------UI Selector Module----------//
-//-----------------------------------//
-
-
-var uiController = function () {
-  //store html selectors in an object for outputField() method
-  var domElements = {
-    hToken: "#hidden-token",
-    hlogin: "#login-div",
-    btnLogin: "#login-btn",
-    songDetail: "#song-description",
-    previousSong: "#prev",
-    currentSong: "#current",
-    nextSong: "#next",
-    title: "#playlist-title",
-    playlistArt: "#playlist-art",
-    nowPlaying: "#now-playing",
-    skipBack: "#skipBack",
-    play: "#play",
-    skipForward: "#skipForward",
-    playlistContents: "#metadata-1",
-    otherPlaylists: "#metadata-2",
-    genreSelect: "#genre-select"
-  };
-  return {
-    //create a method to callback selectors
-    outputField: function outputField() {
-      return {
-        songDetail: document.querySelector(domElements.songDetail),
-        hiddenDiv: document.querySelector(domElements.hlogin),
-        btnLogin: document.querySelector(domElements.btnLogin),
-        previousSong: document.querySelector(domElements.previousSong),
-        currentSong: document.querySelector(domElements.currentSong),
-        nextSong: document.querySelector(domElements.nextSong),
-        title: document.querySelector(domElements.title),
-        playlistArt: document.querySelector(domElements.playlistArt),
-        nowPlaying: document.querySelector(domElements.nowPlaying),
-        skipBack: document.querySelector(domElements.skipBack),
-        play: document.querySelector(domElements.play),
-        skipForward: document.querySelector(domElements.skipForward),
-        playlistSongs: document.querySelector(domElements.playlistContents),
-        playlistLibrary: document.querySelector(domElements.otherPlaylists),
-        genreSelect: document.querySelector(domElements.genreSelect)
-      };
-    },
-    //general ui info population methods
-    assignGenre: function assignGenre(text, value) {
-      var html = "<option id=\"genre-item\" value=\"".concat(value, "\">").concat(text, "</option>");
-      document.querySelector(domElements.genreSelect).insertAdjacentHTML("beforeend", html);
-    },
-    assignTitle: function assignTitle(id, text) {
-      var html = "<div class=\"playlist-title\">".concat(text, "</div><input class=\"hidden-title\" type=\"hidden\" value=").concat(id, "></input>");
-      document.querySelector(domElements.title).insertAdjacentHTML("beforeend", html);
-    },
-    assignPlaylistArt: function assignPlaylistArt(img) {
-      var image = "<div class=\"playlist-art-img\" id=\"playlist-img\">\n      <img src=".concat(img, " class=\"playlist-pic\"/></div>");
-      document.querySelector(domElements.playlistArt).insertAdjacentHTML("beforeend", image);
-    },
-    populatePlaylists: function populatePlaylists(id, url, text) {
-      var html = "<button class=\"playlist-btns\" value=".concat(id, " style=\"z-index:1;\"><img src=").concat(url, " alt=\"").concat(text, "\" style=\"z-index:-1;\"/><div class=\"text\">").concat(text, "</div></button>");
-      document.querySelector(domElements.otherPlaylists).insertAdjacentHTML("beforeend", html);
-    },
-    populateTrackList: function populateTrackList(uri, number, name, artist, length, id) {
-      var html = "<div class=\"track-items\"><input class=\"uri\" type=\"hidden\" value=".concat(uri, ">").concat(number, ". ").concat(name, " by ").concat(artist, "</input><button class=\"track-id playlist-items\" value=").concat(id, ">SELECT</button><div class=\"track-length\">").concat(Math.floor(length / 1000 / 60), ":").concat(Math.floor(length / 1000 % 60).toFixed(0), "</div></div>");
-      document.querySelector(domElements.playlistContents).insertAdjacentHTML("beforeend", html);
-    },
-    populateSongInfo: function populateSongInfo(name, artist, album) {
-      var html = "<div class=\"song-info\">Now Viewing:<br>".concat(name, " by ").concat(artist, "<br>from the Album:<br>").concat(album, "</div>");
-      document.querySelector(domElements.songDetail).insertAdjacentHTML("beforeend", html);
-    },
-    populateSongImage: function populateSongImage(img) {
-      var html = "<img class=\"track-imgs\" src=".concat(img, ">");
-      document.querySelector(domElements.currentSong).insertAdjacentHTML("beforeend", html);
-    },
-    resetTrackArt: function resetTrackArt() {
-      this.outputField().currentSong.innerHTML = "";
-    },
-    resetTrackDetail: function resetTrackDetail() {
-      this.outputField().songDetail.innerHTML = "";
-      this.resetTrackArt();
-    },
-    resetTitle: function resetTitle() {
-      this.outputField().title.innerHTML = "";
-      this.resetTrackDetail();
-    },
-    resetPlaylistPic: function resetPlaylistPic() {
-      this.outputField().playlistArt.innerHTML = "";
-      this.resetTitle();
-    },
-    resetTracks: function resetTracks() {
-      this.outputField().playlistSongs.innerHTML = "";
-      this.resetPlaylistPic();
-    },
-    resetPlaylists: function resetPlaylists() {
-      this.outputField().playlistLibrary.innerHTML = "";
-      this.resetTracks();
-    },
-    storeToken: function storeToken(value) {
-      document.querySelector(domElements.hToken).value = value;
-    },
-    getStoredToken: function getStoredToken() {
-      return {
-        token: document.querySelector(domElements.hToken).value
-      };
-    }
-  };
-}(); //-----------------------------------//
-//-------App Control Module----------//
-//-----------------------------------//
-
+}(uiController);
 
 var appController = function (apiCtrl, uiCtrl) {
   //get object reference for DOM outputs
@@ -610,9 +620,7 @@ var appController = function (apiCtrl, uiCtrl) {
           switch (_context20.prev = _context20.next) {
             case 0:
               _context20.next = 2;
-              return apiCtrl.getToken()["catch"](function (err) {
-                console.log(err);
-              });
+              return apiCtrl.getToken();
 
             case 2:
               token = _context20.sent;
@@ -741,10 +749,7 @@ var appController = function (apiCtrl, uiCtrl) {
                 return function musicPopulate() {
                   return _ref9.apply(this, arguments);
                 };
-              }(); //-----------------------------------//
-              //-------App Event Listeners---------//
-              //-----------------------------------//
-
+              }();
 
               genreListener = function genreListener() {
                 //retrieve token
@@ -1156,7 +1161,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("6d66e034361ce195c898")
+/******/ 		__webpack_require__.h = () => ("ff3fc319d56d7401494c")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

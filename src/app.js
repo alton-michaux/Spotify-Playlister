@@ -1,25 +1,195 @@
 import (__dirname + '/index.css');
-//-----------------------------------//
-//-----API Controller Module---------//
-//-----------------------------------//
-const apiController = (function () {
+
+const uiController = (function () {
+  //store html selectors in an object for outputField() method
+  const domElements = {
+    hToken: "#hidden-token",
+    hlogin: "#login-div",
+    btnLogin: "#login-btn",
+    songDetail: "#song-description",
+    previousSong: "#prev",
+    currentSong: "#current",
+    nextSong: "#next",
+    title: "#playlist-title",
+    playlistArt: "#playlist-art",
+    nowPlaying: "#now-playing",
+    skipBack: "#skipBack",
+    play: "#play",
+    skipForward: "#skipForward",
+    playlistContents: "#metadata-1",
+    otherPlaylists: "#metadata-2",
+    genreSelect: "#genre-select",
+    loader: "#loading"
+  };
+
+  return {
+    //create a method to callback selectors
+    outputField() {
+      return {
+        songDetail: document.querySelector(domElements.songDetail),
+        hiddenDiv: document.querySelector(domElements.hlogin),
+        btnLogin: document.querySelector(domElements.btnLogin),
+        previousSong: document.querySelector(domElements.previousSong),
+        currentSong: document.querySelector(domElements.currentSong),
+        nextSong: document.querySelector(domElements.nextSong),
+        title: document.querySelector(domElements.title),
+        playlistArt: document.querySelector(domElements.playlistArt),
+        nowPlaying: document.querySelector(domElements.nowPlaying),
+        skipBack: document.querySelector(domElements.skipBack),
+        play: document.querySelector(domElements.play),
+        skipForward: document.querySelector(domElements.skipForward),
+        playlistSongs: document.querySelector(domElements.playlistContents),
+        playlistLibrary: document.querySelector(domElements.otherPlaylists),
+        genreSelect: document.querySelector(domElements.genreSelect),
+        loader: document.querySelector(domElements.loader)
+      };
+    },
+    //general ui info population methods
+    displayLoadingMessage() {
+      domElements.loader.style.backgroundColor = 'yellow'
+      domElements.loader.style.color = 'black'
+      domElements.loader.innerHTML = "LOADING..."
+      domElements.loader.classList.add('display');
+      timeoutSet() // set timeout to hide loading message
+    },
+    
+    hideLoadingMessage() {
+      domElements.loader.classList.remove('display');
+    },
+    
+    displayError(error) {
+      domElements.loader.style.backgroundColor = 'red'
+      domElements.loader.style.color = 'white'
+      domElements.loader.innerHTML = ""
+      domElements.loader.innerHTML = error
+      domElements.loader.classList.add('display');
+      timeoutSet()
+      throw new Error(error)
+    },
+
+    timeoutSet() {
+      setTimeout(() => {
+        hideLoadingMessage()
+        } , 5000);  // 1000ms = 1s
+    },
+
+    assignGenre(text, value) {
+      const html = `<option id="genre-item" value="${value}">${text}</option>`;
+      document
+        .querySelector(domElements.genreSelect)
+        .insertAdjacentHTML("beforeend", html);
+    },
+
+    assignTitle(id, text) {
+      const html = `<div class="playlist-title">${text}</div><input class="hidden-title" type="hidden" value=${id}></input>`;
+      document
+        .querySelector(domElements.title)
+        .insertAdjacentHTML("beforeend", html);
+    },
+
+    assignPlaylistArt(img) {
+      const image = `<div class="playlist-art-img" id="playlist-img">
+      <img src=${img} class="playlist-pic"/></div>`;
+      document
+        .querySelector(domElements.playlistArt)
+        .insertAdjacentHTML("beforeend", image);
+    },
+
+    populatePlaylists(id, url, text) {
+      const html = `<button class="playlist-btns" value=${id} style="z-index:1;"><img src=${url} alt="${text}" style="z-index:-1;"/><div class="text">${text}</div></button>`;
+      document
+        .querySelector(domElements.otherPlaylists)
+        .insertAdjacentHTML("beforeend", html);
+    },
+
+    populateTrackList(uri, number, name, artist, length, id) {
+      const html = `<div class="track-items"><input class="uri" type="hidden" value=${uri}>${number}. ${name} by ${artist}</input><button class="track-id playlist-items" value=${id}>SELECT</button><div class="track-length">${Math.floor(
+        length / 1000 / 60
+      )}:${Math.floor((length / 1000) % 60).toFixed(0)}</div></div>`;
+      document
+        .querySelector(domElements.playlistContents)
+        .insertAdjacentHTML("beforeend", html);
+    },
+
+    populateSongInfo(name, artist, album) {
+      const html = `<div class="song-info">Now Viewing:<br>${name} by ${artist}<br>from the Album:<br>${album}</div>`;
+      document
+        .querySelector(domElements.songDetail)
+        .insertAdjacentHTML("beforeend", html);
+    },
+
+    populateSongImage(img) {
+      const html = `<img class="track-imgs" src=${img}>`;
+      document
+        .querySelector(domElements.currentSong)
+        .insertAdjacentHTML("beforeend", html);
+    },
+
+    resetTrackArt() {
+      this.outputField().currentSong.innerHTML = "";
+    },
+
+    resetTrackDetail() {
+      this.outputField().songDetail.innerHTML = "";
+      this.resetTrackArt();
+    },
+
+    resetTitle() {
+      this.outputField().title.innerHTML = "";
+      this.resetTrackDetail();
+    },
+
+    resetPlaylistPic() {
+      this.outputField().playlistArt.innerHTML = "";
+      this.resetTitle();
+    },
+
+    resetTracks() {
+      this.outputField().playlistSongs.innerHTML = "";
+      this.resetPlaylistPic();
+    },
+
+    resetPlaylists() {
+      this.outputField().playlistLibrary.innerHTML = "";
+      this.resetTracks();
+    },
+
+    storeToken(value) {
+      document.querySelector(domElements.hToken).value = value;
+    },
+
+    getStoredToken() {
+      return {
+        token: document.querySelector(domElements.hToken).value,
+      };
+    },
+  };
+})();
+
+const apiController = (function (uiCtrl) {
   //get access token
   async function getToken() {
-    const result = await fetch('https://accounts.spotify.com/api/token', {
+    uiCtrl.displayLoadingMessage();
+    await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
           'Content-Type' : 'application/x-www-form-urlencoded', 
           'Authorization' : 'Basic ' + btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET)
       },
       body: 'grant_type=client_credentials'
-    });
-
-    const data = await result.json().catch((error) => {console.log(error)});
-    return data.access_token;
+    })
+    .then((response) => {
+			if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+				const data = response.json()
+        return data.access_token;
+			}
+			uiCtrl.displayError(response.status)
+		})
+    .catch (error => {
+      uiCtrl.displayError(error)
+		} )
   };
-  //-----------------------------------//
-  //--------API Display Module---------//
-  //-----------------------------------//
 
   //fetch genres from spotify for later sorting
   async function getGenres(token) {
@@ -121,11 +291,7 @@ const apiController = (function () {
       return data;
     })
     return response;
-    };
-
-  //-----------------------------------//
-  //--------API Function Module--------//
-  //-----------------------------------//
+  };
 
   //fetch play/pause
   async function playFunction(token, uri) {
@@ -144,10 +310,6 @@ const apiController = (function () {
     })
     return response;
   };
-
-  //-----------------------------------//
-  //-------------Returns---------------//
-  //-----------------------------------//
 
   return {
     getToken() {
@@ -172,176 +334,7 @@ const apiController = (function () {
       return playFunction(token, uri);
     },
   };
-})();
-
-//-----------------------------------//
-//-------UI Selector Module----------//
-//-----------------------------------//
-
-const uiController = (function () {
-  //store html selectors in an object for outputField() method
-  const domElements = {
-    hToken: "#hidden-token",
-    hlogin: "#login-div",
-    btnLogin: "#login-btn",
-    songDetail: "#song-description",
-    previousSong: "#prev",
-    currentSong: "#current",
-    nextSong: "#next",
-    title: "#playlist-title",
-    playlistArt: "#playlist-art",
-    nowPlaying: "#now-playing",
-    skipBack: "#skipBack",
-    play: "#play",
-    skipForward: "#skipForward",
-    playlistContents: "#metadata-1",
-    otherPlaylists: "#metadata-2",
-    genreSelect: "#genre-select",
-    loader: "#loading"
-  };
-
-  return {
-    //create a method to callback selectors
-    outputField() {
-      return {
-        songDetail: document.querySelector(domElements.songDetail),
-        hiddenDiv: document.querySelector(domElements.hlogin),
-        btnLogin: document.querySelector(domElements.btnLogin),
-        previousSong: document.querySelector(domElements.previousSong),
-        currentSong: document.querySelector(domElements.currentSong),
-        nextSong: document.querySelector(domElements.nextSong),
-        title: document.querySelector(domElements.title),
-        playlistArt: document.querySelector(domElements.playlistArt),
-        nowPlaying: document.querySelector(domElements.nowPlaying),
-        skipBack: document.querySelector(domElements.skipBack),
-        play: document.querySelector(domElements.play),
-        skipForward: document.querySelector(domElements.skipForward),
-        playlistSongs: document.querySelector(domElements.playlistContents),
-        playlistLibrary: document.querySelector(domElements.otherPlaylists),
-        genreSelect: document.querySelector(domElements.genreSelect),
-        loader: document.querySelector(domElements.loader)
-      };
-    },
-
-    displayLoadingMessage() {
-      domElements.loader.style.backgroundColor = 'yellow'
-      domElements.loader.style.color = 'black'
-      domElements.loader.innerHTML = "LOADING..."
-      domElements.loader.classList.add('display');
-      timeoutSet() // set timeout to hide loading message
-    },
-    
-    hideLoadingMessage() {
-      domElements.loader.classList.remove('display');
-    },
-    
-    displayError(error) {
-      domElements.loader.style.backgroundColor = 'red'
-      domElements.loader.style.color = 'white'
-      domElements.loader.innerHTML = ""
-      domElements.loader.innerHTML = error
-      domElements.loader.classList.add('display');
-      timeoutSet()
-      throw new Error(error)
-    },
-
-    //general ui info population methods
-    assignGenre(text, value) {
-      const html = `<option id="genre-item" value="${value}">${text}</option>`;
-      document
-        .querySelector(domElements.genreSelect)
-        .insertAdjacentHTML("beforeend", html);
-    },
-
-    assignTitle(id, text) {
-      const html = `<div class="playlist-title">${text}</div><input class="hidden-title" type="hidden" value=${id}></input>`;
-      document
-        .querySelector(domElements.title)
-        .insertAdjacentHTML("beforeend", html);
-    },
-
-    assignPlaylistArt(img) {
-      const image = `<div class="playlist-art-img" id="playlist-img">
-      <img src=${img} class="playlist-pic"/></div>`;
-      document
-        .querySelector(domElements.playlistArt)
-        .insertAdjacentHTML("beforeend", image);
-    },
-
-    populatePlaylists(id, url, text) {
-      const html = `<button class="playlist-btns" value=${id} style="z-index:1;"><img src=${url} alt="${text}" style="z-index:-1;"/><div class="text">${text}</div></button>`;
-      document
-        .querySelector(domElements.otherPlaylists)
-        .insertAdjacentHTML("beforeend", html);
-    },
-
-    populateTrackList(uri, number, name, artist, length, id) {
-      const html = `<div class="track-items"><input class="uri" type="hidden" value=${uri}>${number}. ${name} by ${artist}</input><button class="track-id playlist-items" value=${id}>SELECT</button><div class="track-length">${Math.floor(
-        length / 1000 / 60
-      )}:${Math.floor((length / 1000) % 60).toFixed(0)}</div></div>`;
-      document
-        .querySelector(domElements.playlistContents)
-        .insertAdjacentHTML("beforeend", html);
-    },
-
-    populateSongInfo(name, artist, album) {
-      const html = `<div class="song-info">Now Viewing:<br>${name} by ${artist}<br>from the Album:<br>${album}</div>`;
-      document
-        .querySelector(domElements.songDetail)
-        .insertAdjacentHTML("beforeend", html);
-    },
-
-    populateSongImage(img) {
-      const html = `<img class="track-imgs" src=${img}>`;
-      document
-        .querySelector(domElements.currentSong)
-        .insertAdjacentHTML("beforeend", html);
-    },
-
-    resetTrackArt() {
-      this.outputField().currentSong.innerHTML = "";
-    },
-
-    resetTrackDetail() {
-      this.outputField().songDetail.innerHTML = "";
-      this.resetTrackArt();
-    },
-
-    resetTitle() {
-      this.outputField().title.innerHTML = "";
-      this.resetTrackDetail();
-    },
-
-    resetPlaylistPic() {
-      this.outputField().playlistArt.innerHTML = "";
-      this.resetTitle();
-    },
-
-    resetTracks() {
-      this.outputField().playlistSongs.innerHTML = "";
-      this.resetPlaylistPic();
-    },
-
-    resetPlaylists() {
-      this.outputField().playlistLibrary.innerHTML = "";
-      this.resetTracks();
-    },
-
-    storeToken(value) {
-      document.querySelector(domElements.hToken).value = value;
-    },
-
-    getStoredToken() {
-      return {
-        token: document.querySelector(domElements.hToken).value,
-      };
-    },
-  };
-})();
-
-//-----------------------------------//
-//-------App Control Module----------//
-//-----------------------------------//
+})(uiController);
 
 const appController = (function (apiCtrl, uiCtrl) {
   //get object reference for DOM outputs
@@ -349,7 +342,7 @@ const appController = (function (apiCtrl, uiCtrl) {
 
   const asyncOps = async () => {
     //fetch token
-    let token = await apiCtrl.getToken().catch((err) => { console.log(err); });
+    let token = await apiCtrl.getToken();
     //retrieve token and store it in hidden html element
     uiCtrl.storeToken(token);
 
@@ -422,10 +415,6 @@ const appController = (function (apiCtrl, uiCtrl) {
       uiCtrl.populateSongImage(newestData.album.images[0].url);
       console.log("async ops complete");
     };
-
-    //-----------------------------------//
-    //-------App Event Listeners---------//
-    //-----------------------------------//
 
     const genreListener = () => {
       //retrieve token
