@@ -1,182 +1,4 @@
 import (__dirname + '/index.css');
-//-----------------------------------//
-//-----API Controller Module---------//
-//-----------------------------------//
-const apiController = (function () {
-  //get access token
-  async function getToken() {
-    const result = await fetch('https://accounts.spotify.com/api/token', {
-      method: 'POST',
-      headers: {
-          'Content-Type' : 'application/x-www-form-urlencoded', 
-          'Authorization' : 'Basic ' + btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET)
-      },
-      body: 'grant_type=client_credentials'
-    });
-
-    const data = await result.json().catch((error) => {console.log(error)});
-    return data.access_token;
-  };
-  //-----------------------------------//
-  //--------API Display Module---------//
-  //-----------------------------------//
-
-  //fetch genres from spotify for later sorting
-  async function getGenres(token) {
-    console.log('fetching genres...');
-    const response = await fetch(
-      `https://api.spotify.com/v1/recommendations/available-genre-seeds`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then( async (response) => {
-      const data = await response.json().catch( (error) => {console.log(error)});
-      return data.genres;
-    })
-    return response;
-  };
-
-  //fetch user playlist information from api
-  async function getMyPlaylists(token) {
-    console.log('fetching playlists...');
-    const limit = 21;
-
-    const response = await fetch(
-      `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then( async (response) => {
-      const data = await response.json().catch((error) => {console.log(error)});
-      return data;
-    })
-    return response;
-  };
-
-  //fetch user playlist information from api
-  async function getPlaylistByID(playlistID, token) {
-    console.log('fetching playlist...');
-    const response = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistID}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then( async (response) => {
-      data = await response.json().catch((error) => {console.log(error)});
-      return data;
-    })
-    return response;
-  };
-
-  //function used to fetch playlist track list
-  async function getMyPlaylistsTrackList(playlistID, token) {
-    console.log('fetching playlist track list...');
-    const response = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then( async (response) => {
-      const data = await response.json().catch((error) => {console.log(error)});
-      return data;
-    })
-    return response;
-  };
-
-  //function used to fetch individual track info from playlists
-  async function getTracksInfo(trackID, token) {
-    console.log('fetching track info...');
-    const response = await fetch(
-      `https://api.spotify.com/v1/tracks/${trackID}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then( async (response) => {
-      const data = await response.json().catch((error) => {console.log(error)});
-      return data;
-    })
-    return response;
-    };
-
-  //-----------------------------------//
-  //--------API Function Module--------//
-  //-----------------------------------//
-
-  //fetch play/pause
-  async function playFunction(token, uri) {
-    const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
-    }).then( async (response) => {
-      data = await response.json().catch((error) => {console.log(error)});
-      console.log("Playing", data);
-      return data;
-    })
-    return response;
-  };
-
-  //-----------------------------------//
-  //-------------Returns---------------//
-  //-----------------------------------//
-
-  return {
-    getToken() {
-      return getToken();
-    },
-    getGenres(token) {
-      return getGenres(token);
-    },
-    getMyPlaylists(token) {
-      return getMyPlaylists(token);
-    },
-    getPlaylistByID(playlistID, token) {
-      return getPlaylistByID(playlistID, token);
-    },
-    getMyPlaylistsTrackList(playlistID, token) {
-      return getMyPlaylistsTrackList(playlistID, token);
-    },
-    getTracksInfo(trackID, token) {
-      return getTracksInfo(trackID, token);
-    },
-    playFunction(token, uri) {
-      return playFunction(token, uri);
-    },
-  };
-})();
-
-//-----------------------------------//
-//-------UI Selector Module----------//
-//-----------------------------------//
 
 const uiController = (function () {
   //store html selectors in an object for outputField() method
@@ -197,6 +19,7 @@ const uiController = (function () {
     playlistContents: "#metadata-1",
     otherPlaylists: "#metadata-2",
     genreSelect: "#genre-select",
+    loader: "#loading"
   };
 
   return {
@@ -218,9 +41,39 @@ const uiController = (function () {
         playlistSongs: document.querySelector(domElements.playlistContents),
         playlistLibrary: document.querySelector(domElements.otherPlaylists),
         genreSelect: document.querySelector(domElements.genreSelect),
+        loader: document.querySelector(domElements.loader)
       };
     },
     //general ui info population methods
+    displayLoadingMessage() {
+      this.outputField().loader.style.backgroundColor = 'yellow'
+      this.outputField().loader.style.color = 'black'
+      this.outputField().loader.innerHTML = "LOADING..."
+      this.outputField().loader.classList.add('display');
+      this.timeoutSet() // set timeout to hide loading message
+    },
+    
+    hideLoadingMessage() {
+      this.outputField().loader.classList.remove('display');
+    },
+    
+    displayError(error) {
+      this.outputField().loader.style.backgroundColor = 'red'
+      this.outputField().loader.style.color = 'white'
+      this.outputField().loader.innerHTML = ""
+      this.outputField().loader.innerHTML = error
+      this.outputField().loader.classList.add('display');
+      this.timeoutSet()
+      console.log(error)
+      throw new Error(error)
+    },
+
+    timeoutSet() {
+      setTimeout(() => {
+        this.hideLoadingMessage()
+        } , 10000);  // 1000ms = 1s
+    },
+
     assignGenre(text, value) {
       const html = `<option id="genre-item" value="${value}">${text}</option>`;
       document
@@ -314,52 +167,247 @@ const uiController = (function () {
   };
 })();
 
-//-----------------------------------//
-//-------App Control Module----------//
-//-----------------------------------//
+
+const apiController = (function (uiCtrl) {
+  //get access token
+  async function getToken() {
+    uiCtrl.displayLoadingMessage();
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+          'Content-Type' : 'application/x-www-form-urlencoded', 
+          'Authorization' : 'Basic ' + btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET)
+      },
+      body: 'grant_type=client_credentials'
+    })
+    .then(async (response) => {
+			if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+				const data = await response.json().catch( (error) => { uiCtrl.displayError(error) })
+        return data.access_token;
+			}
+			uiCtrl.displayError(response.status)
+		})
+    .catch (error => {
+      uiCtrl.displayError(error)
+		} )
+    return response
+  };
+
+  //fetch genres from spotify for later sorting
+  async function getGenres(token) {
+    uiCtrl.displayLoadingMessage()
+    const response = await fetch(
+      `https://api.spotify.com/v1/recommendations/available-genre-seeds`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then( async (response) => {
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        const data = await response.json().catch( (error) => { uiCtrl.displayError(error) })
+        return data.genres;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch (error => {
+      uiCtrl.displayError(error);
+    })
+    return response
+  };
+
+  //fetch user playlist information from api
+  async function getMyPlaylists(token) {
+    uiCtrl.displayLoadingMessage()
+    const limit = 21;
+
+    const response = await fetch(
+      `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then( async (response) => {
+      if (response.ok) {
+        const data = await response.json().catch((error) => {console.log(error)});
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch (error => {
+      uiCtrl.displayError(error)
+    })
+    return response
+  };
+
+  //fetch user playlist information from api
+  async function getPlaylistByID(playlistID, token) {
+    uiCtrl.displayLoadingMessage()
+    const response = await fetch(
+      `https://api.spotify.com/v1/playlists/${playlistID}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then( async (response) => {
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch (error => {
+      uiCtrl.displayError(error)
+    })
+    return response;
+  };
+
+  //function used to fetch playlist track list
+  async function getMyPlaylistsTrackList(playlistID, token) {
+    uiCtrl.displayLoadingMessage()
+    const response = await fetch(
+      `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then( async (response) => {
+      if (response.ok) {
+        const data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch(error => {
+      uiCtrl.displayError(error)
+    })
+    return response;
+  };
+
+  //function used to fetch individual track info from playlists
+  async function getTracksInfo(trackID, token) {
+    uiCtrl.displayLoadingMessage()
+    const response = await fetch(
+      `https://api.spotify.com/v1/tracks/${trackID}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then( async (response) => {
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        const data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch(error => {
+      uiCtrl.displayError(error)
+    })
+    return response;
+  };
+
+  //fetch play/pause
+  async function playFunction(token, uri) {
+    uiCtrl.displayLoadingMessage()
+    const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
+    }).then( async (response) => {
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch(error => {
+      uiCtrl.displayError(error)
+    })
+    return response;
+  };
+
+  return {
+    getToken() {
+      return getToken();
+    },
+    getGenres(token) {
+      return getGenres(token);
+    },
+    getMyPlaylists(token) {
+      return getMyPlaylists(token);
+    },
+    getPlaylistByID(playlistID, token) {
+      return getPlaylistByID(playlistID, token);
+    },
+    getMyPlaylistsTrackList(playlistID, token) {
+      return getMyPlaylistsTrackList(playlistID, token);
+    },
+    getTracksInfo(trackID, token) {
+      return getTracksInfo(trackID, token);
+    },
+    playFunction(token, uri) {
+      return playFunction(token, uri);
+    },
+  };
+})(uiController);
+
 
 const appController = (function (apiCtrl, uiCtrl) {
   //get object reference for DOM outputs
   const domOutput = uiCtrl.outputField();
 
   const asyncOps = async () => {
-    //fetch token
-    let token = await apiCtrl.getToken().catch((err) => { console.log(err); });
-    //retrieve token and store it in hidden html element
+    let token = await apiCtrl.getToken();
     uiCtrl.storeToken(token);
 
-    //----Populate HTML Information------//
-
-    //---onLoad----//
     const genrePopulate = async () => {
-      //retrieve token
       let token = uiCtrl.getStoredToken().token;
-      //fetch genres
       try {
         await apiCtrl.getGenres(token)
           .then((data) => {
           //populate drop-down menu with genres
           data.forEach((element) => uiCtrl.assignGenre(element, element));
-        }).catch((error) => console.log(error));
+        });
       } catch (error) {
-        console.log(error);
+        uiCtrl.displayError(error);
       };
     };
 
     const musicPopulate = async () => {
-      //retrieve token
       let token = uiCtrl.getStoredToken().token;
 
-      //fetch playlist info for each playlist
-      const data = await apiCtrl.getMyPlaylists(token).catch((error) => console.log(error));
+      // fetch playlist info for each playlist
+      const data = await apiCtrl.getMyPlaylists(token).catch((error) => { uiCtrl.displayError(error) });
 
-      //populate title
       const title = data.items[3].name;
       const id = data.items[3].id;
+      // print title
       uiCtrl.assignTitle(id, title);
-      //place image on center div
+      // place image on center div
       uiCtrl.assignPlaylistArt(data.items[3].images[0].url);
-      //populate playlist selection library
+      // populate playlist selection library
       for (let i = 0; i < data.items.length; i++) {
         uiCtrl.populatePlaylists(
           data.items[i].id,
@@ -368,49 +416,40 @@ const appController = (function (apiCtrl, uiCtrl) {
         );
       };
 
-      //fetch tracklist info for each track
-      const newData = await apiCtrl.getMyPlaylistsTrackList(data.items[3].id,token).catch((error) => console.log(error));
+      const trackList = await apiCtrl.getMyPlaylistsTrackList(data.items[3].id,token).catch((error) => { uiCtrl.displayError(error) });
 
-      for (let i = 0; i < newData.items.length; i++) {
-        //place html
+      for (let i = 0; i < trackList.items.length; i++) {
         uiCtrl.populateTrackList(
-          newData.items[i].track.uri,
+          trackList.items[i].track.uri,
           i + 1,
-          newData.items[i].track.name,
-          newData.items[i].track.artists[0].name,
-          newData.items[i].track.duration_ms,
-          newData.items[i].track.id
+          trackList.items[i].track.name,
+          trackList.items[i].track.artists[0].name,
+          trackList.items[i].track.duration_ms,
+          trackList.items[i].track.id
         );
       }
 
-      //fetch current song image
-      const newerData = await apiCtrl.getTracksInfo(newData.items[0].track.id,token).catch((error) => console.log(error));
+      const songInfo = await apiCtrl.getTracksInfo(trackList.items[0].track.id,token).catch((error) => { uiCtrl.displayError(error) });
 
       uiCtrl.populateSongInfo(
-        newerData.name,
-        newerData.artists[0].name,
-        newerData.album.name
+        songInfo.name,
+        songInfo.artists[0].name,
+        songInfo.album.name
       );
 
-      const newestData = await apiCtrl.getTracksInfo(newData.items[0].track.id,token).catch((error) => console.log(error));
+      const songImage = await apiCtrl.getTracksInfo(trackList.items[0].track.id,token).catch((error) => uiCtrl.displayError(error));
       //place song images
-      uiCtrl.populateSongImage(newestData.album.images[0].url);
-      console.log("async ops complete");
+      uiCtrl.populateSongImage(songImage.album.images[0].url);
     };
 
-    //-----------------------------------//
-    //-------App Event Listeners---------//
-    //-----------------------------------//
-
     const genreListener = () => {
-      //retrieve token
       let token = uiCtrl.getStoredToken().token;
       const genreSelect = domOutput.genreSelect;
       genreSelect.addEventListener("change", async () => {
         uiCtrl.resetPlaylists();
         const genreId = genreSelect.options[genreSelect.selectedIndex].value;
         try {
-          const playlist = await apiCtrl.getMyPlaylists(token);
+          const playlist = await apiCtrl.getMyPlaylists(token).catch(error => { uiCtrl.displayError(error) });
           for (i = 0; i < playlist.items.length; i++) {
             const description = playlist.items[i].description;
             if (description.split(" ").includes(genreId)) {
@@ -428,56 +467,56 @@ const appController = (function (apiCtrl, uiCtrl) {
               );
             }
           }} catch (error) {
-            console.log(error);
+            uiCtrl.displayError(error);
           };
 
         try {
           //assign current tracklist
-          const newData = await apiCtrl.getMyPlaylistsTrackList(
+          const trackList = await apiCtrl.getMyPlaylistsTrackList(
             playlist.items[i].id,
             token
-          );
-          for (j = 0; j < newData.items.length; j++) {
+          ).catch(error => { uiCtrl.displayError(error) });
+
+          for (j = 0; j < trackList.items.length; j++) {
             //place current tracklist
             uiCtrl.populateTrackList(
-              newData.items[j].track.uri,
+              trackList.items[j].track.uri,
               j + 1,
-              newData.items[j].track.name,
-              newData.items[j].track.artists[0].name,
-              newData.items[j].track.duration_ms,
-              newData.items[i].track.id
+              trackList.items[j].track.name,
+              trackList.items[j].track.artists[0].name,
+              trackList.items[j].track.duration_ms,
+              trackList.items[i].track.id
             );
             //fetch current song image
-            const newerData = await apiCtrl.getTracksInfo(
-              newData.items[j].track.id,
+            const songImage = await apiCtrl.getTracksInfo(
+              trackList.items[j].track.id,
               token
-            );
+            ).catch(error => { uiCtrl.displayError(error) });
             uiCtrl.populateSongInfo(
-              newerData.name,
-              newerData.artists[0].name,
-              newerData.album.name
+              songImage.name,
+              songImage.artists[0].name,
+              songImage.album.name
             );
-            uiCtrl.populateSongImage(newerData.album.images[0].url);
+            uiCtrl.populateSongImage(songImage.album.images[0].url);
           }
         } catch (error) {
-          console.log(error);
+          uiCtrl.displayError(error);
         };
       });
     };
 
     const playlistListener = () => {
-      //retrieve token
       let token = uiCtrl.getStoredToken().token;
       const playlistContainer = domOutput.playlistLibrary;
       playlistContainer.addEventListener("click", async (e) => {
         uiCtrl.resetTracks();
-        const btnID = e.target.value || e.target.parentElement.value; // <----- there is a bug here, if user clicks image it will not work
-        console.log(e.target)
+        const btnID = e.target.value || e.target.parentElement.value;
         try {
-          const currentPlaylist = await apiCtrl.getPlaylistByID(btnID, token);
+          const currentPlaylist = await apiCtrl.getPlaylistByID(btnID, token).catch(error => { uiCtrl.displayError(error) });
           uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
           uiCtrl.assignTitle(currentPlaylist.id, currentPlaylist.name);
-          const trackList = await apiCtrl.getMyPlaylistsTrackList(btnID, token);
+          const trackList = await apiCtrl.getMyPlaylistsTrackList(btnID, token).catch(error => { uiCtrl.displayError(error) });
+
           for (i = 0; i < trackList.items.length; i++) {
             uiCtrl.populateTrackList(
               trackList.items[i].track.uri,
@@ -491,7 +530,7 @@ const appController = (function (apiCtrl, uiCtrl) {
             const trackInfo = await apiCtrl.getTracksInfo(
               trackList.items[i].track.id,
               token
-            );
+            ).catch(error => { uiCtrl.displayError(error) });
             uiCtrl.populateSongInfo(
               trackInfo.name,
               trackInfo.artists[0].name,
@@ -500,7 +539,7 @@ const appController = (function (apiCtrl, uiCtrl) {
             uiCtrl.populateSongImage(trackInfo.album.images[0].url);
           }
         } catch (error) {
-          console.log(error);
+          uiCtrl.displayError(error);
         };
       });
     };
@@ -516,7 +555,7 @@ const appController = (function (apiCtrl, uiCtrl) {
         const trackID = e.target.value;
 
         try {
-          const trackInfo = await apiCtrl.getTracksInfo(trackID, token);
+          const trackInfo = await apiCtrl.getTracksInfo(trackID, token).catch(error => { uiCtrl.displayError(error) });
           uiCtrl.populateSongInfo(
             trackInfo.name,
             trackInfo.artists[0].name,
@@ -525,13 +564,13 @@ const appController = (function (apiCtrl, uiCtrl) {
           uiCtrl.populateSongImage(trackInfo.album.images[0].url);
           const uri = trackInfo;
         } catch (error) {
-          console.log(error);
+          uiCtrl.displayError(error);
         };
 
         try {
-          const trackPlay = await apiCtrl.playFunction(token, uri);
+          const trackPlay = await apiCtrl.playFunction(token, uri).catch(error => { uiCtrl.displayError(error) });
         } catch (error) {
-          console.log(error);
+          uiCtrl.displayError(error);
         };
       });
     };
@@ -547,9 +586,9 @@ const appController = (function (apiCtrl, uiCtrl) {
         const uri = tracklist[0].childNodes[0].defaultValue;
 
         try {
-          await apiCtrl.playFunction(token, uri);
+          await apiCtrl.playFunction(token, uri).catch(error => { uiCtrl.displayError(error) });
         } catch (error) {
-          console.log(error);
+          uiCtrl.displayError(error);
         };
       })
     };
