@@ -190,7 +190,7 @@ const apiController = (function (uiCtrl) {
 			uiCtrl.displayError(response.status)
 		})
     .catch (error => {
-      uiCtrl.displayError(error)
+      uiCtrl.displayError("failed to fetch token")
 		} )
     return response
   };
@@ -216,7 +216,7 @@ const apiController = (function (uiCtrl) {
       }
       uiCtrl.displayError(response.status)
     }).catch (error => {
-      uiCtrl.displayError(error);
+      uiCtrl.displayError("Failed to fetch genres");
     })
     return response
   };
@@ -243,7 +243,7 @@ const apiController = (function (uiCtrl) {
       }
       uiCtrl.displayError(response.status)
     }).catch (error => {
-      uiCtrl.displayError(error)
+      uiCtrl.displayError("Failed to fetch playlists")
     })
     return response
   };
@@ -269,7 +269,7 @@ const apiController = (function (uiCtrl) {
       }
       uiCtrl.displayError(response.status)
     }).catch (error => {
-      uiCtrl.displayError(error)
+      uiCtrl.displayError("Failed to fetch playlist")
     })
     return response;
   };
@@ -294,7 +294,7 @@ const apiController = (function (uiCtrl) {
       }
       uiCtrl.displayError(response.status)
     }).catch(error => {
-      uiCtrl.displayError(error)
+      uiCtrl.displayError("Failed to fetch tracklist info")
     })
     return response;
   };
@@ -320,7 +320,7 @@ const apiController = (function (uiCtrl) {
       }
       uiCtrl.displayError(response.status)
     }).catch(error => {
-      uiCtrl.displayError(error)
+      uiCtrl.displayError("Failed to fetch track info")
     })
     return response;
   };
@@ -344,7 +344,7 @@ const apiController = (function (uiCtrl) {
       }
       uiCtrl.displayError(response.status)
     }).catch(error => {
-      uiCtrl.displayError(error)
+      uiCtrl.displayError("Spotify Premium Required")
     })
     return response;
   };
