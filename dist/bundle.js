@@ -535,12 +535,12 @@ var apiController = function (uiCtrl) {
 
   ; //function used to fetch individual track info from playlists
 
-  function _getTracksInfo2(_x7, _x8) {
-    return _getTracksInfo.apply(this, arguments);
+  function _getTrackInfo2(_x7, _x8) {
+    return _getTrackInfo.apply(this, arguments);
   }
 
-  function _getTracksInfo() {
-    _getTracksInfo = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(trackID, token) {
+  function _getTrackInfo() {
+    _getTrackInfo = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(trackID, token) {
       var response;
       return _regeneratorRuntime().wrap(function _callee12$(_context12) {
         while (1) {
@@ -607,7 +607,7 @@ var apiController = function (uiCtrl) {
         }
       }, _callee12);
     }));
-    return _getTracksInfo.apply(this, arguments);
+    return _getTrackInfo.apply(this, arguments);
   }
 
   ; //fetch play/pause
@@ -703,8 +703,8 @@ var apiController = function (uiCtrl) {
     getMyPlaylistsTrackList: function getMyPlaylistsTrackList(playlistID, token) {
       return _getMyPlaylistsTrackList2(playlistID, token);
     },
-    getTracksInfo: function getTracksInfo(trackID, token) {
-      return _getTracksInfo2(trackID, token);
+    getTrackInfo: function getTrackInfo(trackID, token) {
+      return _getTrackInfo2(trackID, token);
     },
     playFunction: function playFunction(token, uri) {
       return _playFunction2(token, uri);
@@ -814,7 +814,7 @@ var appController = function (apiCtrl, uiCtrl) {
                           }
 
                           _context16.next = 16;
-                          return apiCtrl.getTracksInfo(trackList.items[0].track.id, token)["catch"](function (error) {
+                          return apiCtrl.getTrackInfo(trackList.items[0].track.id, token)["catch"](function (error) {
                             uiCtrl.displayError(error);
                           });
 
@@ -822,7 +822,7 @@ var appController = function (apiCtrl, uiCtrl) {
                           songInfo = _context16.sent;
                           uiCtrl.populateSongInfo(songInfo.name, songInfo.artists[0].name, songInfo.album.name);
                           _context16.next = 20;
-                          return apiCtrl.getTracksInfo(trackList.items[0].track.id, token)["catch"](function (error) {
+                          return apiCtrl.getTrackInfo(trackList.items[0].track.id, token)["catch"](function (error) {
                             return uiCtrl.displayError(error);
                           });
 
@@ -910,7 +910,7 @@ var appController = function (apiCtrl, uiCtrl) {
                           uiCtrl.populateTrackList(trackList.items[j].track.uri, j + 1, trackList.items[j].track.name, trackList.items[j].track.artists[0].name, trackList.items[j].track.duration_ms, trackList.items[i].track.id); //fetch current song image
 
                           _context17.next = 22;
-                          return apiCtrl.getTracksInfo(trackList.items[j].track.id, token)["catch"](function (error) {
+                          return apiCtrl.getTrackInfo(trackList.items[j].track.id, token)["catch"](function (error) {
                             uiCtrl.displayError(error);
                           });
 
@@ -978,45 +978,48 @@ var appController = function (apiCtrl, uiCtrl) {
 
                           case 12:
                             if (!(i < trackList.items.length)) {
-                              _context18.next = 22;
+                              _context18.next = 21;
                               break;
                             }
 
                             uiCtrl.populateTrackList(trackList.items[i].track.uri, i + 1, trackList.items[i].track.name, trackList.items[i].track.artists[0].name, trackList.items[i].track.duration_ms, trackList.items[i].track.id); //fetch current song image
 
                             _context18.next = 16;
-                            return apiCtrl.getTracksInfo(trackList.items[i].track.id, token)["catch"](function (error) {
+                            return apiCtrl.getTrackInfo(trackList.items[i].track.id, token)["catch"](function (error) {
                               uiCtrl.displayError(error);
                             });
 
                           case 16:
                             trackInfo = _context18.sent;
-                            uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
-                            uiCtrl.populateSongImage(trackInfo.album.images[0].url);
 
-                          case 19:
+                            if (i == 0) {
+                              uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
+                              uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+                            }
+
+                          case 18:
                             i++;
                             _context18.next = 12;
                             break;
 
-                          case 22:
-                            _context18.next = 27;
+                          case 21:
+                            _context18.next = 26;
                             break;
 
-                          case 24:
-                            _context18.prev = 24;
+                          case 23:
+                            _context18.prev = 23;
                             _context18.t0 = _context18["catch"](2);
                             uiCtrl.displayError(_context18.t0);
 
-                          case 27:
+                          case 26:
                             ;
 
-                          case 28:
+                          case 27:
                           case "end":
                             return _context18.stop();
                         }
                       }
-                    }, _callee18, null, [[2, 24]]);
+                    }, _callee18, null, [[2, 23]]);
                   }));
 
                   return function (_x18) {
@@ -1043,7 +1046,7 @@ var appController = function (apiCtrl, uiCtrl) {
                             trackID = e.target.value;
                             _context19.prev = 4;
                             _context19.next = 7;
-                            return apiCtrl.getTracksInfo(trackID, token)["catch"](function (error) {
+                            return apiCtrl.getTrackInfo(trackID, token)["catch"](function (error) {
                               uiCtrl.displayError(error);
                             });
 
@@ -1268,7 +1271,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("fc1927de64203d476aa1")
+/******/ 		__webpack_require__.h = () => ("4feee5c984bedfffaba1")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
