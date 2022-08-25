@@ -7,3 +7,5 @@
 - Feel free to browse my playlists and enjoy the album art.
 
 - Music coming soon!
+
+- Current build: [![Netlify Status](https://api.netlify.com/api/v1/badges/285ecbdb-9756-4901-b544-85b276a38f70/deploy-status)](https://app.netlify.com/sites/gvomusicdiscovery/deploys)
