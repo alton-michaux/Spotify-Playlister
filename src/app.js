@@ -222,9 +222,9 @@ const apiController = (function (uiCtrl) {
 
   //fetch user playlist information from api
   async function getMyPlaylists(token) {
-    uiCtrl.displayLoadingMessage()
     const limit = 21;
 
+    uiCtrl.displayLoadingMessage()
     const response = await fetch(
       `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
       {
@@ -237,6 +237,7 @@ const apiController = (function (uiCtrl) {
       }
     ).then( async (response) => {
       if (response.ok) {
+        uiCtrl.hideLoadingMessage()
         const data = await response.json().catch((error) => {uiCtrl.displayError(error)});
         return data;
       }
@@ -288,6 +289,7 @@ const apiController = (function (uiCtrl) {
       }
     ).then( async (response) => {
       if (response.ok) {
+        uiCtrl.hideLoadingMessage()
         const data = await response.json().catch((error) => { uiCtrl.displayError(error) });
         return data;
       }

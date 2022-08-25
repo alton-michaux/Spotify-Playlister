@@ -317,8 +317,8 @@ var apiController = function (uiCtrl) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              uiCtrl.displayLoadingMessage();
               limit = 21;
+              uiCtrl.displayLoadingMessage();
               _context6.next = 4;
               return fetch("https://api.spotify.com/v1/users/".concat("12172782523", "/playlists?limit=").concat(limit, "&offset=0"), {
                 method: "GET",
@@ -336,23 +336,24 @@ var apiController = function (uiCtrl) {
                       switch (_context5.prev = _context5.next) {
                         case 0:
                           if (!response.ok) {
-                            _context5.next = 5;
+                            _context5.next = 6;
                             break;
                           }
 
-                          _context5.next = 3;
+                          uiCtrl.hideLoadingMessage();
+                          _context5.next = 4;
                           return response.json()["catch"](function (error) {
                             uiCtrl.displayError(error);
                           });
 
-                        case 3:
+                        case 4:
                           _data3 = _context5.sent;
                           return _context5.abrupt("return", _data3);
 
-                        case 5:
+                        case 6:
                           uiCtrl.displayError(response.status);
 
-                        case 6:
+                        case 7:
                         case "end":
                           return _context5.stop();
                       }
@@ -487,23 +488,24 @@ var apiController = function (uiCtrl) {
                       switch (_context9.prev = _context9.next) {
                         case 0:
                           if (!response.ok) {
-                            _context9.next = 5;
+                            _context9.next = 6;
                             break;
                           }
 
-                          _context9.next = 3;
+                          uiCtrl.hideLoadingMessage();
+                          _context9.next = 4;
                           return response.json()["catch"](function (error) {
                             uiCtrl.displayError(error);
                           });
 
-                        case 3:
+                        case 4:
                           _data4 = _context9.sent;
                           return _context9.abrupt("return", _data4);
 
-                        case 5:
+                        case 6:
                           uiCtrl.displayError(response.status);
 
-                        case 6:
+                        case 7:
                         case "end":
                           return _context9.stop();
                       }
@@ -1252,7 +1254,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("3a8a05f2239731be9682")
+/******/ 		__webpack_require__.h = () => ("450b2735cb54e41a5756")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
