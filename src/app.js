@@ -300,7 +300,7 @@ const apiController = (function (uiCtrl) {
   };
 
   //function used to fetch individual track info from playlists
-  async function getTracksInfo(trackID, token) {
+  async function getTrackInfo(trackID, token) {
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
       `https://api.spotify.com/v1/tracks/${trackID}`,
@@ -365,8 +365,8 @@ const apiController = (function (uiCtrl) {
     getMyPlaylistsTrackList(playlistID, token) {
       return getMyPlaylistsTrackList(playlistID, token);
     },
-    getTracksInfo(trackID, token) {
-      return getTracksInfo(trackID, token);
+    getTrackInfo(trackID, token) {
+      return getTrackInfo(trackID, token);
     },
     playFunction(token, uri) {
       return playFunction(token, uri);
@@ -392,7 +392,7 @@ const appController = (function (apiCtrl, uiCtrl) {
           data.forEach((element) => uiCtrl.assignGenre(element, element));
         });
       } catch (error) {
-        uiCtrl.displayError(error);
+        uiCtrl.displayError("Failed to load genres");
       };
     };
 
@@ -430,7 +430,7 @@ const appController = (function (apiCtrl, uiCtrl) {
         );
       }
 
-      const songInfo = await apiCtrl.getTracksInfo(trackList.items[0].track.id,token);
+      const songInfo = await apiCtrl.getTrackInfo(trackList.items[0].track.id,token);
 
       uiCtrl.populateSongInfo(
         songInfo.name,
@@ -438,7 +438,7 @@ const appController = (function (apiCtrl, uiCtrl) {
         songInfo.album.name
       );
 
-      const songImage = await apiCtrl.getTracksInfo(trackList.items[0].track.id,token);
+      const songImage = await apiCtrl.getTrackInfo(trackList.items[0].track.id,token);
       //place song images
       uiCtrl.populateSongImage(songImage.album.images[0].url);
     };
@@ -468,15 +468,12 @@ const appController = (function (apiCtrl, uiCtrl) {
               );
             }
           }} catch (error) {
-            uiCtrl.displayError(error);
+            uiCtrl.displayError("Failed to load genre");
           };
 
         try {
           //assign current tracklist
-          const trackList = await apiCtrl.getMyPlaylistsTrackList(
-            playlist.items[i].id,
-            token
-          ).catch(error => { uiCtrl.displayError(error) });
+          const trackList = await apiCtrl.getMyPlaylistsTrackList(playlist.items[i].id, token);
 
           for (j = 0; j < trackList.items.length; j++) {
             //place current tracklist
@@ -489,19 +486,14 @@ const appController = (function (apiCtrl, uiCtrl) {
               trackList.items[i].track.id
             );
             //fetch current song image
-            const songImage = await apiCtrl.getTracksInfo(
-              trackList.items[j].track.id,
-              token
-            ).catch(error => { uiCtrl.displayError(error) });
-            uiCtrl.populateSongInfo(
-              songImage.name,
-              songImage.artists[0].name,
-              songImage.album.name
-            );
-            uiCtrl.populateSongImage(songImage.album.images[0].url);
+            if (j == 0) {
+              const songImage = await apiCtrl.getTrackInfo(trackList.items[j].track.id, token);
+              uiCtrl.populateSongInfo(songImage.name, songImage.artists[0].name, songImage.album.name)
+              uiCtrl.populateSongImage(songImage.album.images[0].url);
+              };
           }
         } catch (error) {
-          uiCtrl.displayError(error);
+          uiCtrl.displayError("Failed to load playlist");
         };
       });
     };
@@ -528,19 +520,14 @@ const appController = (function (apiCtrl, uiCtrl) {
               trackList.items[i].track.id
             );
             //fetch current song image
-            const trackInfo = await apiCtrl.getTracksInfo(
-              trackList.items[i].track.id,
-              token
-            );
-            uiCtrl.populateSongInfo(
-              trackInfo.name,
-              trackInfo.artists[0].name,
-              trackInfo.album.name
-            );
-            uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+            const trackInfo = await apiCtrl.getTrackInfo(trackList.items[i].track.id, token);
+            if (i == 0) {
+              uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
+              uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+            }
           }
         } catch (error) {
-          uiCtrl.displayError(error);
+          uiCtrl.displayError("Failed to load playlist");
         };
       });
     };
@@ -556,7 +543,7 @@ const appController = (function (apiCtrl, uiCtrl) {
         const trackID = e.target.value;
 
         try {
-          const trackInfo = await apiCtrl.getTracksInfo(trackID, token);
+          const trackInfo = await apiCtrl.getTrackInfo(trackID, token);
           uiCtrl.populateSongInfo(
             trackInfo.name,
             trackInfo.artists[0].name,
@@ -565,13 +552,13 @@ const appController = (function (apiCtrl, uiCtrl) {
           uiCtrl.populateSongImage(trackInfo.album.images[0].url);
           const uri = trackInfo;
         } catch (error) {
-          uiCtrl.displayError(error);
+          uiCtrl.displayError("Failed to load song");
         };
 
         try {
           const trackPlay = await apiCtrl.playFunction(token, uri);
         } catch (error) {
-          uiCtrl.displayError(error);
+          uiCtrl.displayError("Playback not yet supported");
         };
       });
     };
@@ -589,7 +576,7 @@ const appController = (function (apiCtrl, uiCtrl) {
         try {
           await apiCtrl.playFunction(token, uri);
         } catch (error) {
-          uiCtrl.displayError(error);
+          uiCtrl.displayError("Playback error");
         };
       })
     };
