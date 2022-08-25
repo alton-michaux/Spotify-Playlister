@@ -300,7 +300,7 @@ const apiController = (function (uiCtrl) {
   };
 
   //function used to fetch individual track info from playlists
-  async function getTracksInfo(trackID, token) {
+  async function getTrackInfo(trackID, token) {
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
       `https://api.spotify.com/v1/tracks/${trackID}`,
@@ -365,8 +365,8 @@ const apiController = (function (uiCtrl) {
     getMyPlaylistsTrackList(playlistID, token) {
       return getMyPlaylistsTrackList(playlistID, token);
     },
-    getTracksInfo(trackID, token) {
-      return getTracksInfo(trackID, token);
+    getTrackInfo(trackID, token) {
+      return getTrackInfo(trackID, token);
     },
     playFunction(token, uri) {
       return playFunction(token, uri);
@@ -430,7 +430,7 @@ const appController = (function (apiCtrl, uiCtrl) {
         );
       }
 
-      const songInfo = await apiCtrl.getTracksInfo(trackList.items[0].track.id,token).catch((error) => { uiCtrl.displayError(error) });
+      const songInfo = await apiCtrl.getTrackInfo(trackList.items[0].track.id,token).catch((error) => { uiCtrl.displayError(error) });
 
       uiCtrl.populateSongInfo(
         songInfo.name,
@@ -438,7 +438,7 @@ const appController = (function (apiCtrl, uiCtrl) {
         songInfo.album.name
       );
 
-      const songImage = await apiCtrl.getTracksInfo(trackList.items[0].track.id,token).catch((error) => uiCtrl.displayError(error));
+      const songImage = await apiCtrl.getTrackInfo(trackList.items[0].track.id,token).catch((error) => uiCtrl.displayError(error));
       //place song images
       uiCtrl.populateSongImage(songImage.album.images[0].url);
     };
@@ -489,7 +489,7 @@ const appController = (function (apiCtrl, uiCtrl) {
               trackList.items[i].track.id
             );
             //fetch current song image
-            const songImage = await apiCtrl.getTracksInfo(
+            const songImage = await apiCtrl.getTrackInfo(
               trackList.items[j].track.id,
               token
             ).catch(error => { uiCtrl.displayError(error) });
@@ -528,16 +528,18 @@ const appController = (function (apiCtrl, uiCtrl) {
               trackList.items[i].track.id
             );
             //fetch current song image
-            const trackInfo = await apiCtrl.getTracksInfo(
+            const trackInfo = await apiCtrl.getTrackInfo(
               trackList.items[i].track.id,
               token
             ).catch(error => { uiCtrl.displayError(error) });
-            uiCtrl.populateSongInfo(
-              trackInfo.name,
-              trackInfo.artists[0].name,
-              trackInfo.album.name
-            );
-            uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+            if (i == 0) {
+              uiCtrl.populateSongInfo(
+                trackInfo.name,
+                trackInfo.artists[0].name,
+                trackInfo.album.name
+              );
+              uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+              }
           }
         } catch (error) {
           uiCtrl.displayError(error);
@@ -556,7 +558,7 @@ const appController = (function (apiCtrl, uiCtrl) {
         const trackID = e.target.value;
 
         try {
-          const trackInfo = await apiCtrl.getTracksInfo(trackID, token).catch(error => { uiCtrl.displayError(error) });
+          const trackInfo = await apiCtrl.getTrackInfo(trackID, token).catch(error => { uiCtrl.displayError(error) });
           uiCtrl.populateSongInfo(
             trackInfo.name,
             trackInfo.artists[0].name,
