@@ -65,7 +65,6 @@ const uiController = (function () {
       this.outputField().loader.innerHTML = error
       this.outputField().loader.classList.add('display');
       this.timeoutSet()
-      console.log(error)
       throw new Error(error)
     },
 
@@ -238,7 +237,7 @@ const apiController = (function (uiCtrl) {
       }
     ).then( async (response) => {
       if (response.ok) {
-        const data = await response.json().catch((error) => {console.log(error)});
+        const data = await response.json().catch((error) => {uiCtrl.displayError(error)});
         return data;
       }
       uiCtrl.displayError(response.status)

@@ -79,7 +79,6 @@ var uiController = function () {
       this.outputField().loader.innerHTML = error;
       this.outputField().loader.classList.add('display');
       this.timeoutSet();
-      console.log(error);
       throw new Error(error);
     },
     timeoutSet: function timeoutSet() {
@@ -343,7 +342,7 @@ var apiController = function (uiCtrl) {
 
                           _context5.next = 3;
                           return response.json()["catch"](function (error) {
-                            console.log(error);
+                            uiCtrl.displayError(error);
                           });
 
                         case 3:
@@ -1253,7 +1252,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("dcf0d6e11b357463f2c1")
+/******/ 		__webpack_require__.h = () => ("3a8a05f2239731be9682")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
