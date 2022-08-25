@@ -332,7 +332,7 @@ ul.show {
   font-size: 12px;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1000px) {
   body {
     overflow-y: scroll;
   }
