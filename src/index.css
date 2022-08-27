@@ -420,10 +420,11 @@ ul.show {
   label {
     min-width: 100%;
     text-align: center;
+    font-size: 25px;
   }
 
   .modal-cancel {
-    height: 20%;
+    max-height: 20%;
   }
 
   .modal-cancel > 
@@ -431,6 +432,7 @@ ul.show {
   label {
     min-width: 60vw;
     text-align: center;
+    font-size: 25px;
   }
 
   .modal-body > label {
@@ -450,12 +452,14 @@ ul.show {
 
   .submit-btn {
     margin-top: 20%;
+    font-size: 40px;
   }
 
   .cancelbtn {
     margin-top: 20%;
     height: 50%;
     width: 60vw;
+    font-size: 40px;
   }
 
   /* The Close Button */
