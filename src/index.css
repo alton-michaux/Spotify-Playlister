@@ -415,6 +415,49 @@ ul.show {
     width: 80%; /* Could be more or less, depending on screen size */
   }
 
+  .modal-body > 
+  input,
+  label {
+    min-width: 100%;
+    text-align: center;
+  }
+
+  .modal-cancel {
+    height: 20%;
+  }
+
+  .modal-cancel > 
+  input,
+  label {
+    min-width: 60vw;
+    text-align: center;
+  }
+
+  .modal-body > label {
+    color: white;
+    margin: auto;
+  }
+
+  .modal-cancel > label {
+    color: white;
+    margin: auto;
+  }
+
+  .modal-cancel > span {
+    height: fit-content;
+    text-align: center;
+  }
+
+  .submit-btn {
+    margin-top: 20%;
+  }
+
+  .cancelbtn {
+    margin-top: 20%;
+    height: 50%;
+    width: 60vw;
+  }
+
   /* The Close Button */
   .close {
     /* Position it in the top right corner outside of the modal */
