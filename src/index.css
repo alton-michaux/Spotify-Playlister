@@ -72,6 +72,96 @@ footer {
   visibility: visible;
 }
 
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 999; /* Sit on top */
+  left: auto;
+  top: auto;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: 5px auto; /* 15% from the top and centered */
+  border: 1px solid #888;
+  width: 50%; /* Could be more or less, depending on screen size */
+}
+
+.modal-content > img {
+  justify-self: center;
+}
+
+.modal-body > 
+input,
+label {
+  min-width: 40%;
+  min-height: 50%;
+  text-align: center;
+  font-size: 25px;
+  margin: 0 auto;
+}
+
+.modal-body {
+  position: relative;
+  min-height: fit-content;
+  min-width: fit-content;
+  top: 0;
+  justify-content: center;
+}
+
+.modal-body > label {
+  color: white;
+  margin: auto;
+}
+
+.submit-btn {
+  margin-top: 20%;
+  font-size: 40px;
+  width: 20vw;
+  justify-self: center;
+}
+
+.modal-cancel {
+  position: relative;
+  min-height: fit-content;
+  bottom: 0;
+}
+
+.modal-cancel > 
+input,
+label {
+  min-width: 60vw;
+  text-align: center;
+  font-size: 25px;
+}
+
+.modal-cancel > label {
+  color: white;
+  margin: auto;
+}
+
+.modal-cancel > span {
+  font-size: 25px;
+  height: fit-content;
+  text-align: center;
+}
+
+.cancelbtn {
+  justify-self: center;
+  margin-top: 5%;
+  height: fit-content;
+  width: 20vw;
+  font-size: 40px;
+}
+
 #loading {
   width: 22%;
   height: 5%;
