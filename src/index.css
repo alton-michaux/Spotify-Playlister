@@ -409,6 +409,7 @@ ul.show {
 
   /* Modal Content/Box */
   .modal-content {
+    position: relative;
     background-color: #fefefe;
     margin: 5px auto; /* 15% from the top and centered */
     border: 1px solid #888;
@@ -423,8 +424,16 @@ ul.show {
     font-size: 25px;
   }
 
+  .modal-body {
+    position: relative;
+    min-height: fit-content;
+    top: 0;
+  }
+
   .modal-cancel {
-    max-height: 20%;
+    position: relative;
+    min-height: fit-content;
+    bottom: 0;
   }
 
   .modal-cancel > 
