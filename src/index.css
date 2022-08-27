@@ -95,8 +95,9 @@ footer {
   width: 50%; /* Could be more or less, depending on screen size */
 }
 
-.modal-content > img {
-  justify-self: center;
+.imgcontainer {
+  max-width: fit-content;
+  margin: auto;
 }
 
 .modal-body > 
