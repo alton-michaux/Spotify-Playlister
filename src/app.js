@@ -5,6 +5,7 @@ const uiController = (function () {
   const domElements = {
     hToken: "#hidden-token",
     btnLogin: "#login",
+    closeBtn: "#close-btn",
     songDetail: "#song-description",
     previousSong: "#prev",
     currentSong: "#current",
@@ -26,6 +27,7 @@ const uiController = (function () {
     outputField() {
       return {
         login: document.querySelector(domElements.btnLogin),
+        closeBtn: document.querySelector(domElements.closeBtn),
         songDetail: document.querySelector(domElements.songDetail),
         hiddenDiv: document.querySelector(domElements.hlogin),
         btnLogin: document.querySelector(domElements.btnLogin),
@@ -47,6 +49,10 @@ const uiController = (function () {
 
     hideLoginButton() {
       this.outputField().login.style.display = 'none'
+    },
+
+    showLoginButton() {
+      this.outputField().login.style.display = 'block'
     },
 
     //general ui info population methods
@@ -409,6 +415,13 @@ const appController = (function (apiCtrl, uiCtrl) {
       })
     }
 
+    const modalClose = () => {
+      const close = domOutput.closeBtn
+      close.addEventListener("click", () => {
+        uiCtrl.showLoginButton();
+      })
+    }
+
     const musicPopulate = async () => {
       let token = uiCtrl.getStoredToken().token;
 
@@ -594,6 +607,7 @@ const appController = (function (apiCtrl, uiCtrl) {
       })
     };
     
+    modalClose();
     loginListener();
     musicPopulate();
     genrePopulate();
