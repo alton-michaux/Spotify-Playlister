@@ -4,8 +4,7 @@ const uiController = (function () {
   //store html selectors in an object for outputField() method
   const domElements = {
     hToken: "#hidden-token",
-    hlogin: "#login-div",
-    btnLogin: "#login-btn",
+    btnLogin: "#login",
     songDetail: "#song-description",
     previousSong: "#prev",
     currentSong: "#current",
@@ -26,6 +25,7 @@ const uiController = (function () {
     //create a method to callback selectors
     outputField() {
       return {
+        login: document.querySelector(domElements.btnLogin),
         songDetail: document.querySelector(domElements.songDetail),
         hiddenDiv: document.querySelector(domElements.hlogin),
         btnLogin: document.querySelector(domElements.btnLogin),
@@ -44,6 +44,11 @@ const uiController = (function () {
         loader: document.querySelector(domElements.loader)
       };
     },
+
+    hideLoginButton() {
+      this.outputField().login.style.display = 'none'
+    },
+
     //general ui info population methods
     displayLoadingMessage() {
       this.outputField().loader.style.backgroundColor = 'yellow'
@@ -397,6 +402,13 @@ const appController = (function (apiCtrl, uiCtrl) {
       };
     };
 
+    const loginListener = () => {
+      const login = domOutput.login
+      login.addEventListener("click", () => {
+        uiCtrl.hideLoginButton();
+      })
+    }
+
     const musicPopulate = async () => {
       let token = uiCtrl.getStoredToken().token;
 
@@ -582,6 +594,7 @@ const appController = (function (apiCtrl, uiCtrl) {
       })
     };
     
+    loginListener();
     musicPopulate();
     genrePopulate();
     genreListener();
