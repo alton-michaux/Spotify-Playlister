@@ -6,6 +6,7 @@ const uiController = (function () {
     hToken: "#hidden-token",
     btnLogin: "#login",
     closeBtn: "#close-btn",
+    cancel: "#cancel",
     songDetail: "#song-description",
     previousSong: "#prev",
     currentSong: "#current",
@@ -28,6 +29,7 @@ const uiController = (function () {
       return {
         login: document.querySelector(domElements.btnLogin),
         closeBtn: document.querySelector(domElements.closeBtn),
+        cancelBtn: document.querySelector(domElements.cancel),
         songDetail: document.querySelector(domElements.songDetail),
         hiddenDiv: document.querySelector(domElements.hlogin),
         btnLogin: document.querySelector(domElements.btnLogin),
@@ -418,6 +420,11 @@ const appController = (function (apiCtrl, uiCtrl) {
     const modalClose = () => {
       const close = domOutput.closeBtn
       close.addEventListener("click", () => {
+        uiCtrl.showLoginButton();
+      })
+
+      const cancel = domOutput.cancelBtn
+      cancel.addEventListener("click", () => {
         uiCtrl.showLoginButton();
       })
     }
