@@ -58,7 +58,11 @@ footer {
 }
 
 .login-div {
-  visibility: hidden;
+  visibility: visible;
+  z-index: 999;
+  background: black;
+  background-blend-mode: darken;
+  opacity: 80%;
 }
 
 .login-btn {
@@ -125,7 +129,7 @@ label {
 }
 
 .submit-btn {
-  margin-top: 20%;
+  margin-top: 5%;
   font-size: 40px;
   width: 20vw;
   justify-self: center;
