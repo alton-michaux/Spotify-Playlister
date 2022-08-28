@@ -1,12 +1,55 @@
 import (__dirname + '/index.css');
+
+const loginController = (function () {
+  // const domElements = {
+  //   btnLogin: "#login",
+  //   closeBtn: "#close-btn",
+  //   cancel: "#cancel",
+  //   submit: "#submit"
+  // };
+
+  // return {
+  //   //create a method to callback selectors
+  //   outputField() {
+  //     return {
+  //       login: document.querySelector(domElements.btnLogin),
+  //       closeBtn: document.querySelector(domElements.closeBtn),
+  //       cancelBtn: document.querySelector(domElements.cancel),
+  //       submit: document.querySelector(domElements.submit)
+  //     };
+  //   },
+
+  //   submitLogin() {
+  //     this.outputField().login.addEventListener("click", () => {
+  //       console.log(this.outputField().login)
+  //       loginUser();
+  //     })
+  //   }
+  // }
+  const login = document.querySelector("#login")
+
+  login.addEventListener("click", () => {
+    console.log("clicked!")
+    loginUser()
+  })
+})();
+
+function loginUser() {
+  console.log("logging in...")
+  // Open the auth popup
+  const spotifyLoginWindow = window.open(`https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=code`);
+
+  spotifyLoginWindow.onbeforeunload = function() {
+    const accessToken = localStorage.getItem('sp-accessToken');
+    const refreshToken = localStorage.getItem('sp-refreshToken');
+  }
+}
+
 function playlistDataLoader() {
   const uiController = (function () {
     //store html selectors in an object for outputField() method
     const domElements = {
       hToken: "#hidden-token",
-      btnLogin: "#login",
-      closeBtn: "#close-btn",
-      cancel: "#cancel",
       songDetail: "#song-description",
       previousSong: "#prev",
       currentSong: "#current",
@@ -27,9 +70,6 @@ function playlistDataLoader() {
       //create a method to callback selectors
       outputField() {
         return {
-          login: document.querySelector(domElements.btnLogin),
-          closeBtn: document.querySelector(domElements.closeBtn),
-          cancelBtn: document.querySelector(domElements.cancel),
           songDetail: document.querySelector(domElements.songDetail),
           hiddenDiv: document.querySelector(domElements.hlogin),
           btnLogin: document.querySelector(domElements.btnLogin),
@@ -47,14 +87,6 @@ function playlistDataLoader() {
           genreSelect: document.querySelector(domElements.genreSelect),
           loader: document.querySelector(domElements.loader)
         };
-      },
-
-      hideLoginButton() {
-        this.outputField().login.style.display = 'none'
-      },
-
-      showLoginButton() {
-        this.outputField().login.style.display = 'block'
       },
 
       //general ui info population methods
@@ -191,7 +223,7 @@ function playlistDataLoader() {
             'Content-Type' : 'application/x-www-form-urlencoded', 
             'Authorization' : 'Basic ' + btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET)
         },
-        body: 'grant_type=client_credentials'
+        body: 'grant_type=authorization_code'
       })
       .then(async (response) => {
         if (response.ok) {
@@ -409,25 +441,6 @@ function playlistDataLoader() {
           uiCtrl.displayError("Failed to load genres");
         };
       };
-
-      const loginListener = () => {
-        const login = domOutput.login
-        login.addEventListener("click", () => {
-          uiCtrl.hideLoginButton();
-        })
-      }
-
-      const modalClose = () => {
-        const close = domOutput.closeBtn
-        close.addEventListener("click", () => {
-          uiCtrl.showLoginButton();
-        })
-
-        const cancel = domOutput.cancelBtn
-        cancel.addEventListener("click", () => {
-          uiCtrl.showLoginButton();
-        })
-      }
 
       const musicPopulate = async () => {
         let token = uiCtrl.getStoredToken().token;
