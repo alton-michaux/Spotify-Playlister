@@ -20,24 +20,28 @@ __webpack_require__.e(/*! import() */ "src_index_css").then(__webpack_require__.
 var loginController = function () {
   var login = document.querySelector("#login");
   login.addEventListener("click", function () {
-    console.log("clicked!");
     loginUser();
   });
 }();
 
 function loginUser() {
-  console.log("MISSING_ENV_VAR"); // Open the auth popup
+  // Open the auth popup
+  var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/index.html", "&response_type=code"));
 
-  var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://127.0.0.1:5500/index.html", "&response_type=code"));
-
-  spotifyLoginWindow.onbeforeunload = function () {// something here
+  spotifyLoginWindow.onbeforeunload = function () {
+    var accessToken = localStorage.getItem('sp-accessToken');
+    var refreshToken = localStorage.getItem('sp-refreshToken');
+    console.log(accessToken);
+    playlistDataLoader(accessToken, refreshToken);
   };
 }
 
-function playlistDataLoader() {
-  var uiController = function () {
+function playlistDataLoader(accToken, refToken) {
+  var uiController = function (accToken, refToken) {
     //store html selectors in an object for outputField() method
     var domElements = {
+      accToken: "#access-token",
+      refToken: "#refresh-token",
       hToken: "#hidden-token",
       songDetail: "#song-description",
       previousSong: "#prev",
@@ -58,6 +62,8 @@ function playlistDataLoader() {
       //create a method to callback selectors
       outputField: function outputField() {
         return {
+          access: document.querySelector(domElements.accToken),
+          refresh: document.querySelector(domElements.refToken),
           songDetail: document.querySelector(domElements.songDetail),
           hiddenDiv: document.querySelector(domElements.hlogin),
           btnLogin: document.querySelector(domElements.btnLogin),
@@ -155,16 +161,32 @@ function playlistDataLoader() {
         this.outputField().playlistLibrary.innerHTML = "";
         this.resetTracks();
       },
-      storeToken: function storeToken(value) {
+      storeBackToken: function storeBackToken(value) {
         document.querySelector(domElements.hToken).value = value;
       },
-      getStoredToken: function getStoredToken() {
+      storeAccessToken: function storeAccessToken(accToken) {
+        document.querySelector(domElements.accToken).value = accToken;
+      },
+      storeRefToken: function storeRefToken(refToken) {
+        document.querySelector(domElements.refToken).value = refToken;
+      },
+      getBackToken: function getBackToken() {
         return {
           token: document.querySelector(domElements.hToken).value
         };
+      },
+      getAccToken: function getAccToken() {
+        return {
+          token: document.querySelector(domElements.accToken).value
+        };
+      },
+      getRefToken: function getRefToken() {
+        return {
+          token: document.querySelector(domElements.refToken).value
+        };
       }
     };
-  }();
+  }(accessToken, refreshToken);
 
   var apiController = function (uiCtrl) {
     //get access token
@@ -745,7 +767,7 @@ function playlistDataLoader() {
 
               case 2:
                 token = _context21.sent;
-                uiCtrl.storeToken(token);
+                uiCtrl.storeBackToken(token);
 
                 genrePopulate = /*#__PURE__*/function () {
                   var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15() {
@@ -754,7 +776,7 @@ function playlistDataLoader() {
                       while (1) {
                         switch (_context15.prev = _context15.next) {
                           case 0:
-                            token = uiCtrl.getStoredToken().token;
+                            token = uiCtrl.getBackToken().token;
                             _context15.prev = 1;
                             _context15.next = 4;
                             return apiCtrl.getGenres(token).then(function (data) {
@@ -797,7 +819,7 @@ function playlistDataLoader() {
                       while (1) {
                         switch (_context16.prev = _context16.next) {
                           case 0:
-                            token = uiCtrl.getStoredToken().token; // fetch playlist info for each playlist
+                            token = uiCtrl.getBackToken().token; // fetch playlist info for each playlist
 
                             _context16.next = 3;
                             return apiCtrl.getMyPlaylists(token);
@@ -854,7 +876,7 @@ function playlistDataLoader() {
                 }();
 
                 genreListener = function genreListener() {
-                  var token = uiCtrl.getStoredToken().token;
+                  var token = uiCtrl.getBackToken().token;
                   var genreSelect = domOutput.genreSelect;
                   genreSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
                     var genreId, _playlist, description, title, trackList, songImage;
@@ -957,7 +979,7 @@ function playlistDataLoader() {
                 };
 
                 playlistListener = function playlistListener() {
-                  var token = uiCtrl.getStoredToken().token;
+                  var token = uiCtrl.getBackToken().token;
                   var playlistContainer = domOutput.playlistLibrary;
                   playlistContainer.addEventListener("click", /*#__PURE__*/function () {
                     var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(e) {
@@ -1035,7 +1057,7 @@ function playlistDataLoader() {
 
                 tracklistListener = function tracklistListener() {
                   //retrieve token
-                  var token = uiCtrl.getStoredToken().token;
+                  var token = uiCtrl.getBackToken().token;
                   var songDiv = domOutput.playlistSongs;
                   songDiv.addEventListener("click", /*#__PURE__*/function () {
                     var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19(e) {
@@ -1101,7 +1123,7 @@ function playlistDataLoader() {
 
                 trackPlayListener = function trackPlayListener() {
                   //retrieve token
-                  var token = uiCtrl.getStoredToken().token;
+                  var token = uiCtrl.getBackToken().token;
                   var songPlay = domOutput.play;
                   var songSkip = domOutput.skipForward;
                   var songBack = domOutput.skipBack;
@@ -1273,7 +1295,7 @@ function playlistDataLoader() {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("4fecedde640826d6bb0a")
+/******/ 		__webpack_require__.h = () => ("fcff0940309b2a345c52")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

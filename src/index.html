@@ -14,7 +14,10 @@
 
   <body>
     <div class="container">
-      <div class="playlist-div"><input type="hidden" id="hidden-token">
+      <div class="playlist-div">
+        <input type="hidden" id="access-token">
+        <input type="hidden" id="refresh-token">
+        <input type="hidden" id="hidden-token">
 
         <nav class="grid-items nav-item">
           <div class="nav-box">
@@ -63,7 +66,7 @@
       </div>
       <div class="container login-div">
         <!-- Button to open the modal login form -->
-        <button class="login-btn" id="login" onclick="document.getElementById('id01').style.display='block'">Login with Spotify</button>
+        <button class="login-btn" id="login">Login with Spotify</button>
       </div>
     </div>
           

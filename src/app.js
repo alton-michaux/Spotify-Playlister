@@ -4,25 +4,28 @@ const loginController = (function () {
   const login = document.querySelector("#login")
 
   login.addEventListener("click", () => {
-    console.log("clicked!")
     loginUser()
   })
 })();
 
 function loginUser() {
-  console.log(process.env)
   // Open the auth popup
   const spotifyLoginWindow = window.open(`https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=code`);
 
   spotifyLoginWindow.onbeforeunload = function() {
-    // something here
+    const accessToken = localStorage.getItem('sp-accessToken');
+    const refreshToken = localStorage.getItem('sp-refreshToken');
+    console.log(accessToken)
+    playlistDataLoader(accessToken, refreshToken);
   }
 }
 
-function playlistDataLoader() {
-  const uiController = (function () {
+function playlistDataLoader(accToken, refToken) {
+  const uiController = (function (accToken, refToken) {
     //store html selectors in an object for outputField() method
     const domElements = {
+      accToken: "#access-token",
+      refToken: "#refresh-token",
       hToken: "#hidden-token",
       songDetail: "#song-description",
       previousSong: "#prev",
@@ -44,6 +47,8 @@ function playlistDataLoader() {
       //create a method to callback selectors
       outputField() {
         return {
+          access: document.querySelector(domElements.accToken),
+          refresh: document.querySelector(domElements.refToken),
           songDetail: document.querySelector(domElements.songDetail),
           hiddenDiv: document.querySelector(domElements.hlogin),
           btnLogin: document.querySelector(domElements.btnLogin),
@@ -174,17 +179,37 @@ function playlistDataLoader() {
         this.resetTracks();
       },
 
-      storeToken(value) {
+      storeBackToken(value) {
         document.querySelector(domElements.hToken).value = value;
       },
 
-      getStoredToken() {
+      storeAccessToken(accToken) {
+        document.querySelector(domElements.accToken).value = accToken;
+      },
+
+      storeRefToken(refToken) {
+        document.querySelector(domElements.refToken).value = refToken;
+      },
+
+      getBackToken() {
         return {
           token: document.querySelector(domElements.hToken).value,
         };
       },
+
+      getAccToken() {
+        return {
+          token: document.querySelector(domElements.accToken).value,
+        };
+      },
+
+      getRefToken() {
+        return {
+          token: document.querySelector(domElements.refToken).value,
+        };
+      }
     };
-  })();
+  })(accessToken, refreshToken);
 
 
   const apiController = (function (uiCtrl) {
@@ -401,10 +426,10 @@ function playlistDataLoader() {
 
     const asyncOps = async () => {
       let token = await apiCtrl.getToken();
-      uiCtrl.storeToken(token);
+      uiCtrl.storeBackToken(token);
 
       const genrePopulate = async () => {
-        let token = uiCtrl.getStoredToken().token;
+        let token = uiCtrl.getBackToken().token;
         try {
           await apiCtrl.getGenres(token)
             .then((data) => {
@@ -417,7 +442,7 @@ function playlistDataLoader() {
       };
 
       const musicPopulate = async () => {
-        let token = uiCtrl.getStoredToken().token;
+        let token = uiCtrl.getBackToken().token;
 
         // fetch playlist info for each playlist
         const data = await apiCtrl.getMyPlaylists(token);
@@ -464,7 +489,7 @@ function playlistDataLoader() {
       };
 
       const genreListener = () => {
-        let token = uiCtrl.getStoredToken().token;
+        let token = uiCtrl.getBackToken().token;
         const genreSelect = domOutput.genreSelect;
         genreSelect.addEventListener("change", async () => {
           uiCtrl.resetPlaylists();
@@ -519,7 +544,7 @@ function playlistDataLoader() {
       };
 
       const playlistListener = () => {
-        let token = uiCtrl.getStoredToken().token;
+        let token = uiCtrl.getBackToken().token;
         const playlistContainer = domOutput.playlistLibrary;
         playlistContainer.addEventListener("click", async (e) => {
           uiCtrl.resetTracks();
@@ -554,7 +579,7 @@ function playlistDataLoader() {
 
       const tracklistListener = () => {
         //retrieve token
-        let token = uiCtrl.getStoredToken().token;
+        let token = uiCtrl.getBackToken().token;
         const songDiv = domOutput.playlistSongs;
         songDiv.addEventListener("click", async (e) => {
           uiCtrl.resetTrackDetail();
@@ -585,7 +610,7 @@ function playlistDataLoader() {
 
       const trackPlayListener = () => {
         //retrieve token
-        let token = uiCtrl.getStoredToken().token;
+        let token = uiCtrl.getBackToken().token;
         const songPlay = domOutput.play;
         const songSkip = domOutput.skipForward;
         const songBack = domOutput.skipBack;
