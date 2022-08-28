@@ -1,8 +1,9 @@
 import (__dirname + '/index.css');
 
-const loginController = (function () {
-  const login = document.querySelector("#login")
+const loginDiv = document.querySelector("#login-div")
+const login = document.querySelector("#login")
 
+const loginController = (function () {
   login.addEventListener("click", () => {
     loginUser()
   })
@@ -10,20 +11,51 @@ const loginController = (function () {
 
 function loginUser() {
   // Open the auth popup
-  const spotifyLoginWindow = window.open(`https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=code`);
+  const spotifyLoginWindow = window.open(
+    `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=code`,
+    'Login with Spotify',
+    'width=800,height=600'
+  );
 
-  spotifyLoginWindow.onbeforeunload = function() {
-    const accessToken = localStorage.getItem('sp-accessToken');
-    const refreshToken = localStorage.getItem('sp-refreshToken');
-    console.log(accessToken)
-    playlistDataLoader(accessToken, refreshToken);
+  window.spotifyCallback = (payload) => {
+    console.log(payload)
+
+    spotifyLoginWindow.close()
+  
+    fetch('https://api.spotify.com/v1/me', {
+      headers: {
+        'Authorization': `Bearer ${payload}`
+      }
+    }).then(response => {
+      return response.json()
+    }).then(data => {
+        console.log(data)
+        // loginDiv.style.visibility = 'hidden'
+        // console.log(`redirected! ${loginDiv} should not be visible!`)
+    
+        // const accessToken = localStorage.getItem('sp-accessToken');
+        // const refreshToken = localStorage.getItem('sp-refreshToken');
+        // console.log(`access token: ${accessToken}`)
+        // playlistDataLoader(accessToken, refreshToken);
+    })
   }
-}
+
+  // spotifyLoginWindow.addEventListener("beforeunload", function() {
+  //   loginDiv.style.visibility = 'hidden'
+  //   console.log(`redirected! ${loginDiv} should not be visible!`)
+
+  //   const accessToken = localStorage.getItem('sp-accessToken');
+  //   const refreshToken = localStorage.getItem('sp-refreshToken');
+  //   console.log(`access token: ${accessToken}`)
+  //   playlistDataLoader(accessToken, refreshToken);
+  // })
+};
 
 function playlistDataLoader(accToken, refToken) {
   const uiController = (function (accToken, refToken) {
     //store html selectors in an object for outputField() method
     const domElements = {
+      login: "#login",
       accToken: "#access-token",
       refToken: "#refresh-token",
       hToken: "#hidden-token",
@@ -47,6 +79,7 @@ function playlistDataLoader(accToken, refToken) {
       //create a method to callback selectors
       outputField() {
         return {
+          login: document.querySelector(domElements.login),
           access: document.querySelector(domElements.accToken),
           refresh: document.querySelector(domElements.refToken),
           songDetail: document.querySelector(domElements.songDetail),

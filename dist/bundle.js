@@ -16,9 +16,10 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 __webpack_require__.e(/*! import() */ "src_index_css").then(__webpack_require__.bind(__webpack_require__, /*! ./src/index.css */ "./src/index.css"));
+var loginDiv = document.querySelector("#login-div");
+var login = document.querySelector("#login");
 
 var loginController = function () {
-  var login = document.querySelector("#login");
   login.addEventListener("click", function () {
     loginUser();
   });
@@ -26,20 +27,43 @@ var loginController = function () {
 
 function loginUser() {
   // Open the auth popup
-  var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/index.html", "&response_type=code"));
+  var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/index.html", "&response_type=code"), 'Login with Spotify', 'width=800,height=600');
 
-  spotifyLoginWindow.onbeforeunload = function () {
-    var accessToken = localStorage.getItem('sp-accessToken');
-    var refreshToken = localStorage.getItem('sp-refreshToken');
-    console.log(accessToken);
-    playlistDataLoader(accessToken, refreshToken);
-  };
+  window.spotifyCallback = function (payload) {
+    console.log(payload);
+    spotifyLoginWindow.close();
+    fetch('https://api.spotify.com/v1/me', {
+      headers: {
+        'Authorization': "Bearer ".concat(payload)
+      }
+    }).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      console.log(data); // loginDiv.style.visibility = 'hidden'
+      // console.log(`redirected! ${loginDiv} should not be visible!`)
+      // const accessToken = localStorage.getItem('sp-accessToken');
+      // const refreshToken = localStorage.getItem('sp-refreshToken');
+      // console.log(`access token: ${accessToken}`)
+      // playlistDataLoader(accessToken, refreshToken);
+    });
+  }; // spotifyLoginWindow.addEventListener("beforeunload", function() {
+  //   loginDiv.style.visibility = 'hidden'
+  //   console.log(`redirected! ${loginDiv} should not be visible!`)
+  //   const accessToken = localStorage.getItem('sp-accessToken');
+  //   const refreshToken = localStorage.getItem('sp-refreshToken');
+  //   console.log(`access token: ${accessToken}`)
+  //   playlistDataLoader(accessToken, refreshToken);
+  // })
+
 }
+
+;
 
 function playlistDataLoader(accToken, refToken) {
   var uiController = function (accToken, refToken) {
     //store html selectors in an object for outputField() method
     var domElements = {
+      login: "#login",
       accToken: "#access-token",
       refToken: "#refresh-token",
       hToken: "#hidden-token",
@@ -62,6 +86,7 @@ function playlistDataLoader(accToken, refToken) {
       //create a method to callback selectors
       outputField: function outputField() {
         return {
+          login: document.querySelector(domElements.login),
           access: document.querySelector(domElements.accToken),
           refresh: document.querySelector(domElements.refToken),
           songDetail: document.querySelector(domElements.songDetail),
@@ -1295,7 +1320,7 @@ function playlistDataLoader(accToken, refToken) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("fcff0940309b2a345c52")
+/******/ 		__webpack_require__.h = () => ("b69442faf6c5bfe4765f")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
