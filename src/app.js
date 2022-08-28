@@ -1,31 +1,6 @@
 import (__dirname + '/index.css');
 
 const loginController = (function () {
-  // const domElements = {
-  //   btnLogin: "#login",
-  //   closeBtn: "#close-btn",
-  //   cancel: "#cancel",
-  //   submit: "#submit"
-  // };
-
-  // return {
-  //   //create a method to callback selectors
-  //   outputField() {
-  //     return {
-  //       login: document.querySelector(domElements.btnLogin),
-  //       closeBtn: document.querySelector(domElements.closeBtn),
-  //       cancelBtn: document.querySelector(domElements.cancel),
-  //       submit: document.querySelector(domElements.submit)
-  //     };
-  //   },
-
-  //   submitLogin() {
-  //     this.outputField().login.addEventListener("click", () => {
-  //       console.log(this.outputField().login)
-  //       loginUser();
-  //     })
-  //   }
-  // }
   const login = document.querySelector("#login")
 
   login.addEventListener("click", () => {
@@ -35,13 +10,12 @@ const loginController = (function () {
 })();
 
 function loginUser() {
-  console.log("logging in...")
+  console.log(process.env)
   // Open the auth popup
   const spotifyLoginWindow = window.open(`https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=code`);
 
   spotifyLoginWindow.onbeforeunload = function() {
-    const accessToken = localStorage.getItem('sp-accessToken');
-    const refreshToken = localStorage.getItem('sp-refreshToken');
+    // something here
   }
 }
 

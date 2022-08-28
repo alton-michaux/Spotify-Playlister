@@ -17,1163 +17,1152 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 __webpack_require__.e(/*! import() */ "src_index_css").then(__webpack_require__.bind(__webpack_require__, /*! ./src/index.css */ "./src/index.css"));
 
-var uiController = function () {
-  //store html selectors in an object for outputField() method
-  var domElements = {
-    hToken: "#hidden-token",
-    btnLogin: "#login",
-    closeBtn: "#close-btn",
-    cancel: "#cancel",
-    songDetail: "#song-description",
-    previousSong: "#prev",
-    currentSong: "#current",
-    nextSong: "#next",
-    title: "#playlist-title",
-    playlistArt: "#playlist-art",
-    nowPlaying: "#now-playing",
-    skipBack: "#skipBack",
-    play: "#play",
-    skipForward: "#skipForward",
-    playlistContents: "#metadata-1",
-    otherPlaylists: "#metadata-2",
-    genreSelect: "#genre-select",
-    loader: "#loading"
-  };
-  return {
-    //create a method to callback selectors
-    outputField: function outputField() {
-      return {
-        login: document.querySelector(domElements.btnLogin),
-        closeBtn: document.querySelector(domElements.closeBtn),
-        cancelBtn: document.querySelector(domElements.cancel),
-        songDetail: document.querySelector(domElements.songDetail),
-        hiddenDiv: document.querySelector(domElements.hlogin),
-        btnLogin: document.querySelector(domElements.btnLogin),
-        previousSong: document.querySelector(domElements.previousSong),
-        currentSong: document.querySelector(domElements.currentSong),
-        nextSong: document.querySelector(domElements.nextSong),
-        title: document.querySelector(domElements.title),
-        playlistArt: document.querySelector(domElements.playlistArt),
-        nowPlaying: document.querySelector(domElements.nowPlaying),
-        skipBack: document.querySelector(domElements.skipBack),
-        play: document.querySelector(domElements.play),
-        skipForward: document.querySelector(domElements.skipForward),
-        playlistSongs: document.querySelector(domElements.playlistContents),
-        playlistLibrary: document.querySelector(domElements.otherPlaylists),
-        genreSelect: document.querySelector(domElements.genreSelect),
-        loader: document.querySelector(domElements.loader)
-      };
-    },
-    hideLoginButton: function hideLoginButton() {
-      this.outputField().login.style.display = 'none';
-    },
-    showLoginButton: function showLoginButton() {
-      this.outputField().login.style.display = 'block';
-    },
-    //general ui info population methods
-    displayLoadingMessage: function displayLoadingMessage() {
-      this.outputField().loader.style.backgroundColor = 'yellow';
-      this.outputField().loader.style.opacity = .7;
-      this.outputField().loader.style.color = 'black';
-      this.outputField().loader.innerHTML = "LOADING...";
-      this.outputField().loader.classList.add('display');
-      this.timeoutSet(); // set timeout to hide loading message
-    },
-    hideLoadingMessage: function hideLoadingMessage() {
-      this.outputField().loader.classList.remove('display');
-    },
-    displayError: function displayError(error) {
-      this.outputField().loader.style.backgroundColor = 'red';
-      this.outputField().loader.style.color = 'white';
-      this.outputField().loader.innerHTML = "";
-      this.outputField().loader.innerHTML = error;
-      this.outputField().loader.classList.add('display');
-      this.timeoutSet();
-      throw new Error(error);
-    },
-    timeoutSet: function timeoutSet() {
-      var _this = this;
-
-      setTimeout(function () {
-        _this.hideLoadingMessage();
-      }, 10000); // 1000ms = 1s
-    },
-    assignGenre: function assignGenre(text, value) {
-      var html = "<option id=\"genre-item\" value=\"".concat(value, "\">").concat(text, "</option>");
-      document.querySelector(domElements.genreSelect).insertAdjacentHTML("beforeend", html);
-    },
-    assignTitle: function assignTitle(id, text) {
-      var html = "<div class=\"playlist-title\">".concat(text, "</div><input class=\"hidden-title\" type=\"hidden\" value=").concat(id, "></input>");
-      document.querySelector(domElements.title).insertAdjacentHTML("beforeend", html);
-    },
-    assignPlaylistArt: function assignPlaylistArt(img) {
-      var image = "<div class=\"playlist-art-img\" id=\"playlist-img\">\n      <img src=".concat(img, " class=\"playlist-pic\"/></div>");
-      document.querySelector(domElements.playlistArt).insertAdjacentHTML("beforeend", image);
-    },
-    populatePlaylists: function populatePlaylists(id, url, text) {
-      var html = "<button class=\"playlist-btns\" value=".concat(id, " style=\"z-index:1;\"><img src=").concat(url, " alt=\"").concat(text, "\" style=\"z-index:-1;\"/><div class=\"text\">").concat(text, "</div></button>");
-      document.querySelector(domElements.otherPlaylists).insertAdjacentHTML("beforeend", html);
-    },
-    populateTrackList: function populateTrackList(uri, number, name, artist, length, id) {
-      var html = "<div class=\"track-items\"><input class=\"uri\" type=\"hidden\" value=".concat(uri, ">").concat(number, ". ").concat(name, " by ").concat(artist, "</input><button class=\"track-id playlist-items\" value=").concat(id, ">SELECT</button><div class=\"track-length\">").concat(Math.floor(length / 1000 / 60), ":").concat(Math.floor(length / 1000 % 60).toFixed(0), "</div></div>");
-      document.querySelector(domElements.playlistContents).insertAdjacentHTML("beforeend", html);
-    },
-    populateSongInfo: function populateSongInfo(name, artist, album) {
-      var html = "<div class=\"song-info\">Now Viewing:<br>".concat(name, " by ").concat(artist, "<br>from the Album:<br>").concat(album, "</div>");
-      document.querySelector(domElements.songDetail).insertAdjacentHTML("beforeend", html);
-    },
-    populateSongImage: function populateSongImage(img) {
-      var html = "<img class=\"track-imgs\" src=".concat(img, ">");
-      document.querySelector(domElements.currentSong).insertAdjacentHTML("beforeend", html);
-    },
-    resetTrackArt: function resetTrackArt() {
-      this.outputField().currentSong.innerHTML = "";
-    },
-    resetTrackDetail: function resetTrackDetail() {
-      this.outputField().songDetail.innerHTML = "";
-      this.resetTrackArt();
-    },
-    resetTitle: function resetTitle() {
-      this.outputField().title.innerHTML = "";
-      this.resetTrackDetail();
-    },
-    resetPlaylistPic: function resetPlaylistPic() {
-      this.outputField().playlistArt.innerHTML = "";
-      this.resetTitle();
-    },
-    resetTracks: function resetTracks() {
-      this.outputField().playlistSongs.innerHTML = "";
-      this.resetPlaylistPic();
-    },
-    resetPlaylists: function resetPlaylists() {
-      this.outputField().playlistLibrary.innerHTML = "";
-      this.resetTracks();
-    },
-    storeToken: function storeToken(value) {
-      document.querySelector(domElements.hToken).value = value;
-    },
-    getStoredToken: function getStoredToken() {
-      return {
-        token: document.querySelector(domElements.hToken).value
-      };
-    }
-  };
+var loginController = function () {
+  var login = document.querySelector("#login");
+  login.addEventListener("click", function () {
+    console.log("clicked!");
+    loginUser();
+  });
 }();
 
-var apiController = function (uiCtrl) {
-  //get access token
-  function _getToken2() {
-    return _getToken.apply(this, arguments);
-  }
+function loginUser() {
+  console.log("MISSING_ENV_VAR"); // Open the auth popup
 
-  function _getToken() {
-    _getToken = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              uiCtrl.displayLoadingMessage();
-              _context2.next = 3;
-              return fetch('https://accounts.spotify.com/api/token', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded',
-                  'Authorization': 'Basic ' + btoa("4986258db999480dbcb94669e69535ad" + ':' + "50a5f956f0f84b278d3d90745c3308b5")
-                },
-                body: 'grant_type=client_credentials'
-              }).then( /*#__PURE__*/function () {
-                var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(response) {
-                  var _data;
+  var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://127.0.0.1:5500/index.html", "&response_type=code"));
 
-                  return _regeneratorRuntime().wrap(function _callee$(_context) {
-                    while (1) {
-                      switch (_context.prev = _context.next) {
-                        case 0:
-                          if (!response.ok) {
-                            _context.next = 6;
-                            break;
-                          }
-
-                          uiCtrl.hideLoadingMessage();
-                          _context.next = 4;
-                          return response.json()["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
-
-                        case 4:
-                          _data = _context.sent;
-                          return _context.abrupt("return", _data.access_token);
-
-                        case 6:
-                          uiCtrl.displayError(response.status);
-
-                        case 7:
-                        case "end":
-                          return _context.stop();
-                      }
-                    }
-                  }, _callee);
-                }));
-
-                return function (_x11) {
-                  return _ref.apply(this, arguments);
-                };
-              }())["catch"](function (error) {
-                uiCtrl.displayError(error);
-              });
-
-            case 3:
-              response = _context2.sent;
-              return _context2.abrupt("return", response);
-
-            case 5:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-    return _getToken.apply(this, arguments);
-  }
-
-  ; //fetch genres from spotify for later sorting
-
-  function _getGenres2(_x) {
-    return _getGenres.apply(this, arguments);
-  }
-
-  function _getGenres() {
-    _getGenres = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(token) {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              uiCtrl.displayLoadingMessage();
-              _context4.next = 3;
-              return fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
-                method: "GET",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer ".concat(token)
-                }
-              }).then( /*#__PURE__*/function () {
-                var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(response) {
-                  var _data2;
-
-                  return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                    while (1) {
-                      switch (_context3.prev = _context3.next) {
-                        case 0:
-                          if (!response.ok) {
-                            _context3.next = 6;
-                            break;
-                          }
-
-                          uiCtrl.hideLoadingMessage();
-                          _context3.next = 4;
-                          return response.json()["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
-
-                        case 4:
-                          _data2 = _context3.sent;
-                          return _context3.abrupt("return", _data2.genres);
-
-                        case 6:
-                          uiCtrl.displayError(response.status);
-
-                        case 7:
-                        case "end":
-                          return _context3.stop();
-                      }
-                    }
-                  }, _callee3);
-                }));
-
-                return function (_x12) {
-                  return _ref2.apply(this, arguments);
-                };
-              }())["catch"](function (error) {
-                uiCtrl.displayError(error);
-              });
-
-            case 3:
-              response = _context4.sent;
-              return _context4.abrupt("return", response);
-
-            case 5:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, _callee4);
-    }));
-    return _getGenres.apply(this, arguments);
-  }
-
-  ; //fetch user playlist information from api
-
-  function _getMyPlaylists2(_x2) {
-    return _getMyPlaylists.apply(this, arguments);
-  }
-
-  function _getMyPlaylists() {
-    _getMyPlaylists = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(token) {
-      var limit, response;
-      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              limit = 21;
-              uiCtrl.displayLoadingMessage();
-              _context6.next = 4;
-              return fetch("https://api.spotify.com/v1/users/".concat("12172782523", "/playlists?limit=").concat(limit, "&offset=0"), {
-                method: "GET",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer ".concat(token)
-                }
-              }).then( /*#__PURE__*/function () {
-                var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(response) {
-                  var _data3;
-
-                  return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-                    while (1) {
-                      switch (_context5.prev = _context5.next) {
-                        case 0:
-                          if (!response.ok) {
-                            _context5.next = 6;
-                            break;
-                          }
-
-                          uiCtrl.hideLoadingMessage();
-                          _context5.next = 4;
-                          return response.json()["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
-
-                        case 4:
-                          _data3 = _context5.sent;
-                          return _context5.abrupt("return", _data3);
-
-                        case 6:
-                          uiCtrl.displayError(response.status);
-
-                        case 7:
-                        case "end":
-                          return _context5.stop();
-                      }
-                    }
-                  }, _callee5);
-                }));
-
-                return function (_x13) {
-                  return _ref3.apply(this, arguments);
-                };
-              }())["catch"](function (error) {
-                uiCtrl.displayError(error);
-              });
-
-            case 4:
-              response = _context6.sent;
-              return _context6.abrupt("return", response);
-
-            case 6:
-            case "end":
-              return _context6.stop();
-          }
-        }
-      }, _callee6);
-    }));
-    return _getMyPlaylists.apply(this, arguments);
-  }
-
-  ; //fetch user playlist information from api
-
-  function _getPlaylistByID2(_x3, _x4) {
-    return _getPlaylistByID.apply(this, arguments);
-  }
-
-  function _getPlaylistByID() {
-    _getPlaylistByID = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(playlistID, token) {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
-        while (1) {
-          switch (_context8.prev = _context8.next) {
-            case 0:
-              uiCtrl.displayLoadingMessage();
-              _context8.next = 3;
-              return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID), {
-                method: "GET",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer ".concat(token)
-                }
-              }).then( /*#__PURE__*/function () {
-                var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(response) {
-                  return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-                    while (1) {
-                      switch (_context7.prev = _context7.next) {
-                        case 0:
-                          if (!response.ok) {
-                            _context7.next = 6;
-                            break;
-                          }
-
-                          uiCtrl.hideLoadingMessage();
-                          _context7.next = 4;
-                          return response.json()["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
-
-                        case 4:
-                          data = _context7.sent;
-                          return _context7.abrupt("return", data);
-
-                        case 6:
-                          uiCtrl.displayError(response.status);
-
-                        case 7:
-                        case "end":
-                          return _context7.stop();
-                      }
-                    }
-                  }, _callee7);
-                }));
-
-                return function (_x14) {
-                  return _ref4.apply(this, arguments);
-                };
-              }())["catch"](function (error) {
-                uiCtrl.displayError(error);
-              });
-
-            case 3:
-              response = _context8.sent;
-              return _context8.abrupt("return", response);
-
-            case 5:
-            case "end":
-              return _context8.stop();
-          }
-        }
-      }, _callee8);
-    }));
-    return _getPlaylistByID.apply(this, arguments);
-  }
-
-  ; //function used to fetch playlist track list
-
-  function _getMyPlaylistsTrackList2(_x5, _x6) {
-    return _getMyPlaylistsTrackList.apply(this, arguments);
-  }
-
-  function _getMyPlaylistsTrackList() {
-    _getMyPlaylistsTrackList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(playlistID, token) {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee10$(_context10) {
-        while (1) {
-          switch (_context10.prev = _context10.next) {
-            case 0:
-              uiCtrl.displayLoadingMessage();
-              _context10.next = 3;
-              return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID, "/tracks"), {
-                method: "GET",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer ".concat(token)
-                }
-              }).then( /*#__PURE__*/function () {
-                var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(response) {
-                  var _data4;
-
-                  return _regeneratorRuntime().wrap(function _callee9$(_context9) {
-                    while (1) {
-                      switch (_context9.prev = _context9.next) {
-                        case 0:
-                          if (!response.ok) {
-                            _context9.next = 6;
-                            break;
-                          }
-
-                          uiCtrl.hideLoadingMessage();
-                          _context9.next = 4;
-                          return response.json()["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
-
-                        case 4:
-                          _data4 = _context9.sent;
-                          return _context9.abrupt("return", _data4);
-
-                        case 6:
-                          uiCtrl.displayError(response.status);
-
-                        case 7:
-                        case "end":
-                          return _context9.stop();
-                      }
-                    }
-                  }, _callee9);
-                }));
-
-                return function (_x15) {
-                  return _ref5.apply(this, arguments);
-                };
-              }())["catch"](function (error) {
-                uiCtrl.displayError(error);
-              });
-
-            case 3:
-              response = _context10.sent;
-              return _context10.abrupt("return", response);
-
-            case 5:
-            case "end":
-              return _context10.stop();
-          }
-        }
-      }, _callee10);
-    }));
-    return _getMyPlaylistsTrackList.apply(this, arguments);
-  }
-
-  ; //function used to fetch individual track info from playlists
-
-  function _getTrackInfo2(_x7, _x8) {
-    return _getTrackInfo.apply(this, arguments);
-  }
-
-  function _getTrackInfo() {
-    _getTrackInfo = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(trackID, token) {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee12$(_context12) {
-        while (1) {
-          switch (_context12.prev = _context12.next) {
-            case 0:
-              uiCtrl.displayLoadingMessage();
-              _context12.next = 3;
-              return fetch("https://api.spotify.com/v1/tracks/".concat(trackID), {
-                method: "GET",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer ".concat(token)
-                }
-              }).then( /*#__PURE__*/function () {
-                var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(response) {
-                  var _data5;
-
-                  return _regeneratorRuntime().wrap(function _callee11$(_context11) {
-                    while (1) {
-                      switch (_context11.prev = _context11.next) {
-                        case 0:
-                          if (!response.ok) {
-                            _context11.next = 6;
-                            break;
-                          }
-
-                          uiCtrl.hideLoadingMessage();
-                          _context11.next = 4;
-                          return response.json()["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
-
-                        case 4:
-                          _data5 = _context11.sent;
-                          return _context11.abrupt("return", _data5);
-
-                        case 6:
-                          uiCtrl.displayError(response.status);
-
-                        case 7:
-                        case "end":
-                          return _context11.stop();
-                      }
-                    }
-                  }, _callee11);
-                }));
-
-                return function (_x16) {
-                  return _ref6.apply(this, arguments);
-                };
-              }())["catch"](function (error) {
-                uiCtrl.displayError(error);
-              });
-
-            case 3:
-              response = _context12.sent;
-              return _context12.abrupt("return", response);
-
-            case 5:
-            case "end":
-              return _context12.stop();
-          }
-        }
-      }, _callee12);
-    }));
-    return _getTrackInfo.apply(this, arguments);
-  }
-
-  ; //fetch play/pause
-
-  function _playFunction2(_x9, _x10) {
-    return _playFunction.apply(this, arguments);
-  }
-
-  function _playFunction() {
-    _playFunction = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(token, uri) {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee14$(_context14) {
-        while (1) {
-          switch (_context14.prev = _context14.next) {
-            case 0:
-              uiCtrl.displayLoadingMessage();
-              _context14.next = 3;
-              return fetch("https://api.spotify.com/v1/me/player/play", {
-                method: "PUT",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer ".concat(token)
-                },
-                body: "{\"context_uri\":\"spotify:track:".concat(uri, "\",\"offset\":{\"position\":5},\"position_ms\":0}")
-              }).then( /*#__PURE__*/function () {
-                var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(response) {
-                  return _regeneratorRuntime().wrap(function _callee13$(_context13) {
-                    while (1) {
-                      switch (_context13.prev = _context13.next) {
-                        case 0:
-                          if (!response.ok) {
-                            _context13.next = 6;
-                            break;
-                          }
-
-                          uiCtrl.hideLoadingMessage();
-                          _context13.next = 4;
-                          return response.json()["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
-
-                        case 4:
-                          data = _context13.sent;
-                          return _context13.abrupt("return", data);
-
-                        case 6:
-                          uiCtrl.displayError(response.status);
-
-                        case 7:
-                        case "end":
-                          return _context13.stop();
-                      }
-                    }
-                  }, _callee13);
-                }));
-
-                return function (_x17) {
-                  return _ref7.apply(this, arguments);
-                };
-              }())["catch"](function (error) {
-                uiCtrl.displayError(error);
-              });
-
-            case 3:
-              response = _context14.sent;
-              return _context14.abrupt("return", response);
-
-            case 5:
-            case "end":
-              return _context14.stop();
-          }
-        }
-      }, _callee14);
-    }));
-    return _playFunction.apply(this, arguments);
-  }
-
-  ;
-  return {
-    getToken: function getToken() {
-      return _getToken2();
-    },
-    getGenres: function getGenres(token) {
-      return _getGenres2(token);
-    },
-    getMyPlaylists: function getMyPlaylists(token) {
-      return _getMyPlaylists2(token);
-    },
-    getPlaylistByID: function getPlaylistByID(playlistID, token) {
-      return _getPlaylistByID2(playlistID, token);
-    },
-    getMyPlaylistsTrackList: function getMyPlaylistsTrackList(playlistID, token) {
-      return _getMyPlaylistsTrackList2(playlistID, token);
-    },
-    getTrackInfo: function getTrackInfo(trackID, token) {
-      return _getTrackInfo2(trackID, token);
-    },
-    playFunction: function playFunction(token, uri) {
-      return _playFunction2(token, uri);
-    }
+  spotifyLoginWindow.onbeforeunload = function () {// something here
   };
-}(uiController);
-
-var appController = function (apiCtrl, uiCtrl) {
-  //get object reference for DOM outputs
-  var domOutput = uiCtrl.outputField();
-
-  var asyncOps = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21() {
-      var token, genrePopulate, loginListener, modalClose, musicPopulate, genreListener, playlistListener, tracklistListener, trackPlayListener;
-      return _regeneratorRuntime().wrap(function _callee21$(_context21) {
-        while (1) {
-          switch (_context21.prev = _context21.next) {
-            case 0:
-              _context21.next = 2;
-              return apiCtrl.getToken();
-
-            case 2:
-              token = _context21.sent;
-              uiCtrl.storeToken(token);
-
-              genrePopulate = /*#__PURE__*/function () {
-                var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15() {
-                  var token;
-                  return _regeneratorRuntime().wrap(function _callee15$(_context15) {
-                    while (1) {
-                      switch (_context15.prev = _context15.next) {
-                        case 0:
-                          token = uiCtrl.getStoredToken().token;
-                          _context15.prev = 1;
-                          _context15.next = 4;
-                          return apiCtrl.getGenres(token).then(function (data) {
-                            //populate drop-down menu with genres
-                            data.forEach(function (element) {
-                              return uiCtrl.assignGenre(element, element);
-                            });
-                          });
-
-                        case 4:
-                          _context15.next = 9;
-                          break;
-
-                        case 6:
-                          _context15.prev = 6;
-                          _context15.t0 = _context15["catch"](1);
-                          uiCtrl.displayError("Failed to load genres");
-
-                        case 9:
-                          ;
-
-                        case 10:
-                        case "end":
-                          return _context15.stop();
-                      }
-                    }
-                  }, _callee15, null, [[1, 6]]);
-                }));
-
-                return function genrePopulate() {
-                  return _ref9.apply(this, arguments);
-                };
-              }();
-
-              loginListener = function loginListener() {
-                var login = domOutput.login;
-                login.addEventListener("click", function () {
-                  uiCtrl.hideLoginButton();
-                });
-              };
-
-              modalClose = function modalClose() {
-                var close = domOutput.closeBtn;
-                close.addEventListener("click", function () {
-                  uiCtrl.showLoginButton();
-                });
-                var cancel = domOutput.cancelBtn;
-                cancel.addEventListener("click", function () {
-                  uiCtrl.showLoginButton();
-                });
-              };
-
-              musicPopulate = /*#__PURE__*/function () {
-                var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16() {
-                  var token, data, title, id, _i, trackList, _i2, songInfo, songImage;
-
-                  return _regeneratorRuntime().wrap(function _callee16$(_context16) {
-                    while (1) {
-                      switch (_context16.prev = _context16.next) {
-                        case 0:
-                          token = uiCtrl.getStoredToken().token; // fetch playlist info for each playlist
-
-                          _context16.next = 3;
-                          return apiCtrl.getMyPlaylists(token);
-
-                        case 3:
-                          data = _context16.sent;
-                          title = data.items[3].name;
-                          id = data.items[3].id; // print title
-
-                          uiCtrl.assignTitle(id, title); // place image on center div
-
-                          uiCtrl.assignPlaylistArt(data.items[3].images[0].url); // populate playlist selection library
-
-                          for (_i = 0; _i < data.items.length; _i++) {
-                            uiCtrl.populatePlaylists(data.items[_i].id, data.items[_i].images[0].url, data.items[_i].name);
-                          }
-
-                          ;
-                          _context16.next = 12;
-                          return apiCtrl.getMyPlaylistsTrackList(data.items[3].id, token);
-
-                        case 12:
-                          trackList = _context16.sent;
-
-                          for (_i2 = 0; _i2 < trackList.items.length; _i2++) {
-                            uiCtrl.populateTrackList(trackList.items[_i2].track.uri, _i2 + 1, trackList.items[_i2].track.name, trackList.items[_i2].track.artists[0].name, trackList.items[_i2].track.duration_ms, trackList.items[_i2].track.id);
-                          }
-
-                          _context16.next = 16;
-                          return apiCtrl.getTrackInfo(trackList.items[0].track.id, token);
-
-                        case 16:
-                          songInfo = _context16.sent;
-                          uiCtrl.populateSongInfo(songInfo.name, songInfo.artists[0].name, songInfo.album.name);
-                          _context16.next = 20;
-                          return apiCtrl.getTrackInfo(trackList.items[0].track.id, token);
-
-                        case 20:
-                          songImage = _context16.sent;
-                          //place song images
-                          uiCtrl.populateSongImage(songImage.album.images[0].url);
-
-                        case 22:
-                        case "end":
-                          return _context16.stop();
-                      }
-                    }
-                  }, _callee16);
-                }));
-
-                return function musicPopulate() {
-                  return _ref10.apply(this, arguments);
-                };
-              }();
-
-              genreListener = function genreListener() {
-                var token = uiCtrl.getStoredToken().token;
-                var genreSelect = domOutput.genreSelect;
-                genreSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
-                  var genreId, _playlist, description, title, trackList, songImage;
-
-                  return _regeneratorRuntime().wrap(function _callee17$(_context17) {
-                    while (1) {
-                      switch (_context17.prev = _context17.next) {
-                        case 0:
-                          uiCtrl.resetPlaylists();
-                          genreId = genreSelect.options[genreSelect.selectedIndex].value;
-                          _context17.prev = 2;
-                          _context17.next = 5;
-                          return apiCtrl.getMyPlaylists(token);
-
-                        case 5:
-                          _playlist = _context17.sent;
-
-                          for (i = 0; i < _playlist.items.length; i++) {
-                            description = _playlist.items[i].description;
-
-                            if (description.split(" ").includes(genreId)) {
-                              //populate title
-                              title = _playlist.items[i].name;
-                              uiCtrl.resetTracks();
-                              uiCtrl.assignTitle(genreId, title); //assign current playlist image to center div
-
-                              uiCtrl.assignPlaylistArt(_playlist.items[i].images[0].url); //assign current playlist(s)
-
-                              uiCtrl.populatePlaylists(_playlist.items[i].id, _playlist.items[i].images[0].url, _playlist.items[i].name);
-                            }
-                          }
-
-                          _context17.next = 12;
-                          break;
-
-                        case 9:
-                          _context17.prev = 9;
-                          _context17.t0 = _context17["catch"](2);
-                          uiCtrl.displayError("Failed to load genre");
-
-                        case 12:
-                          ;
-                          _context17.prev = 13;
-                          _context17.next = 16;
-                          return apiCtrl.getMyPlaylistsTrackList(playlist.items[i].id, token);
-
-                        case 16:
-                          trackList = _context17.sent;
-                          j = 0;
-
-                        case 18:
-                          if (!(j < trackList.items.length)) {
-                            _context17.next = 30;
-                            break;
-                          }
-
-                          //place current tracklist
-                          uiCtrl.populateTrackList(trackList.items[j].track.uri, j + 1, trackList.items[j].track.name, trackList.items[j].track.artists[0].name, trackList.items[j].track.duration_ms, trackList.items[i].track.id); //fetch current song image
-
-                          if (!(j == 0)) {
-                            _context17.next = 26;
-                            break;
-                          }
-
-                          _context17.next = 23;
-                          return apiCtrl.getTrackInfo(trackList.items[j].track.id, token);
-
-                        case 23:
-                          songImage = _context17.sent;
-                          uiCtrl.populateSongInfo(songImage.name, songImage.artists[0].name, songImage.album.name);
-                          uiCtrl.populateSongImage(songImage.album.images[0].url);
-
-                        case 26:
-                          ;
-
-                        case 27:
-                          j++;
-                          _context17.next = 18;
-                          break;
-
-                        case 30:
-                          _context17.next = 35;
-                          break;
-
-                        case 32:
-                          _context17.prev = 32;
-                          _context17.t1 = _context17["catch"](13);
-                          uiCtrl.displayError("Failed to load playlist");
-
-                        case 35:
-                          ;
-
-                        case 36:
-                        case "end":
-                          return _context17.stop();
-                      }
-                    }
-                  }, _callee17, null, [[2, 9], [13, 32]]);
-                })));
-              };
-
-              playlistListener = function playlistListener() {
-                var token = uiCtrl.getStoredToken().token;
-                var playlistContainer = domOutput.playlistLibrary;
-                playlistContainer.addEventListener("click", /*#__PURE__*/function () {
-                  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(e) {
-                    var btnID, currentPlaylist, trackList, trackInfo;
-                    return _regeneratorRuntime().wrap(function _callee18$(_context18) {
-                      while (1) {
-                        switch (_context18.prev = _context18.next) {
-                          case 0:
-                            uiCtrl.resetTracks();
-                            btnID = e.target.value || e.target.parentElement.value;
-                            _context18.prev = 2;
-                            _context18.next = 5;
-                            return apiCtrl.getPlaylistByID(btnID, token);
-
-                          case 5:
-                            currentPlaylist = _context18.sent;
-                            uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
-                            uiCtrl.assignTitle(currentPlaylist.id, currentPlaylist.name);
-                            _context18.next = 10;
-                            return apiCtrl.getMyPlaylistsTrackList(btnID, token);
-
-                          case 10:
-                            trackList = _context18.sent;
-                            i = 0;
-
-                          case 12:
-                            if (!(i < trackList.items.length)) {
-                              _context18.next = 21;
-                              break;
-                            }
-
-                            uiCtrl.populateTrackList(trackList.items[i].track.uri, i + 1, trackList.items[i].track.name, trackList.items[i].track.artists[0].name, trackList.items[i].track.duration_ms, trackList.items[i].track.id); //fetch current song image
-
-                            _context18.next = 16;
-                            return apiCtrl.getTrackInfo(trackList.items[i].track.id, token);
-
-                          case 16:
-                            trackInfo = _context18.sent;
-
-                            if (i == 0) {
-                              uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
-                              uiCtrl.populateSongImage(trackInfo.album.images[0].url);
-                            }
-
-                          case 18:
-                            i++;
-                            _context18.next = 12;
-                            break;
-
-                          case 21:
-                            _context18.next = 26;
-                            break;
-
-                          case 23:
-                            _context18.prev = 23;
-                            _context18.t0 = _context18["catch"](2);
-                            uiCtrl.displayError("Failed to load playlist");
-
-                          case 26:
-                            ;
-
-                          case 27:
-                          case "end":
-                            return _context18.stop();
-                        }
-                      }
-                    }, _callee18, null, [[2, 23]]);
-                  }));
-
-                  return function (_x18) {
-                    return _ref12.apply(this, arguments);
-                  };
-                }());
-              };
-
-              tracklistListener = function tracklistListener() {
-                //retrieve token
-                var token = uiCtrl.getStoredToken().token;
-                var songDiv = domOutput.playlistSongs;
-                songDiv.addEventListener("click", /*#__PURE__*/function () {
-                  var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19(e) {
-                    var trackDiv, uri, trackID, trackInfo, _uri, trackPlay;
-
-                    return _regeneratorRuntime().wrap(function _callee19$(_context19) {
-                      while (1) {
-                        switch (_context19.prev = _context19.next) {
-                          case 0:
-                            uiCtrl.resetTrackDetail();
-                            trackDiv = document.getElementsByClassName("track-items");
-                            uri = document.querySelector("uri");
-                            trackID = e.target.value;
-                            _context19.prev = 4;
-                            _context19.next = 7;
-                            return apiCtrl.getTrackInfo(trackID, token);
-
-                          case 7:
-                            trackInfo = _context19.sent;
-                            uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
-                            uiCtrl.populateSongImage(trackInfo.album.images[0].url);
-                            _uri = trackInfo;
-                            _context19.next = 16;
-                            break;
-
-                          case 13:
-                            _context19.prev = 13;
-                            _context19.t0 = _context19["catch"](4);
-                            uiCtrl.displayError("Failed to load song");
-
-                          case 16:
-                            ;
-                            _context19.prev = 17;
-                            _context19.next = 20;
-                            return apiCtrl.playFunction(token, uri);
-
-                          case 20:
-                            trackPlay = _context19.sent;
-                            _context19.next = 26;
-                            break;
-
-                          case 23:
-                            _context19.prev = 23;
-                            _context19.t1 = _context19["catch"](17);
-                            uiCtrl.displayError("Playback not yet supported");
-
-                          case 26:
-                            ;
-
-                          case 27:
-                          case "end":
-                            return _context19.stop();
-                        }
-                      }
-                    }, _callee19, null, [[4, 13], [17, 23]]);
-                  }));
-
-                  return function (_x19) {
-                    return _ref13.apply(this, arguments);
-                  };
-                }());
-              };
-
-              trackPlayListener = function trackPlayListener() {
-                //retrieve token
-                var token = uiCtrl.getStoredToken().token;
-                var songPlay = domOutput.play;
-                var songSkip = domOutput.skipForward;
-                var songBack = domOutput.skipBack;
-                songPlay.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20() {
-                  var tracklist, uri;
-                  return _regeneratorRuntime().wrap(function _callee20$(_context20) {
-                    while (1) {
-                      switch (_context20.prev = _context20.next) {
-                        case 0:
-                          tracklist = domOutput.playlistSongs.children;
-                          uri = tracklist[0].childNodes[0].defaultValue;
-                          _context20.prev = 2;
-                          _context20.next = 5;
-                          return apiCtrl.playFunction(token, uri);
-
-                        case 5:
-                          _context20.next = 10;
-                          break;
-
-                        case 7:
-                          _context20.prev = 7;
-                          _context20.t0 = _context20["catch"](2);
-                          uiCtrl.displayError("Playback error");
-
-                        case 10:
-                          ;
-
-                        case 11:
-                        case "end":
-                          return _context20.stop();
-                      }
-                    }
-                  }, _callee20, null, [[2, 7]]);
-                })));
-              };
-
-              modalClose();
-              loginListener();
-              musicPopulate();
-              genrePopulate();
-              genreListener();
-              playlistListener();
-              trackPlayListener();
-              tracklistListener();
-
-            case 20:
-            case "end":
-              return _context21.stop();
-          }
-        }
-      }, _callee21);
-    }));
-
-    return function asyncOps() {
-      return _ref8.apply(this, arguments);
+}
+
+function playlistDataLoader() {
+  var uiController = function () {
+    //store html selectors in an object for outputField() method
+    var domElements = {
+      hToken: "#hidden-token",
+      songDetail: "#song-description",
+      previousSong: "#prev",
+      currentSong: "#current",
+      nextSong: "#next",
+      title: "#playlist-title",
+      playlistArt: "#playlist-art",
+      nowPlaying: "#now-playing",
+      skipBack: "#skipBack",
+      play: "#play",
+      skipForward: "#skipForward",
+      playlistContents: "#metadata-1",
+      otherPlaylists: "#metadata-2",
+      genreSelect: "#genre-select",
+      loader: "#loading"
+    };
+    return {
+      //create a method to callback selectors
+      outputField: function outputField() {
+        return {
+          songDetail: document.querySelector(domElements.songDetail),
+          hiddenDiv: document.querySelector(domElements.hlogin),
+          btnLogin: document.querySelector(domElements.btnLogin),
+          previousSong: document.querySelector(domElements.previousSong),
+          currentSong: document.querySelector(domElements.currentSong),
+          nextSong: document.querySelector(domElements.nextSong),
+          title: document.querySelector(domElements.title),
+          playlistArt: document.querySelector(domElements.playlistArt),
+          nowPlaying: document.querySelector(domElements.nowPlaying),
+          skipBack: document.querySelector(domElements.skipBack),
+          play: document.querySelector(domElements.play),
+          skipForward: document.querySelector(domElements.skipForward),
+          playlistSongs: document.querySelector(domElements.playlistContents),
+          playlistLibrary: document.querySelector(domElements.otherPlaylists),
+          genreSelect: document.querySelector(domElements.genreSelect),
+          loader: document.querySelector(domElements.loader)
+        };
+      },
+      //general ui info population methods
+      displayLoadingMessage: function displayLoadingMessage() {
+        this.outputField().loader.style.backgroundColor = 'yellow';
+        this.outputField().loader.style.opacity = .7;
+        this.outputField().loader.style.color = 'black';
+        this.outputField().loader.innerHTML = "LOADING...";
+        this.outputField().loader.classList.add('display');
+        this.timeoutSet(); // set timeout to hide loading message
+      },
+      hideLoadingMessage: function hideLoadingMessage() {
+        this.outputField().loader.classList.remove('display');
+      },
+      displayError: function displayError(error) {
+        this.outputField().loader.style.backgroundColor = 'red';
+        this.outputField().loader.style.color = 'white';
+        this.outputField().loader.innerHTML = "";
+        this.outputField().loader.innerHTML = error;
+        this.outputField().loader.classList.add('display');
+        this.timeoutSet();
+        throw new Error(error);
+      },
+      timeoutSet: function timeoutSet() {
+        var _this = this;
+
+        setTimeout(function () {
+          _this.hideLoadingMessage();
+        }, 10000); // 1000ms = 1s
+      },
+      assignGenre: function assignGenre(text, value) {
+        var html = "<option id=\"genre-item\" value=\"".concat(value, "\">").concat(text, "</option>");
+        document.querySelector(domElements.genreSelect).insertAdjacentHTML("beforeend", html);
+      },
+      assignTitle: function assignTitle(id, text) {
+        var html = "<div class=\"playlist-title\">".concat(text, "</div><input class=\"hidden-title\" type=\"hidden\" value=").concat(id, "></input>");
+        document.querySelector(domElements.title).insertAdjacentHTML("beforeend", html);
+      },
+      assignPlaylistArt: function assignPlaylistArt(img) {
+        var image = "<div class=\"playlist-art-img\" id=\"playlist-img\">\n        <img src=".concat(img, " class=\"playlist-pic\"/></div>");
+        document.querySelector(domElements.playlistArt).insertAdjacentHTML("beforeend", image);
+      },
+      populatePlaylists: function populatePlaylists(id, url, text) {
+        var html = "<button class=\"playlist-btns\" value=".concat(id, " style=\"z-index:1;\"><img src=").concat(url, " alt=\"").concat(text, "\" style=\"z-index:-1;\"/><div class=\"text\">").concat(text, "</div></button>");
+        document.querySelector(domElements.otherPlaylists).insertAdjacentHTML("beforeend", html);
+      },
+      populateTrackList: function populateTrackList(uri, number, name, artist, length, id) {
+        var html = "<div class=\"track-items\"><input class=\"uri\" type=\"hidden\" value=".concat(uri, ">").concat(number, ". ").concat(name, " by ").concat(artist, "</input><button class=\"track-id playlist-items\" value=").concat(id, ">SELECT</button><div class=\"track-length\">").concat(Math.floor(length / 1000 / 60), ":").concat(Math.floor(length / 1000 % 60).toFixed(0), "</div></div>");
+        document.querySelector(domElements.playlistContents).insertAdjacentHTML("beforeend", html);
+      },
+      populateSongInfo: function populateSongInfo(name, artist, album) {
+        var html = "<div class=\"song-info\">Now Viewing:<br>".concat(name, " by ").concat(artist, "<br>from the Album:<br>").concat(album, "</div>");
+        document.querySelector(domElements.songDetail).insertAdjacentHTML("beforeend", html);
+      },
+      populateSongImage: function populateSongImage(img) {
+        var html = "<img class=\"track-imgs\" src=".concat(img, ">");
+        document.querySelector(domElements.currentSong).insertAdjacentHTML("beforeend", html);
+      },
+      resetTrackArt: function resetTrackArt() {
+        this.outputField().currentSong.innerHTML = "";
+      },
+      resetTrackDetail: function resetTrackDetail() {
+        this.outputField().songDetail.innerHTML = "";
+        this.resetTrackArt();
+      },
+      resetTitle: function resetTitle() {
+        this.outputField().title.innerHTML = "";
+        this.resetTrackDetail();
+      },
+      resetPlaylistPic: function resetPlaylistPic() {
+        this.outputField().playlistArt.innerHTML = "";
+        this.resetTitle();
+      },
+      resetTracks: function resetTracks() {
+        this.outputField().playlistSongs.innerHTML = "";
+        this.resetPlaylistPic();
+      },
+      resetPlaylists: function resetPlaylists() {
+        this.outputField().playlistLibrary.innerHTML = "";
+        this.resetTracks();
+      },
+      storeToken: function storeToken(value) {
+        document.querySelector(domElements.hToken).value = value;
+      },
+      getStoredToken: function getStoredToken() {
+        return {
+          token: document.querySelector(domElements.hToken).value
+        };
+      }
     };
   }();
 
-  asyncOps();
-}(apiController, uiController);
+  var apiController = function (uiCtrl) {
+    //get access token
+    function _getToken2() {
+      return _getToken.apply(this, arguments);
+    }
+
+    function _getToken() {
+      _getToken = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                uiCtrl.displayLoadingMessage();
+                _context2.next = 3;
+                return fetch('https://accounts.spotify.com/api/token', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Basic ' + btoa("4986258db999480dbcb94669e69535ad" + ':' + "50a5f956f0f84b278d3d90745c3308b5")
+                  },
+                  body: 'grant_type=authorization_code'
+                }).then( /*#__PURE__*/function () {
+                  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(response) {
+                    var _data;
+
+                    return _regeneratorRuntime().wrap(function _callee$(_context) {
+                      while (1) {
+                        switch (_context.prev = _context.next) {
+                          case 0:
+                            if (!response.ok) {
+                              _context.next = 6;
+                              break;
+                            }
+
+                            uiCtrl.hideLoadingMessage();
+                            _context.next = 4;
+                            return response.json()["catch"](function (error) {
+                              uiCtrl.displayError(error);
+                            });
+
+                          case 4:
+                            _data = _context.sent;
+                            return _context.abrupt("return", _data.access_token);
+
+                          case 6:
+                            uiCtrl.displayError(response.status);
+
+                          case 7:
+                          case "end":
+                            return _context.stop();
+                        }
+                      }
+                    }, _callee);
+                  }));
+
+                  return function (_x11) {
+                    return _ref.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  uiCtrl.displayError(error);
+                });
+
+              case 3:
+                response = _context2.sent;
+                return _context2.abrupt("return", response);
+
+              case 5:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+      return _getToken.apply(this, arguments);
+    }
+
+    ; //fetch genres from spotify for later sorting
+
+    function _getGenres2(_x) {
+      return _getGenres.apply(this, arguments);
+    }
+
+    function _getGenres() {
+      _getGenres = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(token) {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                uiCtrl.displayLoadingMessage();
+                _context4.next = 3;
+                return fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer ".concat(token)
+                  }
+                }).then( /*#__PURE__*/function () {
+                  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(response) {
+                    var _data2;
+
+                    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+                      while (1) {
+                        switch (_context3.prev = _context3.next) {
+                          case 0:
+                            if (!response.ok) {
+                              _context3.next = 6;
+                              break;
+                            }
+
+                            uiCtrl.hideLoadingMessage();
+                            _context3.next = 4;
+                            return response.json()["catch"](function (error) {
+                              uiCtrl.displayError(error);
+                            });
+
+                          case 4:
+                            _data2 = _context3.sent;
+                            return _context3.abrupt("return", _data2.genres);
+
+                          case 6:
+                            uiCtrl.displayError(response.status);
+
+                          case 7:
+                          case "end":
+                            return _context3.stop();
+                        }
+                      }
+                    }, _callee3);
+                  }));
+
+                  return function (_x12) {
+                    return _ref2.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  uiCtrl.displayError(error);
+                });
+
+              case 3:
+                response = _context4.sent;
+                return _context4.abrupt("return", response);
+
+              case 5:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }));
+      return _getGenres.apply(this, arguments);
+    }
+
+    ; //fetch user playlist information from api
+
+    function _getMyPlaylists2(_x2) {
+      return _getMyPlaylists.apply(this, arguments);
+    }
+
+    function _getMyPlaylists() {
+      _getMyPlaylists = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(token) {
+        var limit, response;
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                limit = 21;
+                uiCtrl.displayLoadingMessage();
+                _context6.next = 4;
+                return fetch("https://api.spotify.com/v1/users/".concat("12172782523", "/playlists?limit=").concat(limit, "&offset=0"), {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer ".concat(token)
+                  }
+                }).then( /*#__PURE__*/function () {
+                  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(response) {
+                    var _data3;
+
+                    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+                      while (1) {
+                        switch (_context5.prev = _context5.next) {
+                          case 0:
+                            if (!response.ok) {
+                              _context5.next = 6;
+                              break;
+                            }
+
+                            uiCtrl.hideLoadingMessage();
+                            _context5.next = 4;
+                            return response.json()["catch"](function (error) {
+                              uiCtrl.displayError(error);
+                            });
+
+                          case 4:
+                            _data3 = _context5.sent;
+                            return _context5.abrupt("return", _data3);
+
+                          case 6:
+                            uiCtrl.displayError(response.status);
+
+                          case 7:
+                          case "end":
+                            return _context5.stop();
+                        }
+                      }
+                    }, _callee5);
+                  }));
+
+                  return function (_x13) {
+                    return _ref3.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  uiCtrl.displayError(error);
+                });
+
+              case 4:
+                response = _context6.sent;
+                return _context6.abrupt("return", response);
+
+              case 6:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }));
+      return _getMyPlaylists.apply(this, arguments);
+    }
+
+    ; //fetch user playlist information from api
+
+    function _getPlaylistByID2(_x3, _x4) {
+      return _getPlaylistByID.apply(this, arguments);
+    }
+
+    function _getPlaylistByID() {
+      _getPlaylistByID = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(playlistID, token) {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                uiCtrl.displayLoadingMessage();
+                _context8.next = 3;
+                return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID), {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer ".concat(token)
+                  }
+                }).then( /*#__PURE__*/function () {
+                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(response) {
+                    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+                      while (1) {
+                        switch (_context7.prev = _context7.next) {
+                          case 0:
+                            if (!response.ok) {
+                              _context7.next = 6;
+                              break;
+                            }
+
+                            uiCtrl.hideLoadingMessage();
+                            _context7.next = 4;
+                            return response.json()["catch"](function (error) {
+                              uiCtrl.displayError(error);
+                            });
+
+                          case 4:
+                            data = _context7.sent;
+                            return _context7.abrupt("return", data);
+
+                          case 6:
+                            uiCtrl.displayError(response.status);
+
+                          case 7:
+                          case "end":
+                            return _context7.stop();
+                        }
+                      }
+                    }, _callee7);
+                  }));
+
+                  return function (_x14) {
+                    return _ref4.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  uiCtrl.displayError(error);
+                });
+
+              case 3:
+                response = _context8.sent;
+                return _context8.abrupt("return", response);
+
+              case 5:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }));
+      return _getPlaylistByID.apply(this, arguments);
+    }
+
+    ; //function used to fetch playlist track list
+
+    function _getMyPlaylistsTrackList2(_x5, _x6) {
+      return _getMyPlaylistsTrackList.apply(this, arguments);
+    }
+
+    function _getMyPlaylistsTrackList() {
+      _getMyPlaylistsTrackList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(playlistID, token) {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                uiCtrl.displayLoadingMessage();
+                _context10.next = 3;
+                return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID, "/tracks"), {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer ".concat(token)
+                  }
+                }).then( /*#__PURE__*/function () {
+                  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(response) {
+                    var _data4;
+
+                    return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+                      while (1) {
+                        switch (_context9.prev = _context9.next) {
+                          case 0:
+                            if (!response.ok) {
+                              _context9.next = 6;
+                              break;
+                            }
+
+                            uiCtrl.hideLoadingMessage();
+                            _context9.next = 4;
+                            return response.json()["catch"](function (error) {
+                              uiCtrl.displayError(error);
+                            });
+
+                          case 4:
+                            _data4 = _context9.sent;
+                            return _context9.abrupt("return", _data4);
+
+                          case 6:
+                            uiCtrl.displayError(response.status);
+
+                          case 7:
+                          case "end":
+                            return _context9.stop();
+                        }
+                      }
+                    }, _callee9);
+                  }));
+
+                  return function (_x15) {
+                    return _ref5.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  uiCtrl.displayError(error);
+                });
+
+              case 3:
+                response = _context10.sent;
+                return _context10.abrupt("return", response);
+
+              case 5:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10);
+      }));
+      return _getMyPlaylistsTrackList.apply(this, arguments);
+    }
+
+    ; //function used to fetch individual track info from playlists
+
+    function _getTrackInfo2(_x7, _x8) {
+      return _getTrackInfo.apply(this, arguments);
+    }
+
+    function _getTrackInfo() {
+      _getTrackInfo = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(trackID, token) {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+          while (1) {
+            switch (_context12.prev = _context12.next) {
+              case 0:
+                uiCtrl.displayLoadingMessage();
+                _context12.next = 3;
+                return fetch("https://api.spotify.com/v1/tracks/".concat(trackID), {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer ".concat(token)
+                  }
+                }).then( /*#__PURE__*/function () {
+                  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(response) {
+                    var _data5;
+
+                    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+                      while (1) {
+                        switch (_context11.prev = _context11.next) {
+                          case 0:
+                            if (!response.ok) {
+                              _context11.next = 6;
+                              break;
+                            }
+
+                            uiCtrl.hideLoadingMessage();
+                            _context11.next = 4;
+                            return response.json()["catch"](function (error) {
+                              uiCtrl.displayError(error);
+                            });
+
+                          case 4:
+                            _data5 = _context11.sent;
+                            return _context11.abrupt("return", _data5);
+
+                          case 6:
+                            uiCtrl.displayError(response.status);
+
+                          case 7:
+                          case "end":
+                            return _context11.stop();
+                        }
+                      }
+                    }, _callee11);
+                  }));
+
+                  return function (_x16) {
+                    return _ref6.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  uiCtrl.displayError(error);
+                });
+
+              case 3:
+                response = _context12.sent;
+                return _context12.abrupt("return", response);
+
+              case 5:
+              case "end":
+                return _context12.stop();
+            }
+          }
+        }, _callee12);
+      }));
+      return _getTrackInfo.apply(this, arguments);
+    }
+
+    ; //fetch play/pause
+
+    function _playFunction2(_x9, _x10) {
+      return _playFunction.apply(this, arguments);
+    }
+
+    function _playFunction() {
+      _playFunction = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(token, uri) {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee14$(_context14) {
+          while (1) {
+            switch (_context14.prev = _context14.next) {
+              case 0:
+                uiCtrl.displayLoadingMessage();
+                _context14.next = 3;
+                return fetch("https://api.spotify.com/v1/me/player/play", {
+                  method: "PUT",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer ".concat(token)
+                  },
+                  body: "{\"context_uri\":\"spotify:track:".concat(uri, "\",\"offset\":{\"position\":5},\"position_ms\":0}")
+                }).then( /*#__PURE__*/function () {
+                  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(response) {
+                    return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+                      while (1) {
+                        switch (_context13.prev = _context13.next) {
+                          case 0:
+                            if (!response.ok) {
+                              _context13.next = 6;
+                              break;
+                            }
+
+                            uiCtrl.hideLoadingMessage();
+                            _context13.next = 4;
+                            return response.json()["catch"](function (error) {
+                              uiCtrl.displayError(error);
+                            });
+
+                          case 4:
+                            data = _context13.sent;
+                            return _context13.abrupt("return", data);
+
+                          case 6:
+                            uiCtrl.displayError(response.status);
+
+                          case 7:
+                          case "end":
+                            return _context13.stop();
+                        }
+                      }
+                    }, _callee13);
+                  }));
+
+                  return function (_x17) {
+                    return _ref7.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  uiCtrl.displayError(error);
+                });
+
+              case 3:
+                response = _context14.sent;
+                return _context14.abrupt("return", response);
+
+              case 5:
+              case "end":
+                return _context14.stop();
+            }
+          }
+        }, _callee14);
+      }));
+      return _playFunction.apply(this, arguments);
+    }
+
+    ;
+    return {
+      getToken: function getToken() {
+        return _getToken2();
+      },
+      getGenres: function getGenres(token) {
+        return _getGenres2(token);
+      },
+      getMyPlaylists: function getMyPlaylists(token) {
+        return _getMyPlaylists2(token);
+      },
+      getPlaylistByID: function getPlaylistByID(playlistID, token) {
+        return _getPlaylistByID2(playlistID, token);
+      },
+      getMyPlaylistsTrackList: function getMyPlaylistsTrackList(playlistID, token) {
+        return _getMyPlaylistsTrackList2(playlistID, token);
+      },
+      getTrackInfo: function getTrackInfo(trackID, token) {
+        return _getTrackInfo2(trackID, token);
+      },
+      playFunction: function playFunction(token, uri) {
+        return _playFunction2(token, uri);
+      }
+    };
+  }(uiController);
+
+  var appController = function (apiCtrl, uiCtrl) {
+    //get object reference for DOM outputs
+    var domOutput = uiCtrl.outputField();
+
+    var asyncOps = /*#__PURE__*/function () {
+      var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21() {
+        var token, genrePopulate, musicPopulate, genreListener, playlistListener, tracklistListener, trackPlayListener;
+        return _regeneratorRuntime().wrap(function _callee21$(_context21) {
+          while (1) {
+            switch (_context21.prev = _context21.next) {
+              case 0:
+                _context21.next = 2;
+                return apiCtrl.getToken();
+
+              case 2:
+                token = _context21.sent;
+                uiCtrl.storeToken(token);
+
+                genrePopulate = /*#__PURE__*/function () {
+                  var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15() {
+                    var token;
+                    return _regeneratorRuntime().wrap(function _callee15$(_context15) {
+                      while (1) {
+                        switch (_context15.prev = _context15.next) {
+                          case 0:
+                            token = uiCtrl.getStoredToken().token;
+                            _context15.prev = 1;
+                            _context15.next = 4;
+                            return apiCtrl.getGenres(token).then(function (data) {
+                              //populate drop-down menu with genres
+                              data.forEach(function (element) {
+                                return uiCtrl.assignGenre(element, element);
+                              });
+                            });
+
+                          case 4:
+                            _context15.next = 9;
+                            break;
+
+                          case 6:
+                            _context15.prev = 6;
+                            _context15.t0 = _context15["catch"](1);
+                            uiCtrl.displayError("Failed to load genres");
+
+                          case 9:
+                            ;
+
+                          case 10:
+                          case "end":
+                            return _context15.stop();
+                        }
+                      }
+                    }, _callee15, null, [[1, 6]]);
+                  }));
+
+                  return function genrePopulate() {
+                    return _ref9.apply(this, arguments);
+                  };
+                }();
+
+                musicPopulate = /*#__PURE__*/function () {
+                  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16() {
+                    var token, data, title, id, _i, trackList, _i2, songInfo, songImage;
+
+                    return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+                      while (1) {
+                        switch (_context16.prev = _context16.next) {
+                          case 0:
+                            token = uiCtrl.getStoredToken().token; // fetch playlist info for each playlist
+
+                            _context16.next = 3;
+                            return apiCtrl.getMyPlaylists(token);
+
+                          case 3:
+                            data = _context16.sent;
+                            title = data.items[3].name;
+                            id = data.items[3].id; // print title
+
+                            uiCtrl.assignTitle(id, title); // place image on center div
+
+                            uiCtrl.assignPlaylistArt(data.items[3].images[0].url); // populate playlist selection library
+
+                            for (_i = 0; _i < data.items.length; _i++) {
+                              uiCtrl.populatePlaylists(data.items[_i].id, data.items[_i].images[0].url, data.items[_i].name);
+                            }
+
+                            ;
+                            _context16.next = 12;
+                            return apiCtrl.getMyPlaylistsTrackList(data.items[3].id, token);
+
+                          case 12:
+                            trackList = _context16.sent;
+
+                            for (_i2 = 0; _i2 < trackList.items.length; _i2++) {
+                              uiCtrl.populateTrackList(trackList.items[_i2].track.uri, _i2 + 1, trackList.items[_i2].track.name, trackList.items[_i2].track.artists[0].name, trackList.items[_i2].track.duration_ms, trackList.items[_i2].track.id);
+                            }
+
+                            _context16.next = 16;
+                            return apiCtrl.getTrackInfo(trackList.items[0].track.id, token);
+
+                          case 16:
+                            songInfo = _context16.sent;
+                            uiCtrl.populateSongInfo(songInfo.name, songInfo.artists[0].name, songInfo.album.name);
+                            _context16.next = 20;
+                            return apiCtrl.getTrackInfo(trackList.items[0].track.id, token);
+
+                          case 20:
+                            songImage = _context16.sent;
+                            //place song images
+                            uiCtrl.populateSongImage(songImage.album.images[0].url);
+
+                          case 22:
+                          case "end":
+                            return _context16.stop();
+                        }
+                      }
+                    }, _callee16);
+                  }));
+
+                  return function musicPopulate() {
+                    return _ref10.apply(this, arguments);
+                  };
+                }();
+
+                genreListener = function genreListener() {
+                  var token = uiCtrl.getStoredToken().token;
+                  var genreSelect = domOutput.genreSelect;
+                  genreSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
+                    var genreId, _playlist, description, title, trackList, songImage;
+
+                    return _regeneratorRuntime().wrap(function _callee17$(_context17) {
+                      while (1) {
+                        switch (_context17.prev = _context17.next) {
+                          case 0:
+                            uiCtrl.resetPlaylists();
+                            genreId = genreSelect.options[genreSelect.selectedIndex].value;
+                            _context17.prev = 2;
+                            _context17.next = 5;
+                            return apiCtrl.getMyPlaylists(token);
+
+                          case 5:
+                            _playlist = _context17.sent;
+
+                            for (i = 0; i < _playlist.items.length; i++) {
+                              description = _playlist.items[i].description;
+
+                              if (description.split(" ").includes(genreId)) {
+                                //populate title
+                                title = _playlist.items[i].name;
+                                uiCtrl.resetTracks();
+                                uiCtrl.assignTitle(genreId, title); //assign current playlist image to center div
+
+                                uiCtrl.assignPlaylistArt(_playlist.items[i].images[0].url); //assign current playlist(s)
+
+                                uiCtrl.populatePlaylists(_playlist.items[i].id, _playlist.items[i].images[0].url, _playlist.items[i].name);
+                              }
+                            }
+
+                            _context17.next = 12;
+                            break;
+
+                          case 9:
+                            _context17.prev = 9;
+                            _context17.t0 = _context17["catch"](2);
+                            uiCtrl.displayError("Failed to load genre");
+
+                          case 12:
+                            ;
+                            _context17.prev = 13;
+                            _context17.next = 16;
+                            return apiCtrl.getMyPlaylistsTrackList(playlist.items[i].id, token);
+
+                          case 16:
+                            trackList = _context17.sent;
+                            j = 0;
+
+                          case 18:
+                            if (!(j < trackList.items.length)) {
+                              _context17.next = 30;
+                              break;
+                            }
+
+                            //place current tracklist
+                            uiCtrl.populateTrackList(trackList.items[j].track.uri, j + 1, trackList.items[j].track.name, trackList.items[j].track.artists[0].name, trackList.items[j].track.duration_ms, trackList.items[i].track.id); //fetch current song image
+
+                            if (!(j == 0)) {
+                              _context17.next = 26;
+                              break;
+                            }
+
+                            _context17.next = 23;
+                            return apiCtrl.getTrackInfo(trackList.items[j].track.id, token);
+
+                          case 23:
+                            songImage = _context17.sent;
+                            uiCtrl.populateSongInfo(songImage.name, songImage.artists[0].name, songImage.album.name);
+                            uiCtrl.populateSongImage(songImage.album.images[0].url);
+
+                          case 26:
+                            ;
+
+                          case 27:
+                            j++;
+                            _context17.next = 18;
+                            break;
+
+                          case 30:
+                            _context17.next = 35;
+                            break;
+
+                          case 32:
+                            _context17.prev = 32;
+                            _context17.t1 = _context17["catch"](13);
+                            uiCtrl.displayError("Failed to load playlist");
+
+                          case 35:
+                            ;
+
+                          case 36:
+                          case "end":
+                            return _context17.stop();
+                        }
+                      }
+                    }, _callee17, null, [[2, 9], [13, 32]]);
+                  })));
+                };
+
+                playlistListener = function playlistListener() {
+                  var token = uiCtrl.getStoredToken().token;
+                  var playlistContainer = domOutput.playlistLibrary;
+                  playlistContainer.addEventListener("click", /*#__PURE__*/function () {
+                    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(e) {
+                      var btnID, currentPlaylist, trackList, trackInfo;
+                      return _regeneratorRuntime().wrap(function _callee18$(_context18) {
+                        while (1) {
+                          switch (_context18.prev = _context18.next) {
+                            case 0:
+                              uiCtrl.resetTracks();
+                              btnID = e.target.value || e.target.parentElement.value;
+                              _context18.prev = 2;
+                              _context18.next = 5;
+                              return apiCtrl.getPlaylistByID(btnID, token);
+
+                            case 5:
+                              currentPlaylist = _context18.sent;
+                              uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
+                              uiCtrl.assignTitle(currentPlaylist.id, currentPlaylist.name);
+                              _context18.next = 10;
+                              return apiCtrl.getMyPlaylistsTrackList(btnID, token);
+
+                            case 10:
+                              trackList = _context18.sent;
+                              i = 0;
+
+                            case 12:
+                              if (!(i < trackList.items.length)) {
+                                _context18.next = 21;
+                                break;
+                              }
+
+                              uiCtrl.populateTrackList(trackList.items[i].track.uri, i + 1, trackList.items[i].track.name, trackList.items[i].track.artists[0].name, trackList.items[i].track.duration_ms, trackList.items[i].track.id); //fetch current song image
+
+                              _context18.next = 16;
+                              return apiCtrl.getTrackInfo(trackList.items[i].track.id, token);
+
+                            case 16:
+                              trackInfo = _context18.sent;
+
+                              if (i == 0) {
+                                uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
+                                uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+                              }
+
+                            case 18:
+                              i++;
+                              _context18.next = 12;
+                              break;
+
+                            case 21:
+                              _context18.next = 26;
+                              break;
+
+                            case 23:
+                              _context18.prev = 23;
+                              _context18.t0 = _context18["catch"](2);
+                              uiCtrl.displayError("Failed to load playlist");
+
+                            case 26:
+                              ;
+
+                            case 27:
+                            case "end":
+                              return _context18.stop();
+                          }
+                        }
+                      }, _callee18, null, [[2, 23]]);
+                    }));
+
+                    return function (_x18) {
+                      return _ref12.apply(this, arguments);
+                    };
+                  }());
+                };
+
+                tracklistListener = function tracklistListener() {
+                  //retrieve token
+                  var token = uiCtrl.getStoredToken().token;
+                  var songDiv = domOutput.playlistSongs;
+                  songDiv.addEventListener("click", /*#__PURE__*/function () {
+                    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19(e) {
+                      var trackDiv, uri, trackID, trackInfo, _uri, trackPlay;
+
+                      return _regeneratorRuntime().wrap(function _callee19$(_context19) {
+                        while (1) {
+                          switch (_context19.prev = _context19.next) {
+                            case 0:
+                              uiCtrl.resetTrackDetail();
+                              trackDiv = document.getElementsByClassName("track-items");
+                              uri = document.querySelector("uri");
+                              trackID = e.target.value;
+                              _context19.prev = 4;
+                              _context19.next = 7;
+                              return apiCtrl.getTrackInfo(trackID, token);
+
+                            case 7:
+                              trackInfo = _context19.sent;
+                              uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
+                              uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+                              _uri = trackInfo;
+                              _context19.next = 16;
+                              break;
+
+                            case 13:
+                              _context19.prev = 13;
+                              _context19.t0 = _context19["catch"](4);
+                              uiCtrl.displayError("Failed to load song");
+
+                            case 16:
+                              ;
+                              _context19.prev = 17;
+                              _context19.next = 20;
+                              return apiCtrl.playFunction(token, uri);
+
+                            case 20:
+                              trackPlay = _context19.sent;
+                              _context19.next = 26;
+                              break;
+
+                            case 23:
+                              _context19.prev = 23;
+                              _context19.t1 = _context19["catch"](17);
+                              uiCtrl.displayError("Playback not yet supported");
+
+                            case 26:
+                              ;
+
+                            case 27:
+                            case "end":
+                              return _context19.stop();
+                          }
+                        }
+                      }, _callee19, null, [[4, 13], [17, 23]]);
+                    }));
+
+                    return function (_x19) {
+                      return _ref13.apply(this, arguments);
+                    };
+                  }());
+                };
+
+                trackPlayListener = function trackPlayListener() {
+                  //retrieve token
+                  var token = uiCtrl.getStoredToken().token;
+                  var songPlay = domOutput.play;
+                  var songSkip = domOutput.skipForward;
+                  var songBack = domOutput.skipBack;
+                  songPlay.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20() {
+                    var tracklist, uri;
+                    return _regeneratorRuntime().wrap(function _callee20$(_context20) {
+                      while (1) {
+                        switch (_context20.prev = _context20.next) {
+                          case 0:
+                            tracklist = domOutput.playlistSongs.children;
+                            uri = tracklist[0].childNodes[0].defaultValue;
+                            _context20.prev = 2;
+                            _context20.next = 5;
+                            return apiCtrl.playFunction(token, uri);
+
+                          case 5:
+                            _context20.next = 10;
+                            break;
+
+                          case 7:
+                            _context20.prev = 7;
+                            _context20.t0 = _context20["catch"](2);
+                            uiCtrl.displayError("Playback error");
+
+                          case 10:
+                            ;
+
+                          case 11:
+                          case "end":
+                            return _context20.stop();
+                        }
+                      }
+                    }, _callee20, null, [[2, 7]]);
+                  })));
+                };
+
+                modalClose();
+                loginListener();
+                musicPopulate();
+                genrePopulate();
+                genreListener();
+                playlistListener();
+                trackPlayListener();
+                tracklistListener();
+
+              case 18:
+              case "end":
+                return _context21.stop();
+            }
+          }
+        }, _callee21);
+      }));
+
+      return function asyncOps() {
+        return _ref8.apply(this, arguments);
+      };
+    }();
+
+    asyncOps();
+  }(apiController, uiController);
+}
 
 /***/ })
 
@@ -1284,7 +1273,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("92bb2bfc334728d40f6d")
+/******/ 		__webpack_require__.h = () => ("4fecedde640826d6bb0a")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
