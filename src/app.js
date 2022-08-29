@@ -217,6 +217,9 @@ const loginController = (function (uiCtrl) {
       'width=800,height=600'
     );
 
+    this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=")
+    console.log("Access Token: " + this.token);
+
     window.spotifyCallback = (payload) => {
       uiCtrl.hideElement(domOutput.loginDiv)
       uiCtrl.hideElement(domOutput.login)
@@ -244,10 +247,7 @@ const loginController = (function (uiCtrl) {
         uiCtrl.displayError(error)
       } )
     }
-
-    this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=")
-    console.log("Access Token: " + this.token);
-
+    
     if (this.token) {
       this.window.spotifyCallback(this.token)
     }
