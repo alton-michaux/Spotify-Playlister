@@ -51,6 +51,14 @@ const uiController = (function () {
       };
     },
 
+    hideElement(element) {
+      element.style.visibility = 'hidden'
+      element.style.background = 'transparent'
+      element.style.opacity = '100%'
+      element.style['background-blend-mode'] = 'none'
+      element.style['z-index'] = -999
+    },
+
     //general ui info population methods
     displayLoadingMessage() {
       this.outputField().loader.style.backgroundColor = 'yellow'
@@ -204,43 +212,45 @@ const loginController = (function (uiCtrl) {
   function loginUser() {
     // Open the auth popup
     const spotifyLoginWindow = window.open(
-      `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=code`,
+      `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
       'Login with Spotify',
       'width=800,height=600'
     );
 
     window.spotifyCallback = (payload) => {
-      console.log(payload)
+      uiCtrl.hideElement(domOutput.loginDiv)
+      uiCtrl.hideElement(domOutput.login)
 
       spotifyLoginWindow.close()
     
+      uiCtrl.displayLoadingMessage()
+      
       fetch('https://api.spotify.com/v1/me', {
         headers: {
           'Authorization': `Bearer ${payload}`
         }
       }).then(response => {
-        return response.json()
+        if (response.ok) {
+          uiCtrl.hideLoadingMessage()
+          return response.json()
+        }
+        uiCtrl.displayError()
       }).then(data => {
           console.log(data)
-          // loginDiv.style.visibility = 'hidden'
-          // console.log(`redirected! ${loginDiv} should not be visible!`)
-      
-          // const accessToken = localStorage.getItem('sp-accessToken');
-          // const refreshToken = localStorage.getItem('sp-refreshToken');
-          // console.log(`access token: ${accessToken}`)
-          // playlistDataLoader(accessToken, refreshToken);
+          uiCtrl.hideElement(domOutput.login, domOutput.loginDiv);
+          this.me = data;
       })
+      .catch (error => {
+        uiCtrl.displayError(error)
+      } )
     }
 
-    // spotifyLoginWindow.addEventListener("beforeunload", function() {
-    //   loginDiv.style.visibility = 'hidden'
-    //   console.log(`redirected! ${loginDiv} should not be visible!`)
+    this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=")
+    console.log("Access Token: " + this.token);
 
-    //   const accessToken = localStorage.getItem('sp-accessToken');
-    //   const refreshToken = localStorage.getItem('sp-refreshToken');
-    //   console.log(`access token: ${accessToken}`)
-    //   playlistDataLoader(accessToken, refreshToken);
-    // })
+    if (this.token) {
+      this.window.spotifyCallback(this.token)
+    }
   };
 })(uiController);
 

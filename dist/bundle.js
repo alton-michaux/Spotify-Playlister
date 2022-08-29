@@ -66,6 +66,13 @@ var uiController = function () {
         loader: document.querySelector(domElements.loader)
       };
     },
+    hideElement: function hideElement(element) {
+      element.style.visibility = 'hidden';
+      element.style.background = 'transparent';
+      element.style.opacity = '100%';
+      element.style['background-blend-mode'] = 'none';
+      element.style['z-index'] = -999;
+    },
     //general ui info population methods
     displayLoadingMessage: function displayLoadingMessage() {
       this.outputField().loader.style.backgroundColor = 'yellow';
@@ -179,35 +186,42 @@ var loginController = function (uiCtrl) {
   });
 
   function loginUser() {
+    var _this2 = this;
+
     // Open the auth popup
-    var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/index.html", "&response_type=code"), 'Login with Spotify', 'width=800,height=600');
+    var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/index.html", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
 
     window.spotifyCallback = function (payload) {
-      console.log(payload);
+      uiCtrl.hideElement(domOutput.loginDiv);
+      uiCtrl.hideElement(domOutput.login);
       spotifyLoginWindow.close();
+      uiCtrl.displayLoadingMessage();
       fetch('https://api.spotify.com/v1/me', {
         headers: {
           'Authorization': "Bearer ".concat(payload)
         }
       }).then(function (response) {
-        return response.json();
-      }).then(function (data) {
-        console.log(data); // loginDiv.style.visibility = 'hidden'
-        // console.log(`redirected! ${loginDiv} should not be visible!`)
-        // const accessToken = localStorage.getItem('sp-accessToken');
-        // const refreshToken = localStorage.getItem('sp-refreshToken');
-        // console.log(`access token: ${accessToken}`)
-        // playlistDataLoader(accessToken, refreshToken);
-      });
-    }; // spotifyLoginWindow.addEventListener("beforeunload", function() {
-    //   loginDiv.style.visibility = 'hidden'
-    //   console.log(`redirected! ${loginDiv} should not be visible!`)
-    //   const accessToken = localStorage.getItem('sp-accessToken');
-    //   const refreshToken = localStorage.getItem('sp-refreshToken');
-    //   console.log(`access token: ${accessToken}`)
-    //   playlistDataLoader(accessToken, refreshToken);
-    // })
+        if (response.ok) {
+          uiCtrl.hideLoadingMessage();
+          return response.json();
+        }
 
+        uiCtrl.displayError();
+      }).then(function (data) {
+        console.log(data);
+        uiCtrl.hideElement(domOutput.login, domOutput.loginDiv);
+        _this2.me = data;
+      })["catch"](function (error) {
+        uiCtrl.displayError(error);
+      });
+    };
+
+    this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=");
+    console.log("Access Token: " + this.token);
+
+    if (this.token) {
+      this.window.spotifyCallback(this.token);
+    }
   }
 
   ;
@@ -1317,7 +1331,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("f1933f74fb993ccf6057")
+/******/ 		__webpack_require__.h = () => ("e0efd22cbae98400531e")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

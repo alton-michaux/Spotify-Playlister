@@ -382,7 +382,11 @@ ul.show {
   }
 
   .login-div {
-    visibility: hidden;
+    visibility: visible;
+    z-index: 999;
+    background: black;
+    background-blend-mode: darken;
+    opacity: 90%;
   }
 
   .login-btn {
