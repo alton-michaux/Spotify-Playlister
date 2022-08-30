@@ -202,61 +202,56 @@ const uiController = (function () {
   };
 })();
 
-const loginController = (function (uiCtrl) {
-  const domOutput = uiCtrl.outputField()
-
-  domOutput.login.addEventListener("click", () => {
-    loginUser()
-  })
-  
-  function loginUser() {
+const apiController = (function (uiCtrl) {
+  function userLogin() {
     // Open the auth popup
     const spotifyLoginWindow = window.open(
       `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
       'Login with Spotify',
       'width=800,height=600'
     );
-
+  
     this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=")
     console.log("Access Token: " + this.token);
-
+  
     window.spotifyCallback = (payload) => {
-      uiCtrl.hideElement(domOutput.loginDiv)
-      uiCtrl.hideElement(domOutput.login)
-
       spotifyLoginWindow.close()
-    
-      uiCtrl.displayLoadingMessage()
       
-      fetch('https://api.spotify.com/v1/me', {
-        headers: {
-          'Authorization': `Bearer ${payload}`
-        }
-      }).then(response => {
-        if (response.ok) {
-          uiCtrl.hideLoadingMessage()
-          return response.json()
-        }
-        uiCtrl.displayError()
-      }).then(data => {
-          console.log(data)
-          uiCtrl.hideElement(domOutput.login, domOutput.loginDiv);
-          this.me = data;
-      })
-      .catch (error => {
-        uiCtrl.displayError(error)
-      } )
+      getUser(payload)
     }
     
     if (this.token) {
       this.window.spotifyCallback(this.token)
     }
   };
-})(uiController);
 
+  //get access token for users
+  async function getUser(token) {
+    uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
+    uiCtrl.hideElement(uiCtrl.outputField().login)
+    uiCtrl.displayLoadingMessage()
+    const response = await fetch('https://api.spotify.com/v1/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(response => {
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        return response.json()
+      }
+      uiCtrl.displayError()
+    }).then(data => {
+        console.log(data)
+        uiCtrl.hideElement(domOutput.login, domOutput.loginDiv);
+        this.me = data;
+    })
+    .catch (error => {
+      uiCtrl.displayError(error)
+    })
+    return response
+  };
 
-const apiController = (function (uiCtrl) {
-  //get access token
+  //get access token for GVO playlists
   async function getToken() {
     uiCtrl.displayLoadingMessage();
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -438,6 +433,12 @@ const apiController = (function (uiCtrl) {
   };
 
   return {
+    userLogin() {
+      return userLogin();
+    },
+    getUser() {
+      return getUser();
+    },
     getToken() {
       return getToken();
     },
@@ -466,6 +467,16 @@ const apiController = (function (uiCtrl) {
 const appController = (function (apiCtrl, uiCtrl) {
   //get object reference for DOM outputs
   const domOutput = uiCtrl.outputField();
+
+  const userOps = () => {
+    //listener for spotify user login
+    domOutput.login.addEventListener("click", () => {
+      console.log(apiCtrl)
+      const token = apiCtrl.userLogin()
+      uiCtrl.storeAccessToken(token)
+      uiCtrl.storeRefToken(token)
+    })
+  }
 
   const asyncOps = async () => {
     let token = await apiCtrl.getToken();
@@ -676,5 +687,6 @@ const appController = (function (apiCtrl, uiCtrl) {
     trackPlayListener();
     tracklistListener();
   };
+  userOps();
   asyncOps();
 })(apiController, uiController);
