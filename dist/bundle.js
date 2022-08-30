@@ -85,7 +85,8 @@ var uiController = function () {
     hideLoadingMessage: function hideLoadingMessage() {
       this.outputField().loader.classList.remove('display');
     },
-    displayError: function displayError(error) {
+    displayError: function displayError() {
+      var error = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "Unknown Error";
       this.outputField().loader.style.backgroundColor = 'red';
       this.outputField().loader.style.color = 'white';
       this.outputField().loader.innerHTML = "";
@@ -181,19 +182,23 @@ var uiController = function () {
 
 var apiController = function (uiCtrl) {
   function _userLogin() {
-    // Open the auth popup
-    var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/index.html", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
-    this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=");
-    console.log("Access Token: " + this.token);
+    try {
+      // Open the auth popup
+      var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/index.html", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
+      this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=");
+      console.log("Access Token: " + this.token);
 
-    window.spotifyCallback = function (payload) {
-      spotifyLoginWindow.close();
+      window.spotifyCallback = function (payload) {
+        spotifyLoginWindow.close();
 
-      _getUser2(payload);
-    };
+        _getUser2(payload);
+      };
 
-    if (this.token) {
-      this.window.spotifyCallback(this.token);
+      if (this.token) {
+        this.window.spotifyCallback(this.token);
+      }
+    } catch (_unused) {
+      uiCtrl.displayError();
     }
   }
 
@@ -825,7 +830,6 @@ var appController = function (apiCtrl, uiCtrl) {
   var userOps = function userOps() {
     //listener for spotify user login
     domOutput.login.addEventListener("click", function () {
-      console.log(apiCtrl);
       var token = apiCtrl.userLogin();
       uiCtrl.storeAccessToken(token);
       uiCtrl.storeRefToken(token);
@@ -1370,7 +1374,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("53bca96b2d91209a5887")
+/******/ 		__webpack_require__.h = () => ("67276e2061c0a665d152")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

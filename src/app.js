@@ -73,7 +73,7 @@ const uiController = (function () {
       this.outputField().loader.classList.remove('display');
     },
     
-    displayError(error) {
+    displayError(error="Unknown Error") {
       this.outputField().loader.style.backgroundColor = 'red'
       this.outputField().loader.style.color = 'white'
       this.outputField().loader.innerHTML = ""
@@ -204,25 +204,28 @@ const uiController = (function () {
 
 const apiController = (function (uiCtrl) {
   function userLogin() {
-    // Open the auth popup
-    const spotifyLoginWindow = window.open(
-      `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
-      'Login with Spotify',
-      'width=800,height=600'
-    );
-  
-    this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=")
-    console.log("Access Token: " + this.token);
-  
-    window.spotifyCallback = (payload) => {
-      spotifyLoginWindow.close()
-      
-      getUser(payload)
-    }
+    try {
+      // Open the auth popup
+      const spotifyLoginWindow = window.open(
+        `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
+        'Login with Spotify',
+        'width=800,height=600'
+      );
     
-    if (this.token) {
-      this.window.spotifyCallback(this.token)
-    }
+      this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=")
+      console.log("Access Token: " + this.token);
+    
+      window.spotifyCallback = (payload) => {
+        spotifyLoginWindow.close()
+        
+        getUser(payload)
+      }
+      
+      if (this.token) {
+        this.window.spotifyCallback(this.token)
+      }} catch {
+        uiCtrl.displayError()
+      }
   };
 
   //get access token for users
@@ -471,7 +474,6 @@ const appController = (function (apiCtrl, uiCtrl) {
   const userOps = () => {
     //listener for spotify user login
     domOutput.login.addEventListener("click", () => {
-      console.log(apiCtrl)
       const token = apiCtrl.userLogin()
       uiCtrl.storeAccessToken(token)
       uiCtrl.storeRefToken(token)
