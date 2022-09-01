@@ -215,8 +215,6 @@ var apiController = function (uiCtrl) {
 
   function _getUser() {
     _getUser = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(token) {
-      var _this2 = this;
-
       var response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -233,11 +231,8 @@ var apiController = function (uiCtrl) {
                   uiCtrl.hideLoadingMessage();
                   return response.json();
                 }
-
-                uiCtrl.displayError();
               }).then(function (data) {
-                // console.log(data)
-                _this2.me = data;
+                data;
               })["catch"](function (error) {
                 uiCtrl.displayError(error);
               });
@@ -1397,7 +1392,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("8549766375745df64609")
+/******/ 		__webpack_require__.h = () => ("182261d1aa59657df00a")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

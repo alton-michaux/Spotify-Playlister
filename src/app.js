@@ -250,10 +250,8 @@ const apiController = (function (uiCtrl) {
         uiCtrl.hideLoadingMessage()
         return response.json()
       }
-      uiCtrl.displayError()
     }).then(data => {
-        // console.log(data)
-        this.me = data;
+      data
     })
     .catch (error => {
       uiCtrl.displayError(error)
