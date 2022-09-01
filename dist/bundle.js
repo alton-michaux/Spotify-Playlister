@@ -184,16 +184,20 @@ var apiController = function (uiCtrl) {
   function _userLogin() {
     // Open the auth popup
     var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/callback", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
-    this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=");
+    this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0];
 
     window.spotifyCallback = function (payload) {
       spotifyLoginWindow.close();
+      uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
+      uiCtrl.hideElement(uiCtrl.outputField().login);
+      uiCtrl.displayLoadingMessage();
 
       _getUser2(payload);
     };
 
     if (this.token) {
-      window.spotifyCallback(this.token);
+      uiCtrl.storeAccessToken(this.token);
+      this.window.spotifyCallback(this.token);
     } else {
       uiCtrl.displayError("Failed to fetch token");
     }
@@ -828,9 +832,7 @@ var appController = function (apiCtrl, uiCtrl) {
   var userOps = function userOps() {
     //listener for spotify user login
     domOutput.login.addEventListener("click", function () {
-      var token = apiCtrl.userLogin();
-      uiCtrl.storeAccessToken(token);
-      uiCtrl.storeRefToken(token);
+      apiCtrl.userLogin();
     });
   };
 
@@ -1372,7 +1374,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("dfbf90f57ccef04c594a")
+/******/ 		__webpack_require__.h = () => ("9df45888888ba264e1ad")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

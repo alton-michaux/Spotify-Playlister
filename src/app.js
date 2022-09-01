@@ -210,17 +210,22 @@ const apiController = (function (uiCtrl) {
       'Login with Spotify',
       'width=800,height=600'
     );
-  
-    this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=")
-  
+    
+    this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0]
+
     window.spotifyCallback = (payload) => {
       spotifyLoginWindow.close()
+      
+      uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
+      uiCtrl.hideElement(uiCtrl.outputField().login)
+      uiCtrl.displayLoadingMessage()
       
       getUser(payload)
     }
     
     if (this.token) {
-      window.spotifyCallback(this.token)
+      uiCtrl.storeAccessToken(this.token)
+      this.window.spotifyCallback(this.token)
     } else {
       uiCtrl.displayError("Failed to fetch token")
     }
@@ -473,9 +478,7 @@ const appController = (function (apiCtrl, uiCtrl) {
   const userOps = () => {
     //listener for spotify user login
     domOutput.login.addEventListener("click", () => {
-      const token = apiCtrl.userLogin()
-      uiCtrl.storeAccessToken(token)
-      uiCtrl.storeRefToken(token)
+      apiCtrl.userLogin()
     })
   }
 
