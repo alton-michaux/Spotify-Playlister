@@ -204,28 +204,26 @@ const uiController = (function () {
 
 const apiController = (function (uiCtrl) {
   function userLogin() {
-    try {
-      // Open the auth popup
-      const spotifyLoginWindow = window.open(
-        `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
-        'Login with Spotify',
-        'width=800,height=600'
-      );
-    
-      this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=")
-      console.log("Access Token: " + this.token);
-    
-      window.spotifyCallback = (payload) => {
-        spotifyLoginWindow.close()
-        
-        getUser(payload)
-      }
+    // Open the auth popup
+    const spotifyLoginWindow = window.open(
+      `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
+      'Login with Spotify',
+      'width=800,height=600'
+    );
+  
+    this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=")
+  
+    window.spotifyCallback = (payload) => {
+      spotifyLoginWindow.close()
       
-      if (this.token) {
-        this.window.spotifyCallback(this.token)
-      }} catch {
-        uiCtrl.displayError()
-      }
+      getUser(payload)
+    }
+    
+    if (this.token) {
+      window.spotifyCallback(this.token)
+    } else {
+      uiCtrl.displayError("Failed to fetch token")
+    }
   };
 
   //get access token for users
@@ -236,7 +234,8 @@ const apiController = (function (uiCtrl) {
     const response = await fetch('https://api.spotify.com/v1/me', {
       headers: {
         'Authorization': `Bearer ${token}`
-      }
+      },
+      json: true
     }).then(response => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()

@@ -182,23 +182,20 @@ var uiController = function () {
 
 var apiController = function (uiCtrl) {
   function _userLogin() {
-    try {
-      // Open the auth popup
-      var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/index.html", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
-      this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=");
-      console.log("Access Token: " + this.token);
+    // Open the auth popup
+    var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/callback", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
+    this.token = spotifyLoginWindow.location.href.substring(46).split('&')[0].split("=");
 
-      window.spotifyCallback = function (payload) {
-        spotifyLoginWindow.close();
+    window.spotifyCallback = function (payload) {
+      spotifyLoginWindow.close();
 
-        _getUser2(payload);
-      };
+      _getUser2(payload);
+    };
 
-      if (this.token) {
-        this.window.spotifyCallback(this.token);
-      }
-    } catch (_unused) {
-      uiCtrl.displayError();
+    if (this.token) {
+      window.spotifyCallback(this.token);
+    } else {
+      uiCtrl.displayError("Failed to fetch token");
     }
   }
 
@@ -224,7 +221,8 @@ var apiController = function (uiCtrl) {
               return fetch('https://api.spotify.com/v1/me', {
                 headers: {
                   'Authorization': "Bearer ".concat(token)
-                }
+                },
+                json: true
               }).then(function (response) {
                 if (response.ok) {
                   uiCtrl.hideLoadingMessage();
@@ -1374,7 +1372,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("67276e2061c0a665d152")
+/******/ 		__webpack_require__.h = () => ("dfbf90f57ccef04c594a")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
