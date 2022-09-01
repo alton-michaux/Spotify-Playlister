@@ -89,6 +89,13 @@ const uiController = (function () {
         } , 10000);  // 1000ms = 1s
     },
 
+    displayUserName(userName){
+      const html = `<div class="nav-box center-box">Logged in as: ${userName}</div>`;
+      document
+        .querySelector(domElements.userShow)
+        .insertAdjacentHTML("afterbegin", html);
+    },
+
     assignGenre(text, value) {
       const html = `<option id="genre-item" value="${value}">${text}</option>`;
       document
@@ -233,9 +240,6 @@ const apiController = (function (uiCtrl) {
 
   //get access token for users
   async function getUser(token) {
-    uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
-    uiCtrl.hideElement(uiCtrl.outputField().login)
-    uiCtrl.displayLoadingMessage()
     const response = await fetch('https://api.spotify.com/v1/me', {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -477,8 +481,13 @@ const appController = (function (apiCtrl, uiCtrl) {
 
   const userOps = () => {
     //listener for spotify user login
-    domOutput.login.addEventListener("click", () => {
-      apiCtrl.userLogin()
+    domOutput.login.addEventListener("click", async () => {
+      const user = await apiCtrl.userLogin()
+      if (user) {
+        uiCtrl.displayUserName(user.display_name)
+      } else {
+        uiCtrl.displayError("Failed to login")
+      }
     })
   }
 
