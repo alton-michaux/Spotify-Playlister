@@ -252,8 +252,7 @@ const apiController = (function (uiCtrl) {
       }
       uiCtrl.displayError()
     }).then(data => {
-        console.log(data)
-        uiCtrl.hideElement(domOutput.login, domOutput.loginDiv);
+        // console.log(data)
         this.me = data;
     })
     .catch (error => {
@@ -447,8 +446,8 @@ const apiController = (function (uiCtrl) {
     userLogin() {
       return userLogin();
     },
-    getUser() {
-      return getUser();
+    getUser(token) {
+      return getUser(token);
     },
     getToken() {
       return getToken();
@@ -483,6 +482,7 @@ const appController = (function (apiCtrl, uiCtrl) {
     //listener for spotify user login
     domOutput.login.addEventListener("click", async () => {
       const user = await apiCtrl.userLogin()
+      console.log(user)
       if (user) {
         uiCtrl.displayUserName(user.display_name)
       } else {
