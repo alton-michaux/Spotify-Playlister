@@ -237,10 +237,6 @@ const apiController = (function (uiCtrl) {
       if (this.token) {
         this.window.spotifyCallback(spotifyLoginWindow, this.token);
       }
-
-      // spotifyLoginWindow.window.addEventListener('beforeunload', function() {
-      //   console.log("Listener added!")
-      // })
     } catch (error) {
       uiCtrl.displayError(`ERROR:${error}`);
     }
@@ -252,8 +248,7 @@ const apiController = (function (uiCtrl) {
     const response = await fetch('https://api.spotify.com/v1/me', {
       headers: {
         'Authorization': `Bearer ${token}`
-      },
-      json: true
+      }
     }).then(response => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
