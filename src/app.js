@@ -211,32 +211,32 @@ const uiController = (function () {
 
 const apiController = (function (uiCtrl) {
   function userLogin() {
-    // Open the auth popup
-    const spotifyLoginWindow = window.open(
-      `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
-      'Login with Spotify',
-      'width=800,height=600'
-    );
-    
-    this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0]
+    try {
+      // Open the auth popup
+      const spotifyLoginWindow = window.open(
+        `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
+        'Login with Spotify',
+        'width=800,height=600'
+      );
 
-    window.spotifyCallback = (payload) => {
-      spotifyLoginWindow.close()
+      window.spotifyCallback = () => {
+        this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0]
+        uiCtrl.storeAccessToken(this.token)
+        
+        spotifyLoginWindow.close()
+        
+        uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
+        uiCtrl.hideElement(uiCtrl.outputField().login)
+        uiCtrl.displayLoadingMessage()
+        
+        getUser(this.token)
+      }
       
-      uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
-      uiCtrl.hideElement(uiCtrl.outputField().login)
-      uiCtrl.displayLoadingMessage()
-      
-      getUser(payload)
+      this.window.spotifyCallback()
+    } catch (error) {
+      uiCtrl.displayError(`ERROR:${error}`);
     }
-    
-    if (this.token) {
-      uiCtrl.storeAccessToken(this.token)
-      this.window.spotifyCallback(this.token)
-    } else {
-      uiCtrl.displayError("Failed to fetch token")
-    }
-  };
+  }
 
   //get access token for users
   async function getUser(token) {
@@ -479,12 +479,15 @@ const appController = (function (apiCtrl, uiCtrl) {
   const userOps = () => {
     //listener for spotify user login
     domOutput.login.addEventListener("click", async () => {
-      const user = await apiCtrl.userLogin()
-      console.log(user)
-      if (user) {
-        uiCtrl.displayUserName(user.display_name)
-      } else {
-        uiCtrl.displayError("Failed to login")
+      try {
+        const user = await apiCtrl.userLogin()
+        console.log(user)
+        if (user) {
+          uiCtrl.displayUserName(user.display_name)
+          asyncOps();
+        }
+      } catch (error) {
+        uiCtrl.displayError(`ERROR: ${error}`)
       }
     })
   }
@@ -699,5 +702,4 @@ const appController = (function (apiCtrl, uiCtrl) {
     tracklistListener();
   };
   userOps();
-  asyncOps();
 })(apiController, uiController);

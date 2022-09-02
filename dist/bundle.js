@@ -186,28 +186,29 @@ var uiController = function () {
 
 var apiController = function (uiCtrl) {
   function _userLogin() {
-    // Open the auth popup
-    var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/callback", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
-    this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0];
+    var _this2 = this;
 
-    window.spotifyCallback = function (payload) {
-      spotifyLoginWindow.close();
-      uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
-      uiCtrl.hideElement(uiCtrl.outputField().login);
-      uiCtrl.displayLoadingMessage();
+    try {
+      // Open the auth popup
+      var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/callback/", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
 
-      _getUser2(payload);
-    };
+      window.spotifyCallback = function () {
+        _this2.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0];
+        uiCtrl.storeAccessToken(_this2.token);
+        spotifyLoginWindow.close();
+        uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
+        uiCtrl.hideElement(uiCtrl.outputField().login);
+        uiCtrl.displayLoadingMessage();
 
-    if (this.token) {
-      uiCtrl.storeAccessToken(this.token);
-      this.window.spotifyCallback(this.token);
-    } else {
-      uiCtrl.displayError("Failed to fetch token");
+        _getUser2(_this2.token);
+      };
+
+      this.window.spotifyCallback();
+    } catch (error) {
+      uiCtrl.displayError("ERROR:".concat(error));
     }
-  }
+  } //get access token for users
 
-  ; //get access token for users
 
   function _getUser2(_x) {
     return _getUser.apply(this, arguments);
@@ -832,25 +833,33 @@ var appController = function (apiCtrl, uiCtrl) {
         while (1) {
           switch (_context16.prev = _context16.next) {
             case 0:
-              _context16.next = 2;
+              _context16.prev = 0;
+              _context16.next = 3;
               return apiCtrl.userLogin();
 
-            case 2:
+            case 3:
               user = _context16.sent;
               console.log(user);
 
               if (user) {
                 uiCtrl.displayUserName(user.display_name);
-              } else {
-                uiCtrl.displayError("Failed to login");
+                asyncOps();
               }
 
-            case 5:
+              _context16.next = 11;
+              break;
+
+            case 8:
+              _context16.prev = 8;
+              _context16.t0 = _context16["catch"](0);
+              uiCtrl.displayError("ERROR: ".concat(_context16.t0));
+
+            case 11:
             case "end":
               return _context16.stop();
           }
         }
-      }, _callee16);
+      }, _callee16, null, [[0, 8]]);
     })));
   };
 
@@ -1280,7 +1289,6 @@ var appController = function (apiCtrl, uiCtrl) {
   }();
 
   userOps();
-  asyncOps();
 }(apiController, uiController);
 
 /***/ })
@@ -1392,7 +1400,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("182261d1aa59657df00a")
+/******/ 		__webpack_require__.h = () => ("f9fe1cd4fa90c268fa63")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
