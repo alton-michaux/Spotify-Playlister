@@ -231,15 +231,11 @@ const apiController = (function (uiCtrl) {
         'width=800,height=600'
       );
 
-      waitForToken(spotifyLoginWindow);
-      
-      async function waitForToken(popup) {
-        this.token = await popup.window.location.hash.substring(14).split('&')[0]
-        if (this.token) {
-          this.window.spotifyCallback(popup, this.token);
-        } uiCtrl.displayError("Failed to fetch token")
-      }
-      
+      spotifyLoginWindow.window.addEventListener('beforeunload', function() {
+        console.log("Listener added!")
+        this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
+        this.window.spotifyCallback(spotifyLoginWindow, this.token);
+      })
     } catch (error) {
       uiCtrl.displayError(`ERROR:${error}`);
     }
@@ -486,10 +482,10 @@ const appController = (function (apiCtrl, uiCtrl) {
 
   const userOps = () => {
     //listener for spotify user login
-    domOutput.login.addEventListener("click", async () => {
+    domOutput.login.addEventListener("click", () => {
       try {
-        const user = await apiCtrl.userLogin()
-        console.log(user)
+        const user = apiCtrl.userLogin()
+        console.log(`User: ${user}`)
         if (user) {
           uiCtrl.displayUserName(user.display_name)
           asyncOps();
