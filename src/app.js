@@ -216,7 +216,7 @@ const apiController = (function (uiCtrl) {
         console.log(payload)
         uiCtrl.storeAccessToken(payload)
         
-        popup.close()
+        // popup.close()
         
         uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
         uiCtrl.hideElement(uiCtrl.outputField().login)
@@ -231,11 +231,16 @@ const apiController = (function (uiCtrl) {
         'width=800,height=600'
       );
 
-      spotifyLoginWindow.window.addEventListener('beforeunload', function() {
-        console.log("Listener added!")
-        this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
+      setTimeout(this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0], 10000)
+      console.log(spotifyLoginWindow.window.location.hash)
+
+      if (this.token) {
         this.window.spotifyCallback(spotifyLoginWindow, this.token);
-      })
+      }
+
+      // spotifyLoginWindow.window.addEventListener('beforeunload', function() {
+      //   console.log("Listener added!")
+      // })
     } catch (error) {
       uiCtrl.displayError(`ERROR:${error}`);
     }
@@ -482,13 +487,13 @@ const appController = (function (apiCtrl, uiCtrl) {
 
   const userOps = () => {
     //listener for spotify user login
-    domOutput.login.addEventListener("click", () => {
+    domOutput.login.addEventListener("click", async () => {
       try {
-        const user = apiCtrl.userLogin()
+        const user = await apiCtrl.userLogin()
         console.log(`User: ${user}`)
         if (user) {
           uiCtrl.displayUserName(user.display_name)
-          asyncOps();
+          await asyncOps();
         }
       } catch (error) {
         uiCtrl.displayError(`ERROR: ${error}`)
