@@ -65,7 +65,9 @@
       </div>
       <div class="container login-div" id="login-div">
         <!-- Button to open the modal login form -->
-        <button class="login-btn" id="login">Login with Spotify</button>
+        <button class="login-btn" id="login" href="https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token">
+          Login with Spotify
+        </button>
       </div>
     </div>
           

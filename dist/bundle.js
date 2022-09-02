@@ -186,24 +186,23 @@ var uiController = function () {
 
 var apiController = function (uiCtrl) {
   function _userLogin() {
-    var _this2 = this;
-
     try {
-      // Open the auth popup
-      var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/callback/", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
-
-      window.spotifyCallback = function () {
-        _this2.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0];
-        uiCtrl.storeAccessToken(_this2.token);
-        spotifyLoginWindow.close();
+      window.spotifyCallback = function (popup, payload) {
+        console.log(payload);
+        uiCtrl.storeAccessToken(payload);
+        popup.close();
         uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
         uiCtrl.hideElement(uiCtrl.outputField().login);
-        uiCtrl.displayLoadingMessage();
 
-        _getUser2(_this2.token);
+        _getUser2(payload);
       };
 
-      this.window.spotifyCallback();
+      setTimeout(function () {
+        // Open the auth popup
+        var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000/callback/", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
+        this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0];
+        this.window.spotifyCallback(spotifyLoginWindow, this.token);
+      }, 2000); //simple async
     } catch (error) {
       uiCtrl.displayError("ERROR:".concat(error));
     }
@@ -221,7 +220,8 @@ var apiController = function (uiCtrl) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              uiCtrl.displayLoadingMessage();
+              _context.next = 3;
               return fetch('https://api.spotify.com/v1/me', {
                 headers: {
                   'Authorization': "Bearer ".concat(token)
@@ -238,11 +238,11 @@ var apiController = function (uiCtrl) {
                 uiCtrl.displayError(error);
               });
 
-            case 2:
+            case 3:
               response = _context.sent;
               return _context.abrupt("return", response);
 
-            case 4:
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -1400,7 +1400,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("f9fe1cd4fa90c268fa63")
+/******/ 		__webpack_require__.h = () => ("0de1e508cac63cf2f27d")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

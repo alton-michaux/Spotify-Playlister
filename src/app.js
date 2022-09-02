@@ -212,27 +212,29 @@ const uiController = (function () {
 const apiController = (function (uiCtrl) {
   function userLogin() {
     try {
-      // Open the auth popup
-      const spotifyLoginWindow = window.open(
-        `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
-        'Login with Spotify',
-        'width=800,height=600'
-      );
-
-      window.spotifyCallback = () => {
-        this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0]
-        uiCtrl.storeAccessToken(this.token)
+      window.spotifyCallback = (popup, payload) => {
+        console.log(payload)
+        uiCtrl.storeAccessToken(payload)
         
-        spotifyLoginWindow.close()
+        popup.close()
         
         uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
         uiCtrl.hideElement(uiCtrl.outputField().login)
-        uiCtrl.displayLoadingMessage()
         
-        getUser(this.token)
+        getUser(payload)
       }
       
-      this.window.spotifyCallback()
+      setTimeout(function () {
+        // Open the auth popup
+        const spotifyLoginWindow = window.open(
+          `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
+          'Login with Spotify',
+          'width=800,height=600'
+        );
+
+        this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
+        this.window.spotifyCallback(spotifyLoginWindow, this.token);
+      }, 2000); //simple async
     } catch (error) {
       uiCtrl.displayError(`ERROR:${error}`);
     }
@@ -240,6 +242,7 @@ const apiController = (function (uiCtrl) {
 
   //get access token for users
   async function getUser(token) {
+    uiCtrl.displayLoadingMessage()
     const response = await fetch('https://api.spotify.com/v1/me', {
       headers: {
         'Authorization': `Bearer ${token}`
