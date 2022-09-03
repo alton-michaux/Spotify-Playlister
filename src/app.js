@@ -5,6 +5,7 @@ const uiController = (function () {
   const domElements = {
     loginDiv: "#login-div",
     login: "#login",
+    userShow: "#userShow",
     accToken: "#access-token",
     refToken: "#refresh-token",
     hToken: "#hidden-token",
@@ -90,7 +91,7 @@ const uiController = (function () {
     },
 
     displayUserName(userName){
-      const html = `<div class="nav-box center-box">Logged in as: ${userName}</div>`;
+      const html = `<div class="nav-box center-box">Logged in as: ${userName.toString()}</div>`;
       document
         .querySelector(domElements.userShow)
         .insertAdjacentHTML("afterbegin", html);
@@ -212,18 +213,21 @@ const uiController = (function () {
 const apiController = (function (uiCtrl) {
   function userLogin() {
     try {
+      this.token = "BQCaKIlsYo48U_Y6b6CSRnJ494fLBEEa7RxEDXqTQ-VSWvHSYNjzO2HuxM-cEtNdi0wJq0L7-EvDbp7rcbOVNdHyKqeAl5EWeCDmW_PjqOkpgp9RamcDZC4TWfiJGj2HoiKU4LJCBc6o9ld84Uwzupq5brpNkJGKNNQfXF2gkS5DTHdW"
+      // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
       window.spotifyCallback = async (popup = [], payload) => {
-        // uiCtrl.storeAccessToken(payload)
+        uiCtrl.storeAccessToken(payload)
         
         // popup.close()
         
         uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
         uiCtrl.hideElement(uiCtrl.outputField().login)
-        console.log(`payload:${payload}`)
 
         const user = await getUser(payload)
-        console.log(`User: ${user}`)
+        return user
       }
+
+      this.window.spotifyCallback([], this.token);
       
       // Open the auth popup
       // const spotifyLoginWindow = window.open(
@@ -232,13 +236,6 @@ const apiController = (function (uiCtrl) {
       //   'width=800,height=600'
       // );
 
-      this.token = "BQDx7kBemOzsynSU7vPmEKtzh7A3xoXBzHz5RM3YzwRpcJE3bq3FOeHonvR6P-MfU8bvmmtuN0q4-M0hJryXqCgCOSkfj529beYR2UajHRzNhjVtFiLyrtNBwLq38ttyDaqKiBX5xSaKLPReiXhn7EQ6eaM4Xdy6wSFTIzNhBIEyJMDX"
-      console.log(`this.token:${this.token}`)
-      // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
-
-      if (this.token) {
-        this.window.spotifyCallback([], this.token);
-      }
     } catch (error) {
       uiCtrl.displayError(`ERROR:${error}`);
     }
@@ -254,16 +251,13 @@ const apiController = (function (uiCtrl) {
     }).then(response => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        console.log(`Token2:${token}`)
-        return response.json()
+        this.me = response.json()
+        return this.me
       }
-    }).then(data => {
-      console.log(`Data:${data}`)
-      data
-    })
-    .catch (error => {
+    }).catch (error => {
       uiCtrl.displayError(error)
     })
+    uiCtrl.displayUserName(response.display_name)
     return response
   };
 
@@ -490,9 +484,8 @@ const appController = (function (apiCtrl, uiCtrl) {
     domOutput.login.addEventListener("click", async () => {
       try {
         let user = apiCtrl.userLogin()
+        console.log(user)
         if (user) {
-          uiCtrl.displayUserName(user.display_name)
-  
           await asyncOps();
         }
       } catch (error) {

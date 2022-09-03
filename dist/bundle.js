@@ -22,6 +22,7 @@ var uiController = function () {
   var domElements = {
     loginDiv: "#login-div",
     login: "#login",
+    userShow: "#userShow",
     accToken: "#access-token",
     refToken: "#refresh-token",
     hToken: "#hidden-token",
@@ -103,7 +104,7 @@ var uiController = function () {
       }, 10000); // 1000ms = 1s
     },
     displayUserName: function displayUserName(userName) {
-      var html = "<div class=\"nav-box center-box\">Logged in as: ".concat(userName, "</div>");
+      var html = "<div class=\"nav-box center-box\">Logged in as: ".concat(userName.toString(), "</div>");
       document.querySelector(domElements.userShow).insertAdjacentHTML("afterbegin", html);
     },
     assignGenre: function assignGenre(text, value) {
@@ -187,6 +188,8 @@ var uiController = function () {
 var apiController = function (uiCtrl) {
   function _userLogin() {
     try {
+      this.token = "BQCaKIlsYo48U_Y6b6CSRnJ494fLBEEa7RxEDXqTQ-VSWvHSYNjzO2HuxM-cEtNdi0wJq0L7-EvDbp7rcbOVNdHyKqeAl5EWeCDmW_PjqOkpgp9RamcDZC4TWfiJGj2HoiKU4LJCBc6o9ld84Uwzupq5brpNkJGKNNQfXF2gkS5DTHdW"; // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
+
       window.spotifyCallback = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var popup,
             payload,
@@ -198,17 +201,16 @@ var apiController = function (uiCtrl) {
               case 0:
                 popup = _args.length > 0 && _args[0] !== undefined ? _args[0] : [];
                 payload = _args.length > 1 ? _args[1] : undefined;
-                // uiCtrl.storeAccessToken(payload)
-                // popup.close()
+                uiCtrl.storeAccessToken(payload); // popup.close()
+
                 uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
                 uiCtrl.hideElement(uiCtrl.outputField().login);
-                console.log("payload:".concat(payload));
                 _context.next = 7;
                 return _getUser2(payload);
 
               case 7:
                 user = _context.sent;
-                console.log("User: ".concat(user));
+                return _context.abrupt("return", user);
 
               case 9:
               case "end":
@@ -216,19 +218,13 @@ var apiController = function (uiCtrl) {
             }
           }
         }, _callee);
-      })); // Open the auth popup
+      }));
+      this.window.spotifyCallback([], this.token); // Open the auth popup
       // const spotifyLoginWindow = window.open(
       //   `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
       //   'Login with Spotify',
       //   'width=800,height=600'
       // );
-
-      this.token = "BQDx7kBemOzsynSU7vPmEKtzh7A3xoXBzHz5RM3YzwRpcJE3bq3FOeHonvR6P-MfU8bvmmtuN0q4-M0hJryXqCgCOSkfj529beYR2UajHRzNhjVtFiLyrtNBwLq38ttyDaqKiBX5xSaKLPReiXhn7EQ6eaM4Xdy6wSFTIzNhBIEyJMDX";
-      console.log("this.token:".concat(this.token)); // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
-
-      if (this.token) {
-        this.window.spotifyCallback([], this.token);
-      }
     } catch (error) {
       uiCtrl.displayError("ERROR:".concat(error));
     }
@@ -241,6 +237,8 @@ var apiController = function (uiCtrl) {
 
   function _getUser() {
     _getUser = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(token) {
+      var _this2 = this;
+
       var response;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
@@ -255,21 +253,19 @@ var apiController = function (uiCtrl) {
               }).then(function (response) {
                 if (response.ok) {
                   uiCtrl.hideLoadingMessage();
-                  console.log("Token2:".concat(token));
-                  return response.json();
+                  _this2.me = response.json();
+                  return _this2.me;
                 }
-              }).then(function (data) {
-                console.log("Data:".concat(data));
-                data;
               })["catch"](function (error) {
                 uiCtrl.displayError(error);
               });
 
             case 3:
               response = _context2.sent;
+              uiCtrl.displayUserName(response.display_name);
               return _context2.abrupt("return", response);
 
-            case 5:
+            case 6:
             case "end":
               return _context2.stop();
           }
@@ -863,13 +859,13 @@ var appController = function (apiCtrl, uiCtrl) {
             case 0:
               _context17.prev = 0;
               user = apiCtrl.userLogin();
+              console.log(user);
 
               if (!user) {
                 _context17.next = 6;
                 break;
               }
 
-              uiCtrl.displayUserName(user.display_name);
               _context17.next = 6;
               return asyncOps();
 
@@ -1428,7 +1424,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("6422d33fce3a5f81b252")
+/******/ 		__webpack_require__.h = () => ("0cfebe42be9a3dd3acc5")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
