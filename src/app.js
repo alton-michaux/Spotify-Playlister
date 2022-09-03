@@ -213,7 +213,7 @@ const uiController = (function () {
 const apiController = (function (uiCtrl) {
   function userLogin() {
     try {
-      this.token = "BQCaKIlsYo48U_Y6b6CSRnJ494fLBEEa7RxEDXqTQ-VSWvHSYNjzO2HuxM-cEtNdi0wJq0L7-EvDbp7rcbOVNdHyKqeAl5EWeCDmW_PjqOkpgp9RamcDZC4TWfiJGj2HoiKU4LJCBc6o9ld84Uwzupq5brpNkJGKNNQfXF2gkS5DTHdW"
+      this.token = "BQC3MKdEwoQ8gdfwcIWskcxpgm3DyY4MRaH56vnnn4a6QDpeSNBBEPX0K_aeLUq6RRnYnVtkdj9-02frThjqDDEerySHlN1UN7aU_s3cc73ht9MB8BZsGXn_FZA463clVh38DBZRq2k9BBwNJiVTH7Pg8jiSk4bzLPA98qb_EU1ZwAS"
       // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
       const currentUser = window.spotifyCallback = async (popup = [], payload) => {
                             uiCtrl.storeAccessToken(payload)
@@ -250,9 +250,11 @@ const apiController = (function (uiCtrl) {
         'Authorization': `Bearer ${token}`
       }
     }).then(response => {
+      console.log(response)
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
         this.me = response.json()
+        console.log(this.me)
         return this.me
       }
     }).catch (error => {
@@ -302,9 +304,10 @@ const apiController = (function (uiCtrl) {
         },
       }
     ).then( async (response) => {
+      console.log(response)
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        const data = await response.json().catch( (error) => { uiCtrl.displayError(error) })
+        const data = await response.json()
         return data.genres;
       }
       uiCtrl.displayError(response.status)
@@ -332,7 +335,7 @@ const apiController = (function (uiCtrl) {
     ).then( async (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        const data = await response.json().catch((error) => {uiCtrl.displayError(error)});
+        const data = await response.json()
         return data;
       }
       uiCtrl.displayError(response.status)
@@ -358,7 +361,7 @@ const apiController = (function (uiCtrl) {
     ).then( async (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        data = await response.json()
         return data;
       }
       uiCtrl.displayError(response.status)
@@ -384,7 +387,7 @@ const apiController = (function (uiCtrl) {
     ).then( async (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        const data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        const data = await response.json()
         return data;
       }
       uiCtrl.displayError(response.status)
@@ -410,7 +413,7 @@ const apiController = (function (uiCtrl) {
     ).then( async (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        const data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        const data = await response.json()
         return data;
       }
       uiCtrl.displayError(response.status)
@@ -564,6 +567,7 @@ const appController = (function (apiCtrl, uiCtrl) {
       genreSelect.addEventListener("change", async () => {
         uiCtrl.resetPlaylists();
         const genreId = genreSelect.options[genreSelect.selectedIndex].value;
+        console.log(genreId)
         try {
           const playlist = await apiCtrl.getMyPlaylists(token);
           for (i = 0; i < playlist.items.length; i++) {
@@ -583,7 +587,7 @@ const appController = (function (apiCtrl, uiCtrl) {
               );
             }
           }} catch (error) {
-            uiCtrl.displayError("Failed to load genre");
+            uiCtrl.displayError(error);
           };
 
         try {
