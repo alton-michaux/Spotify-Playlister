@@ -127,7 +127,7 @@ const uiController = (function () {
     },
 
     populateTrackList(uri, number, name, artist, length, id) {
-      const html = `<div class="track-items"><input class="uri" type="hidden" value=${uri}>${number}. ${name} by ${artist}</input><button class="track-id playlist-items" value=${id}>SELECT</button><div class="track-length">${Math.floor(
+      const html = `<div class="track-items"><input class="uri" type="hidden" value=${uri}>${number}. ${name} by ${artist}</input><button class="track-id playlist-items" id="play" value=${id}>PLAY</button><div class="track-length">${Math.floor(
         length / 1000 / 60
       )}:${Math.floor((length / 1000) % 60).toFixed(0)}</div></div>`;
       document
@@ -431,13 +431,12 @@ const apiController = (function (uiCtrl) {
         Authorization: `Bearer ${token}`,
       },
       body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
-    }).then( async (response) => {
+    }).then( (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        data = response.json()
         return data;
       }
-      uiCtrl.displayError(response.status)
     }).catch(error => {
       uiCtrl.displayError(error)
     })
@@ -480,19 +479,19 @@ const appController = (function (apiCtrl, uiCtrl) {
   //get object reference for DOM outputs
   const domOutput = uiCtrl.outputField();
 
-  const userOps = () => {
+  const userOps = async () => {
     //listener for spotify user login
-    domOutput.login.addEventListener("click", async () => {
-      try {
-        let user = apiCtrl.userLogin()
-        console.log(user)
-        if (user) {
-          await asyncOps();
-        }
-      } catch (error) {
-        uiCtrl.displayError(`ERROR: ${error}`)
-      }
+    const user = domOutput.login.addEventListener("click", async () => {
+                try {
+                  let user = apiCtrl.userLogin()
+                  await asyncOps();
+                  return user
+                } catch (error) {
+                  uiCtrl.displayError(`ERROR: ${error}`)
+                }
     })
+    
+    return user
   }
 
   const asyncOps = async () => {
@@ -650,7 +649,7 @@ const appController = (function (apiCtrl, uiCtrl) {
 
     const tracklistListener = () => {
       //retrieve token
-      let token = uiCtrl.getBackToken().token;
+      let token = uiCtrl.getAccToken()
       const songDiv = domOutput.playlistSongs;
       songDiv.addEventListener("click", async (e) => {
         uiCtrl.resetTrackDetail();
@@ -666,13 +665,13 @@ const appController = (function (apiCtrl, uiCtrl) {
             trackInfo.album.name
           );
           uiCtrl.populateSongImage(trackInfo.album.images[0].url);
-          const uri = trackInfo;
         } catch (error) {
           uiCtrl.displayError("Failed to load song");
         };
 
         try {
-          const trackPlay = await apiCtrl.playFunction(token, uri);
+          console.log(token)
+          await apiCtrl.playFunction(token, uri);
         } catch (error) {
           uiCtrl.displayError("Playback not yet supported");
         };
@@ -681,7 +680,7 @@ const appController = (function (apiCtrl, uiCtrl) {
 
     const trackPlayListener = () => {
       //retrieve token
-      let token = uiCtrl.getBackToken().token;
+      let token = uiCtrl.getAccToken();
       const songPlay = domOutput.play;
       const songSkip = domOutput.skipForward;
       const songBack = domOutput.skipBack;
