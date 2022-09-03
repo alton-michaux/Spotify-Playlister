@@ -190,7 +190,7 @@ var apiController = function (uiCtrl) {
     try {
       this.token = "BQCaKIlsYo48U_Y6b6CSRnJ494fLBEEa7RxEDXqTQ-VSWvHSYNjzO2HuxM-cEtNdi0wJq0L7-EvDbp7rcbOVNdHyKqeAl5EWeCDmW_PjqOkpgp9RamcDZC4TWfiJGj2HoiKU4LJCBc6o9ld84Uwzupq5brpNkJGKNNQfXF2gkS5DTHdW"; // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
 
-      window.spotifyCallback = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var currentUser = window.spotifyCallback = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var popup,
             payload,
             user,
@@ -219,7 +219,9 @@ var apiController = function (uiCtrl) {
           }
         }, _callee);
       }));
-      this.window.spotifyCallback([], this.token); // Open the auth popup
+
+      this.window.spotifyCallback([], this.token);
+      return currentUser; // Open the auth popup
       // const spotifyLoginWindow = window.open(
       //   `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
       //   'Login with Spotify',
@@ -1424,7 +1426,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("0cfebe42be9a3dd3acc5")
+/******/ 		__webpack_require__.h = () => ("ead1c3713cadcb8c6479")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
