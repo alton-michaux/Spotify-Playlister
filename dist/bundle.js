@@ -187,24 +187,43 @@ var uiController = function () {
 var apiController = function (uiCtrl) {
   function _userLogin() {
     try {
-      window.spotifyCallback = function () {
-        var popup = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-        var payload = arguments.length > 1 ? arguments[1] : undefined;
-        // uiCtrl.storeAccessToken(payload)
-        // popup.close()
-        uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
-        uiCtrl.hideElement(uiCtrl.outputField().login);
-        console.log("payload:".concat(payload));
-        payload;
-      }; // Open the auth popup
+      window.spotifyCallback = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var popup,
+            payload,
+            user,
+            _args = arguments;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                popup = _args.length > 0 && _args[0] !== undefined ? _args[0] : [];
+                payload = _args.length > 1 ? _args[1] : undefined;
+                // uiCtrl.storeAccessToken(payload)
+                // popup.close()
+                uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
+                uiCtrl.hideElement(uiCtrl.outputField().login);
+                console.log("payload:".concat(payload));
+                _context.next = 7;
+                return _getUser2(payload);
+
+              case 7:
+                user = _context.sent;
+                console.log("User: ".concat(user));
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      })); // Open the auth popup
       // const spotifyLoginWindow = window.open(
       //   `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
       //   'Login with Spotify',
       //   'width=800,height=600'
       // );
 
-
-      this.token = uiCtrl.getAccToken();
+      this.token = "BQDx7kBemOzsynSU7vPmEKtzh7A3xoXBzHz5RM3YzwRpcJE3bq3FOeHonvR6P-MfU8bvmmtuN0q4-M0hJryXqCgCOSkfj529beYR2UajHRzNhjVtFiLyrtNBwLq38ttyDaqKiBX5xSaKLPReiXhn7EQ6eaM4Xdy6wSFTIzNhBIEyJMDX";
       console.log("this.token:".concat(this.token)); // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
 
       if (this.token) {
@@ -216,20 +235,19 @@ var apiController = function (uiCtrl) {
   } //get access token for users
 
 
-  function _getUser2() {
+  function _getUser2(_x) {
     return _getUser.apply(this, arguments);
   }
 
   function _getUser() {
-    _getUser = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var token, response;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
+    _getUser = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(token) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
               uiCtrl.displayLoadingMessage();
-              token = uiCtrl.getAccToken();
-              _context.next = 4;
+              _context2.next = 3;
               return fetch('https://api.spotify.com/v1/me', {
                 headers: {
                   'Authorization': "Bearer ".concat(token)
@@ -237,7 +255,7 @@ var apiController = function (uiCtrl) {
               }).then(function (response) {
                 if (response.ok) {
                   uiCtrl.hideLoadingMessage();
-                  console.log("Response:".concat(response.json()));
+                  console.log("Token2:".concat(token));
                   return response.json();
                 }
               }).then(function (data) {
@@ -247,16 +265,16 @@ var apiController = function (uiCtrl) {
                 uiCtrl.displayError(error);
               });
 
-            case 4:
-              response = _context.sent;
-              return _context.abrupt("return", response);
+            case 3:
+              response = _context2.sent;
+              return _context2.abrupt("return", response);
 
-            case 6:
+            case 5:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee);
+      }, _callee2);
     }));
     return _getUser.apply(this, arguments);
   }
@@ -268,14 +286,14 @@ var apiController = function (uiCtrl) {
   }
 
   function _getToken() {
-    _getToken = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    _getToken = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var response;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
               uiCtrl.displayLoadingMessage();
-              _context3.next = 3;
+              _context4.next = 3;
               return fetch('https://accounts.spotify.com/api/token', {
                 method: 'POST',
                 headers: {
@@ -284,114 +302,38 @@ var apiController = function (uiCtrl) {
                 },
                 body: 'grant_type=client_credentials'
               }).then( /*#__PURE__*/function () {
-                var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(response) {
+                var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(response) {
                   var _data;
 
-                  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                  return _regeneratorRuntime().wrap(function _callee3$(_context3) {
                     while (1) {
-                      switch (_context2.prev = _context2.next) {
+                      switch (_context3.prev = _context3.next) {
                         case 0:
                           if (!response.ok) {
-                            _context2.next = 6;
+                            _context3.next = 7;
                             break;
                           }
 
                           uiCtrl.hideLoadingMessage();
-                          _context2.next = 4;
+                          _context3.next = 4;
                           return response.json()["catch"](function (error) {
                             uiCtrl.displayError(error);
                           });
 
                         case 4:
-                          _data = _context2.sent;
-                          return _context2.abrupt("return", _data.access_token);
-
-                        case 6:
-                          uiCtrl.displayError(response.status);
+                          _data = _context3.sent;
+                          uiCtrl.storeBackToken(_data.access_token);
+                          return _context3.abrupt("return", _data.access_token);
 
                         case 7:
-                        case "end":
-                          return _context2.stop();
-                      }
-                    }
-                  }, _callee2);
-                }));
-
-                return function (_x11) {
-                  return _ref.apply(this, arguments);
-                };
-              }())["catch"](function (error) {
-                uiCtrl.displayError(error);
-              });
-
-            case 3:
-              response = _context3.sent;
-              return _context3.abrupt("return", response);
-
-            case 5:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3);
-    }));
-    return _getToken.apply(this, arguments);
-  }
-
-  ; //fetch genres from spotify for later sorting
-
-  function _getGenres2(_x) {
-    return _getGenres.apply(this, arguments);
-  }
-
-  function _getGenres() {
-    _getGenres = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(token) {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              uiCtrl.displayLoadingMessage();
-              _context5.next = 3;
-              return fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
-                method: "GET",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer ".concat(token)
-                }
-              }).then( /*#__PURE__*/function () {
-                var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(response) {
-                  var _data2;
-
-                  return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-                    while (1) {
-                      switch (_context4.prev = _context4.next) {
-                        case 0:
-                          if (!response.ok) {
-                            _context4.next = 6;
-                            break;
-                          }
-
-                          uiCtrl.hideLoadingMessage();
-                          _context4.next = 4;
-                          return response.json()["catch"](function (error) {
-                            uiCtrl.displayError(error);
-                          });
-
-                        case 4:
-                          _data2 = _context4.sent;
-                          return _context4.abrupt("return", _data2.genres);
-
-                        case 6:
                           uiCtrl.displayError(response.status);
 
-                        case 7:
+                        case 8:
                         case "end":
-                          return _context4.stop();
+                          return _context3.stop();
                       }
                     }
-                  }, _callee4);
+                  }, _callee3);
                 }));
 
                 return function (_x12) {
@@ -402,36 +344,35 @@ var apiController = function (uiCtrl) {
               });
 
             case 3:
-              response = _context5.sent;
-              return _context5.abrupt("return", response);
+              response = _context4.sent;
+              return _context4.abrupt("return", response);
 
             case 5:
             case "end":
-              return _context5.stop();
+              return _context4.stop();
           }
         }
-      }, _callee5);
+      }, _callee4);
     }));
+    return _getToken.apply(this, arguments);
+  }
+
+  ; //fetch genres from spotify for later sorting
+
+  function _getGenres2(_x2) {
     return _getGenres.apply(this, arguments);
   }
 
-  ; //fetch user playlist information from api
-
-  function _getMyPlaylists2(_x2) {
-    return _getMyPlaylists.apply(this, arguments);
-  }
-
-  function _getMyPlaylists() {
-    _getMyPlaylists = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(token) {
-      var limit, response;
-      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+  function _getGenres() {
+    _getGenres = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(token) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context7.prev = _context7.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
-              limit = 21;
               uiCtrl.displayLoadingMessage();
-              _context7.next = 4;
-              return fetch("https://api.spotify.com/v1/users/".concat("12172782523", "/playlists?limit=").concat(limit, "&offset=0"), {
+              _context6.next = 3;
+              return fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
                 method: "GET",
                 headers: {
                   Accept: "application/json",
@@ -439,37 +380,37 @@ var apiController = function (uiCtrl) {
                   Authorization: "Bearer ".concat(token)
                 }
               }).then( /*#__PURE__*/function () {
-                var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(response) {
-                  var _data3;
+                var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(response) {
+                  var _data2;
 
-                  return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+                  return _regeneratorRuntime().wrap(function _callee5$(_context5) {
                     while (1) {
-                      switch (_context6.prev = _context6.next) {
+                      switch (_context5.prev = _context5.next) {
                         case 0:
                           if (!response.ok) {
-                            _context6.next = 6;
+                            _context5.next = 6;
                             break;
                           }
 
                           uiCtrl.hideLoadingMessage();
-                          _context6.next = 4;
+                          _context5.next = 4;
                           return response.json()["catch"](function (error) {
                             uiCtrl.displayError(error);
                           });
 
                         case 4:
-                          _data3 = _context6.sent;
-                          return _context6.abrupt("return", _data3);
+                          _data2 = _context5.sent;
+                          return _context5.abrupt("return", _data2.genres);
 
                         case 6:
                           uiCtrl.displayError(response.status);
 
                         case 7:
                         case "end":
-                          return _context6.stop();
+                          return _context5.stop();
                       }
                     }
-                  }, _callee6);
+                  }, _callee5);
                 }));
 
                 return function (_x13) {
@@ -479,36 +420,37 @@ var apiController = function (uiCtrl) {
                 uiCtrl.displayError(error);
               });
 
-            case 4:
-              response = _context7.sent;
-              return _context7.abrupt("return", response);
+            case 3:
+              response = _context6.sent;
+              return _context6.abrupt("return", response);
 
-            case 6:
+            case 5:
             case "end":
-              return _context7.stop();
+              return _context6.stop();
           }
         }
-      }, _callee7);
+      }, _callee6);
     }));
-    return _getMyPlaylists.apply(this, arguments);
+    return _getGenres.apply(this, arguments);
   }
 
   ; //fetch user playlist information from api
 
-  function _getPlaylistByID2(_x3, _x4) {
-    return _getPlaylistByID.apply(this, arguments);
+  function _getMyPlaylists2(_x3) {
+    return _getMyPlaylists.apply(this, arguments);
   }
 
-  function _getPlaylistByID() {
-    _getPlaylistByID = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(playlistID, token) {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+  function _getMyPlaylists() {
+    _getMyPlaylists = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(token) {
+      var limit, response;
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) {
-          switch (_context9.prev = _context9.next) {
+          switch (_context8.prev = _context8.next) {
             case 0:
+              limit = 21;
               uiCtrl.displayLoadingMessage();
-              _context9.next = 3;
-              return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID), {
+              _context8.next = 4;
+              return fetch("https://api.spotify.com/v1/users/".concat("12172782523", "/playlists?limit=").concat(limit, "&offset=0"), {
                 method: "GET",
                 headers: {
                   Accept: "application/json",
@@ -516,35 +458,37 @@ var apiController = function (uiCtrl) {
                   Authorization: "Bearer ".concat(token)
                 }
               }).then( /*#__PURE__*/function () {
-                var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(response) {
-                  return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+                var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(response) {
+                  var _data3;
+
+                  return _regeneratorRuntime().wrap(function _callee7$(_context7) {
                     while (1) {
-                      switch (_context8.prev = _context8.next) {
+                      switch (_context7.prev = _context7.next) {
                         case 0:
                           if (!response.ok) {
-                            _context8.next = 6;
+                            _context7.next = 6;
                             break;
                           }
 
                           uiCtrl.hideLoadingMessage();
-                          _context8.next = 4;
+                          _context7.next = 4;
                           return response.json()["catch"](function (error) {
                             uiCtrl.displayError(error);
                           });
 
                         case 4:
-                          data = _context8.sent;
-                          return _context8.abrupt("return", data);
+                          _data3 = _context7.sent;
+                          return _context7.abrupt("return", _data3);
 
                         case 6:
                           uiCtrl.displayError(response.status);
 
                         case 7:
                         case "end":
-                          return _context8.stop();
+                          return _context7.stop();
                       }
                     }
-                  }, _callee8);
+                  }, _callee7);
                 }));
 
                 return function (_x14) {
@@ -554,36 +498,36 @@ var apiController = function (uiCtrl) {
                 uiCtrl.displayError(error);
               });
 
-            case 3:
-              response = _context9.sent;
-              return _context9.abrupt("return", response);
+            case 4:
+              response = _context8.sent;
+              return _context8.abrupt("return", response);
 
-            case 5:
+            case 6:
             case "end":
-              return _context9.stop();
+              return _context8.stop();
           }
         }
-      }, _callee9);
+      }, _callee8);
     }));
+    return _getMyPlaylists.apply(this, arguments);
+  }
+
+  ; //fetch user playlist information from api
+
+  function _getPlaylistByID2(_x4, _x5) {
     return _getPlaylistByID.apply(this, arguments);
   }
 
-  ; //function used to fetch playlist track list
-
-  function _getMyPlaylistsTrackList2(_x5, _x6) {
-    return _getMyPlaylistsTrackList.apply(this, arguments);
-  }
-
-  function _getMyPlaylistsTrackList() {
-    _getMyPlaylistsTrackList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(playlistID, token) {
+  function _getPlaylistByID() {
+    _getPlaylistByID = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(playlistID, token) {
       var response;
-      return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+      return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) {
-          switch (_context11.prev = _context11.next) {
+          switch (_context10.prev = _context10.next) {
             case 0:
               uiCtrl.displayLoadingMessage();
-              _context11.next = 3;
-              return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID, "/tracks"), {
+              _context10.next = 3;
+              return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID), {
                 method: "GET",
                 headers: {
                   Accept: "application/json",
@@ -591,37 +535,35 @@ var apiController = function (uiCtrl) {
                   Authorization: "Bearer ".concat(token)
                 }
               }).then( /*#__PURE__*/function () {
-                var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(response) {
-                  var _data4;
-
-                  return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+                var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(response) {
+                  return _regeneratorRuntime().wrap(function _callee9$(_context9) {
                     while (1) {
-                      switch (_context10.prev = _context10.next) {
+                      switch (_context9.prev = _context9.next) {
                         case 0:
                           if (!response.ok) {
-                            _context10.next = 6;
+                            _context9.next = 6;
                             break;
                           }
 
                           uiCtrl.hideLoadingMessage();
-                          _context10.next = 4;
+                          _context9.next = 4;
                           return response.json()["catch"](function (error) {
                             uiCtrl.displayError(error);
                           });
 
                         case 4:
-                          _data4 = _context10.sent;
-                          return _context10.abrupt("return", _data4);
+                          data = _context9.sent;
+                          return _context9.abrupt("return", data);
 
                         case 6:
                           uiCtrl.displayError(response.status);
 
                         case 7:
                         case "end":
-                          return _context10.stop();
+                          return _context9.stop();
                       }
                     }
-                  }, _callee10);
+                  }, _callee9);
                 }));
 
                 return function (_x15) {
@@ -632,35 +574,35 @@ var apiController = function (uiCtrl) {
               });
 
             case 3:
-              response = _context11.sent;
-              return _context11.abrupt("return", response);
+              response = _context10.sent;
+              return _context10.abrupt("return", response);
 
             case 5:
             case "end":
-              return _context11.stop();
+              return _context10.stop();
           }
         }
-      }, _callee11);
+      }, _callee10);
     }));
+    return _getPlaylistByID.apply(this, arguments);
+  }
+
+  ; //function used to fetch playlist track list
+
+  function _getMyPlaylistsTrackList2(_x6, _x7) {
     return _getMyPlaylistsTrackList.apply(this, arguments);
   }
 
-  ; //function used to fetch individual track info from playlists
-
-  function _getTrackInfo2(_x7, _x8) {
-    return _getTrackInfo.apply(this, arguments);
-  }
-
-  function _getTrackInfo() {
-    _getTrackInfo = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(trackID, token) {
+  function _getMyPlaylistsTrackList() {
+    _getMyPlaylistsTrackList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(playlistID, token) {
       var response;
-      return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+      return _regeneratorRuntime().wrap(function _callee12$(_context12) {
         while (1) {
-          switch (_context13.prev = _context13.next) {
+          switch (_context12.prev = _context12.next) {
             case 0:
               uiCtrl.displayLoadingMessage();
-              _context13.next = 3;
-              return fetch("https://api.spotify.com/v1/tracks/".concat(trackID), {
+              _context12.next = 3;
+              return fetch("https://api.spotify.com/v1/playlists/".concat(playlistID, "/tracks"), {
                 method: "GET",
                 headers: {
                   Accept: "application/json",
@@ -668,37 +610,37 @@ var apiController = function (uiCtrl) {
                   Authorization: "Bearer ".concat(token)
                 }
               }).then( /*#__PURE__*/function () {
-                var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(response) {
-                  var _data5;
+                var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(response) {
+                  var _data4;
 
-                  return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+                  return _regeneratorRuntime().wrap(function _callee11$(_context11) {
                     while (1) {
-                      switch (_context12.prev = _context12.next) {
+                      switch (_context11.prev = _context11.next) {
                         case 0:
                           if (!response.ok) {
-                            _context12.next = 6;
+                            _context11.next = 6;
                             break;
                           }
 
                           uiCtrl.hideLoadingMessage();
-                          _context12.next = 4;
+                          _context11.next = 4;
                           return response.json()["catch"](function (error) {
                             uiCtrl.displayError(error);
                           });
 
                         case 4:
-                          _data5 = _context12.sent;
-                          return _context12.abrupt("return", _data5);
+                          _data4 = _context11.sent;
+                          return _context11.abrupt("return", _data4);
 
                         case 6:
                           uiCtrl.displayError(response.status);
 
                         case 7:
                         case "end":
-                          return _context12.stop();
+                          return _context11.stop();
                       }
                     }
-                  }, _callee12);
+                  }, _callee11);
                 }));
 
                 return function (_x16) {
@@ -709,72 +651,73 @@ var apiController = function (uiCtrl) {
               });
 
             case 3:
-              response = _context13.sent;
-              return _context13.abrupt("return", response);
+              response = _context12.sent;
+              return _context12.abrupt("return", response);
 
             case 5:
             case "end":
-              return _context13.stop();
+              return _context12.stop();
           }
         }
-      }, _callee13);
+      }, _callee12);
     }));
+    return _getMyPlaylistsTrackList.apply(this, arguments);
+  }
+
+  ; //function used to fetch individual track info from playlists
+
+  function _getTrackInfo2(_x8, _x9) {
     return _getTrackInfo.apply(this, arguments);
   }
 
-  ; //fetch play/pause
-
-  function _playFunction2(_x9, _x10) {
-    return _playFunction.apply(this, arguments);
-  }
-
-  function _playFunction() {
-    _playFunction = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(token, uri) {
+  function _getTrackInfo() {
+    _getTrackInfo = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(trackID, token) {
       var response;
-      return _regeneratorRuntime().wrap(function _callee15$(_context15) {
+      return _regeneratorRuntime().wrap(function _callee14$(_context14) {
         while (1) {
-          switch (_context15.prev = _context15.next) {
+          switch (_context14.prev = _context14.next) {
             case 0:
               uiCtrl.displayLoadingMessage();
-              _context15.next = 3;
-              return fetch("https://api.spotify.com/v1/me/player/play", {
-                method: "PUT",
+              _context14.next = 3;
+              return fetch("https://api.spotify.com/v1/tracks/".concat(trackID), {
+                method: "GET",
                 headers: {
                   Accept: "application/json",
                   "Content-Type": "application/json",
                   Authorization: "Bearer ".concat(token)
-                },
-                body: "{\"context_uri\":\"spotify:track:".concat(uri, "\",\"offset\":{\"position\":5},\"position_ms\":0}")
+                }
               }).then( /*#__PURE__*/function () {
-                var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(response) {
-                  return _regeneratorRuntime().wrap(function _callee14$(_context14) {
+                var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(response) {
+                  var _data5;
+
+                  return _regeneratorRuntime().wrap(function _callee13$(_context13) {
                     while (1) {
-                      switch (_context14.prev = _context14.next) {
+                      switch (_context13.prev = _context13.next) {
                         case 0:
                           if (!response.ok) {
-                            _context14.next = 6;
+                            _context13.next = 6;
                             break;
                           }
 
                           uiCtrl.hideLoadingMessage();
-                          _context14.next = 4;
+                          _context13.next = 4;
                           return response.json()["catch"](function (error) {
                             uiCtrl.displayError(error);
                           });
 
                         case 4:
-                          data = _context14.sent;
-                          return _context14.abrupt("return", data);
+                          _data5 = _context13.sent;
+                          return _context13.abrupt("return", _data5);
 
                         case 6:
                           uiCtrl.displayError(response.status);
 
                         case 7:
                         case "end":
-                          return _context14.stop();
+                          return _context13.stop();
                       }
                     }
-                  }, _callee14);
+                  }, _callee13);
                 }));
 
                 return function (_x17) {
@@ -785,15 +728,91 @@ var apiController = function (uiCtrl) {
               });
 
             case 3:
-              response = _context15.sent;
-              return _context15.abrupt("return", response);
+              response = _context14.sent;
+              return _context14.abrupt("return", response);
 
             case 5:
             case "end":
-              return _context15.stop();
+              return _context14.stop();
           }
         }
-      }, _callee15);
+      }, _callee14);
+    }));
+    return _getTrackInfo.apply(this, arguments);
+  }
+
+  ; //fetch play/pause
+
+  function _playFunction2(_x10, _x11) {
+    return _playFunction.apply(this, arguments);
+  }
+
+  function _playFunction() {
+    _playFunction = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(token, uri) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+        while (1) {
+          switch (_context16.prev = _context16.next) {
+            case 0:
+              uiCtrl.displayLoadingMessage();
+              _context16.next = 3;
+              return fetch("https://api.spotify.com/v1/me/player/play", {
+                method: "PUT",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer ".concat(token)
+                },
+                body: "{\"context_uri\":\"spotify:track:".concat(uri, "\",\"offset\":{\"position\":5},\"position_ms\":0}")
+              }).then( /*#__PURE__*/function () {
+                var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(response) {
+                  return _regeneratorRuntime().wrap(function _callee15$(_context15) {
+                    while (1) {
+                      switch (_context15.prev = _context15.next) {
+                        case 0:
+                          if (!response.ok) {
+                            _context15.next = 6;
+                            break;
+                          }
+
+                          uiCtrl.hideLoadingMessage();
+                          _context15.next = 4;
+                          return response.json()["catch"](function (error) {
+                            uiCtrl.displayError(error);
+                          });
+
+                        case 4:
+                          data = _context15.sent;
+                          return _context15.abrupt("return", data);
+
+                        case 6:
+                          uiCtrl.displayError(response.status);
+
+                        case 7:
+                        case "end":
+                          return _context15.stop();
+                      }
+                    }
+                  }, _callee15);
+                }));
+
+                return function (_x18) {
+                  return _ref8.apply(this, arguments);
+                };
+              }())["catch"](function (error) {
+                uiCtrl.displayError(error);
+              });
+
+            case 3:
+              response = _context16.sent;
+              return _context16.abrupt("return", response);
+
+            case 5:
+            case "end":
+              return _context16.stop();
+          }
+        }
+      }, _callee16);
     }));
     return _playFunction.apply(this, arguments);
   }
@@ -836,77 +855,66 @@ var appController = function (apiCtrl, uiCtrl) {
 
   var userOps = function userOps() {
     //listener for spotify user login
-    domOutput.login.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16() {
-      var token, user;
-      return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+    domOutput.login.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
+      var user;
+      return _regeneratorRuntime().wrap(function _callee17$(_context17) {
         while (1) {
-          switch (_context16.prev = _context16.next) {
+          switch (_context17.prev = _context17.next) {
             case 0:
-              _context16.prev = 0;
-              _context16.next = 3;
-              return apiCtrl.userLogin();
-
-            case 3:
-              token = _context16.sent;
-              console.log("Token: ".concat(token));
-              _context16.next = 7;
-              return apiCtrl.getUser();
-
-            case 7:
-              user = _context16.sent;
-              console.log(user);
+              _context17.prev = 0;
+              user = apiCtrl.userLogin();
 
               if (!user) {
-                _context16.next = 13;
+                _context17.next = 6;
                 break;
               }
 
               uiCtrl.displayUserName(user.display_name);
-              _context16.next = 13;
+              _context17.next = 6;
               return asyncOps();
 
-            case 13:
-              _context16.next = 18;
+            case 6:
+              _context17.next = 11;
               break;
 
-            case 15:
-              _context16.prev = 15;
-              _context16.t0 = _context16["catch"](0);
-              uiCtrl.displayError("ERROR: ".concat(_context16.t0));
+            case 8:
+              _context17.prev = 8;
+              _context17.t0 = _context17["catch"](0);
+              uiCtrl.displayError("ERROR: ".concat(_context17.t0));
 
-            case 18:
+            case 11:
             case "end":
-              return _context16.stop();
+              return _context17.stop();
           }
         }
-      }, _callee16, null, [[0, 15]]);
+      }, _callee17, null, [[0, 8]]);
     })));
   };
 
   var asyncOps = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee23() {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee24() {
       var token, genrePopulate, musicPopulate, genreListener, playlistListener, tracklistListener, trackPlayListener;
-      return _regeneratorRuntime().wrap(function _callee23$(_context23) {
+      return _regeneratorRuntime().wrap(function _callee24$(_context24) {
         while (1) {
-          switch (_context23.prev = _context23.next) {
+          switch (_context24.prev = _context24.next) {
             case 0:
-              _context23.next = 2;
+              _context24.next = 2;
               return apiCtrl.getToken();
 
             case 2:
-              token = _context23.sent;
+              token = _context24.sent;
               uiCtrl.storeBackToken(token);
 
               genrePopulate = /*#__PURE__*/function () {
-                var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
+                var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18() {
                   var token;
-                  return _regeneratorRuntime().wrap(function _callee17$(_context17) {
+                  return _regeneratorRuntime().wrap(function _callee18$(_context18) {
                     while (1) {
-                      switch (_context17.prev = _context17.next) {
+                      switch (_context18.prev = _context18.next) {
                         case 0:
                           token = uiCtrl.getBackToken();
-                          _context17.prev = 1;
-                          _context17.next = 4;
+                          _context18.prev = 1;
+                          _context18.next = 4;
                           return apiCtrl.getGenres(token).then(function (data) {
                             //populate drop-down menu with genres
                             data.forEach(function (element) {
@@ -915,12 +923,12 @@ var appController = function (apiCtrl, uiCtrl) {
                           });
 
                         case 4:
-                          _context17.next = 9;
+                          _context18.next = 9;
                           break;
 
                         case 6:
-                          _context17.prev = 6;
-                          _context17.t0 = _context17["catch"](1);
+                          _context18.prev = 6;
+                          _context18.t0 = _context18["catch"](1);
                           uiCtrl.displayError("Failed to load genres");
 
                         case 9:
@@ -928,32 +936,32 @@ var appController = function (apiCtrl, uiCtrl) {
 
                         case 10:
                         case "end":
-                          return _context17.stop();
+                          return _context18.stop();
                       }
                     }
-                  }, _callee17, null, [[1, 6]]);
+                  }, _callee18, null, [[1, 6]]);
                 }));
 
                 return function genrePopulate() {
-                  return _ref10.apply(this, arguments);
+                  return _ref11.apply(this, arguments);
                 };
               }();
 
               musicPopulate = /*#__PURE__*/function () {
-                var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18() {
+                var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19() {
                   var token, data, title, id, _i, trackList, _i2, songInfo, songImage;
 
-                  return _regeneratorRuntime().wrap(function _callee18$(_context18) {
+                  return _regeneratorRuntime().wrap(function _callee19$(_context19) {
                     while (1) {
-                      switch (_context18.prev = _context18.next) {
+                      switch (_context19.prev = _context19.next) {
                         case 0:
                           token = uiCtrl.getBackToken().token; // fetch playlist info for each playlist
 
-                          _context18.next = 3;
+                          _context19.next = 3;
                           return apiCtrl.getMyPlaylists(token);
 
                         case 3:
-                          data = _context18.sent;
+                          data = _context19.sent;
                           title = data.items[3].name;
                           id = data.items[3].id; // print title
 
@@ -966,61 +974,61 @@ var appController = function (apiCtrl, uiCtrl) {
                           }
 
                           ;
-                          _context18.next = 12;
+                          _context19.next = 12;
                           return apiCtrl.getMyPlaylistsTrackList(data.items[3].id, token);
 
                         case 12:
-                          trackList = _context18.sent;
+                          trackList = _context19.sent;
 
                           for (_i2 = 0; _i2 < trackList.items.length; _i2++) {
                             uiCtrl.populateTrackList(trackList.items[_i2].track.uri, _i2 + 1, trackList.items[_i2].track.name, trackList.items[_i2].track.artists[0].name, trackList.items[_i2].track.duration_ms, trackList.items[_i2].track.id);
                           }
 
-                          _context18.next = 16;
+                          _context19.next = 16;
                           return apiCtrl.getTrackInfo(trackList.items[0].track.id, token);
 
                         case 16:
-                          songInfo = _context18.sent;
+                          songInfo = _context19.sent;
                           uiCtrl.populateSongInfo(songInfo.name, songInfo.artists[0].name, songInfo.album.name);
-                          _context18.next = 20;
+                          _context19.next = 20;
                           return apiCtrl.getTrackInfo(trackList.items[0].track.id, token);
 
                         case 20:
-                          songImage = _context18.sent;
+                          songImage = _context19.sent;
                           //place song images
                           uiCtrl.populateSongImage(songImage.album.images[0].url);
 
                         case 22:
                         case "end":
-                          return _context18.stop();
+                          return _context19.stop();
                       }
                     }
-                  }, _callee18);
+                  }, _callee19);
                 }));
 
                 return function musicPopulate() {
-                  return _ref11.apply(this, arguments);
+                  return _ref12.apply(this, arguments);
                 };
               }();
 
               genreListener = function genreListener() {
                 var token = uiCtrl.getBackToken().token;
                 var genreSelect = domOutput.genreSelect;
-                genreSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19() {
+                genreSelect.addEventListener("change", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20() {
                   var genreId, _playlist, description, title, trackList, songImage;
 
-                  return _regeneratorRuntime().wrap(function _callee19$(_context19) {
+                  return _regeneratorRuntime().wrap(function _callee20$(_context20) {
                     while (1) {
-                      switch (_context19.prev = _context19.next) {
+                      switch (_context20.prev = _context20.next) {
                         case 0:
                           uiCtrl.resetPlaylists();
                           genreId = genreSelect.options[genreSelect.selectedIndex].value;
-                          _context19.prev = 2;
-                          _context19.next = 5;
+                          _context20.prev = 2;
+                          _context20.next = 5;
                           return apiCtrl.getMyPlaylists(token);
 
                         case 5:
-                          _playlist = _context19.sent;
+                          _playlist = _context20.sent;
 
                           for (i = 0; i < _playlist.items.length; i++) {
                             description = _playlist.items[i].description;
@@ -1037,27 +1045,27 @@ var appController = function (apiCtrl, uiCtrl) {
                             }
                           }
 
-                          _context19.next = 12;
+                          _context20.next = 12;
                           break;
 
                         case 9:
-                          _context19.prev = 9;
-                          _context19.t0 = _context19["catch"](2);
+                          _context20.prev = 9;
+                          _context20.t0 = _context20["catch"](2);
                           uiCtrl.displayError("Failed to load genre");
 
                         case 12:
                           ;
-                          _context19.prev = 13;
-                          _context19.next = 16;
+                          _context20.prev = 13;
+                          _context20.next = 16;
                           return apiCtrl.getMyPlaylistsTrackList(playlist.items[i].id, token);
 
                         case 16:
-                          trackList = _context19.sent;
+                          trackList = _context20.sent;
                           j = 0;
 
                         case 18:
                           if (!(j < trackList.items.length)) {
-                            _context19.next = 30;
+                            _context20.next = 30;
                             break;
                           }
 
@@ -1065,15 +1073,15 @@ var appController = function (apiCtrl, uiCtrl) {
                           uiCtrl.populateTrackList(trackList.items[j].track.uri, j + 1, trackList.items[j].track.name, trackList.items[j].track.artists[0].name, trackList.items[j].track.duration_ms, trackList.items[i].track.id); //fetch current song image
 
                           if (!(j == 0)) {
-                            _context19.next = 26;
+                            _context20.next = 26;
                             break;
                           }
 
-                          _context19.next = 23;
+                          _context20.next = 23;
                           return apiCtrl.getTrackInfo(trackList.items[j].track.id, token);
 
                         case 23:
-                          songImage = _context19.sent;
+                          songImage = _context20.sent;
                           uiCtrl.populateSongInfo(songImage.name, songImage.artists[0].name, songImage.album.name);
                           uiCtrl.populateSongImage(songImage.album.images[0].url);
 
@@ -1082,16 +1090,16 @@ var appController = function (apiCtrl, uiCtrl) {
 
                         case 27:
                           j++;
-                          _context19.next = 18;
+                          _context20.next = 18;
                           break;
 
                         case 30:
-                          _context19.next = 35;
+                          _context20.next = 35;
                           break;
 
                         case 32:
-                          _context19.prev = 32;
-                          _context19.t1 = _context19["catch"](13);
+                          _context20.prev = 32;
+                          _context20.t1 = _context20["catch"](13);
                           uiCtrl.displayError("Failed to load playlist");
 
                         case 35:
@@ -1099,10 +1107,10 @@ var appController = function (apiCtrl, uiCtrl) {
 
                         case 36:
                         case "end":
-                          return _context19.stop();
+                          return _context20.stop();
                       }
                     }
-                  }, _callee19, null, [[2, 9], [13, 32]]);
+                  }, _callee20, null, [[2, 9], [13, 32]]);
                 })));
               };
 
@@ -1110,42 +1118,42 @@ var appController = function (apiCtrl, uiCtrl) {
                 var token = uiCtrl.getBackToken().token;
                 var playlistContainer = domOutput.playlistLibrary;
                 playlistContainer.addEventListener("click", /*#__PURE__*/function () {
-                  var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20(e) {
+                  var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21(e) {
                     var btnID, currentPlaylist, trackList, trackInfo;
-                    return _regeneratorRuntime().wrap(function _callee20$(_context20) {
+                    return _regeneratorRuntime().wrap(function _callee21$(_context21) {
                       while (1) {
-                        switch (_context20.prev = _context20.next) {
+                        switch (_context21.prev = _context21.next) {
                           case 0:
                             uiCtrl.resetTracks();
                             btnID = e.target.value || e.target.parentElement.value;
-                            _context20.prev = 2;
-                            _context20.next = 5;
+                            _context21.prev = 2;
+                            _context21.next = 5;
                             return apiCtrl.getPlaylistByID(btnID, token);
 
                           case 5:
-                            currentPlaylist = _context20.sent;
+                            currentPlaylist = _context21.sent;
                             uiCtrl.assignPlaylistArt(currentPlaylist.images[0].url);
                             uiCtrl.assignTitle(currentPlaylist.id, currentPlaylist.name);
-                            _context20.next = 10;
+                            _context21.next = 10;
                             return apiCtrl.getMyPlaylistsTrackList(btnID, token);
 
                           case 10:
-                            trackList = _context20.sent;
+                            trackList = _context21.sent;
                             i = 0;
 
                           case 12:
                             if (!(i < trackList.items.length)) {
-                              _context20.next = 21;
+                              _context21.next = 21;
                               break;
                             }
 
                             uiCtrl.populateTrackList(trackList.items[i].track.uri, i + 1, trackList.items[i].track.name, trackList.items[i].track.artists[0].name, trackList.items[i].track.duration_ms, trackList.items[i].track.id); //fetch current song image
 
-                            _context20.next = 16;
+                            _context21.next = 16;
                             return apiCtrl.getTrackInfo(trackList.items[i].track.id, token);
 
                           case 16:
-                            trackInfo = _context20.sent;
+                            trackInfo = _context21.sent;
 
                             if (i == 0) {
                               uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
@@ -1154,83 +1162,17 @@ var appController = function (apiCtrl, uiCtrl) {
 
                           case 18:
                             i++;
-                            _context20.next = 12;
+                            _context21.next = 12;
                             break;
 
                           case 21:
-                            _context20.next = 26;
-                            break;
-
-                          case 23:
-                            _context20.prev = 23;
-                            _context20.t0 = _context20["catch"](2);
-                            uiCtrl.displayError("Failed to load playlist");
-
-                          case 26:
-                            ;
-
-                          case 27:
-                          case "end":
-                            return _context20.stop();
-                        }
-                      }
-                    }, _callee20, null, [[2, 23]]);
-                  }));
-
-                  return function (_x18) {
-                    return _ref13.apply(this, arguments);
-                  };
-                }());
-              };
-
-              tracklistListener = function tracklistListener() {
-                //retrieve token
-                var token = uiCtrl.getBackToken().token;
-                var songDiv = domOutput.playlistSongs;
-                songDiv.addEventListener("click", /*#__PURE__*/function () {
-                  var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21(e) {
-                    var trackDiv, uri, trackID, trackInfo, _uri, trackPlay;
-
-                    return _regeneratorRuntime().wrap(function _callee21$(_context21) {
-                      while (1) {
-                        switch (_context21.prev = _context21.next) {
-                          case 0:
-                            uiCtrl.resetTrackDetail();
-                            trackDiv = document.getElementsByClassName("track-items");
-                            uri = document.querySelector("uri");
-                            trackID = e.target.value;
-                            _context21.prev = 4;
-                            _context21.next = 7;
-                            return apiCtrl.getTrackInfo(trackID, token);
-
-                          case 7:
-                            trackInfo = _context21.sent;
-                            uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
-                            uiCtrl.populateSongImage(trackInfo.album.images[0].url);
-                            _uri = trackInfo;
-                            _context21.next = 16;
-                            break;
-
-                          case 13:
-                            _context21.prev = 13;
-                            _context21.t0 = _context21["catch"](4);
-                            uiCtrl.displayError("Failed to load song");
-
-                          case 16:
-                            ;
-                            _context21.prev = 17;
-                            _context21.next = 20;
-                            return apiCtrl.playFunction(token, uri);
-
-                          case 20:
-                            trackPlay = _context21.sent;
                             _context21.next = 26;
                             break;
 
                           case 23:
                             _context21.prev = 23;
-                            _context21.t1 = _context21["catch"](17);
-                            uiCtrl.displayError("Playback not yet supported");
+                            _context21.t0 = _context21["catch"](2);
+                            uiCtrl.displayError("Failed to load playlist");
 
                           case 26:
                             ;
@@ -1240,11 +1182,77 @@ var appController = function (apiCtrl, uiCtrl) {
                             return _context21.stop();
                         }
                       }
-                    }, _callee21, null, [[4, 13], [17, 23]]);
+                    }, _callee21, null, [[2, 23]]);
                   }));
 
                   return function (_x19) {
                     return _ref14.apply(this, arguments);
+                  };
+                }());
+              };
+
+              tracklistListener = function tracklistListener() {
+                //retrieve token
+                var token = uiCtrl.getBackToken().token;
+                var songDiv = domOutput.playlistSongs;
+                songDiv.addEventListener("click", /*#__PURE__*/function () {
+                  var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee22(e) {
+                    var trackDiv, uri, trackID, trackInfo, _uri, trackPlay;
+
+                    return _regeneratorRuntime().wrap(function _callee22$(_context22) {
+                      while (1) {
+                        switch (_context22.prev = _context22.next) {
+                          case 0:
+                            uiCtrl.resetTrackDetail();
+                            trackDiv = document.getElementsByClassName("track-items");
+                            uri = document.querySelector("uri");
+                            trackID = e.target.value;
+                            _context22.prev = 4;
+                            _context22.next = 7;
+                            return apiCtrl.getTrackInfo(trackID, token);
+
+                          case 7:
+                            trackInfo = _context22.sent;
+                            uiCtrl.populateSongInfo(trackInfo.name, trackInfo.artists[0].name, trackInfo.album.name);
+                            uiCtrl.populateSongImage(trackInfo.album.images[0].url);
+                            _uri = trackInfo;
+                            _context22.next = 16;
+                            break;
+
+                          case 13:
+                            _context22.prev = 13;
+                            _context22.t0 = _context22["catch"](4);
+                            uiCtrl.displayError("Failed to load song");
+
+                          case 16:
+                            ;
+                            _context22.prev = 17;
+                            _context22.next = 20;
+                            return apiCtrl.playFunction(token, uri);
+
+                          case 20:
+                            trackPlay = _context22.sent;
+                            _context22.next = 26;
+                            break;
+
+                          case 23:
+                            _context22.prev = 23;
+                            _context22.t1 = _context22["catch"](17);
+                            uiCtrl.displayError("Playback not yet supported");
+
+                          case 26:
+                            ;
+
+                          case 27:
+                          case "end":
+                            return _context22.stop();
+                        }
+                      }
+                    }, _callee22, null, [[4, 13], [17, 23]]);
+                  }));
+
+                  return function (_x20) {
+                    return _ref15.apply(this, arguments);
                   };
                 }());
               };
@@ -1255,25 +1263,25 @@ var appController = function (apiCtrl, uiCtrl) {
                 var songPlay = domOutput.play;
                 var songSkip = domOutput.skipForward;
                 var songBack = domOutput.skipBack;
-                songPlay.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee22() {
+                songPlay.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee23() {
                   var tracklist, uri;
-                  return _regeneratorRuntime().wrap(function _callee22$(_context22) {
+                  return _regeneratorRuntime().wrap(function _callee23$(_context23) {
                     while (1) {
-                      switch (_context22.prev = _context22.next) {
+                      switch (_context23.prev = _context23.next) {
                         case 0:
                           tracklist = domOutput.playlistSongs.children;
                           uri = tracklist[0].childNodes[0].defaultValue;
-                          _context22.prev = 2;
-                          _context22.next = 5;
+                          _context23.prev = 2;
+                          _context23.next = 5;
                           return apiCtrl.playFunction(token, uri);
 
                         case 5:
-                          _context22.next = 10;
+                          _context23.next = 10;
                           break;
 
                         case 7:
-                          _context22.prev = 7;
-                          _context22.t0 = _context22["catch"](2);
+                          _context23.prev = 7;
+                          _context23.t0 = _context23["catch"](2);
                           uiCtrl.displayError("Playback error");
 
                         case 10:
@@ -1281,10 +1289,10 @@ var appController = function (apiCtrl, uiCtrl) {
 
                         case 11:
                         case "end":
-                          return _context22.stop();
+                          return _context23.stop();
                       }
                     }
-                  }, _callee22, null, [[2, 7]]);
+                  }, _callee23, null, [[2, 7]]);
                 })));
               };
 
@@ -1297,14 +1305,14 @@ var appController = function (apiCtrl, uiCtrl) {
 
             case 16:
             case "end":
-              return _context23.stop();
+              return _context24.stop();
           }
         }
-      }, _callee23);
+      }, _callee24);
     }));
 
     return function asyncOps() {
-      return _ref9.apply(this, arguments);
+      return _ref10.apply(this, arguments);
     };
   }();
 
@@ -1420,7 +1428,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("2fafa0b5bb76ef33475c")
+/******/ 		__webpack_require__.h = () => ("6422d33fce3a5f81b252")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

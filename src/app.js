@@ -191,19 +191,19 @@ const uiController = (function () {
 
     getBackToken() {
       return {
-        token: document.querySelector(domElements.hToken).value,
+        token: document.querySelector(domElements.hToken).value
       };
     },
 
     getAccToken() {
       return {
-        token: document.querySelector(domElements.accToken).value,
+        token: document.querySelector(domElements.accToken).value
       };
     },
 
     getRefToken() {
       return {
-        token: document.querySelector(domElements.refToken).value,
+        token: document.querySelector(domElements.refToken).value
       };
     }
   };
@@ -212,7 +212,7 @@ const uiController = (function () {
 const apiController = (function (uiCtrl) {
   function userLogin() {
     try {
-      window.spotifyCallback = (popup = [], payload) => {
+      window.spotifyCallback = async (popup = [], payload) => {
         // uiCtrl.storeAccessToken(payload)
         
         // popup.close()
@@ -220,7 +220,9 @@ const apiController = (function (uiCtrl) {
         uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
         uiCtrl.hideElement(uiCtrl.outputField().login)
         console.log(`payload:${payload}`)
-        payload
+
+        const user = await getUser(payload)
+        console.log(`User: ${user}`)
       }
       
       // Open the auth popup
@@ -230,7 +232,7 @@ const apiController = (function (uiCtrl) {
       //   'width=800,height=600'
       // );
 
-      this.token = uiCtrl.getAccToken()
+      this.token = "BQDx7kBemOzsynSU7vPmEKtzh7A3xoXBzHz5RM3YzwRpcJE3bq3FOeHonvR6P-MfU8bvmmtuN0q4-M0hJryXqCgCOSkfj529beYR2UajHRzNhjVtFiLyrtNBwLq38ttyDaqKiBX5xSaKLPReiXhn7EQ6eaM4Xdy6wSFTIzNhBIEyJMDX"
       console.log(`this.token:${this.token}`)
       // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
 
@@ -243,9 +245,8 @@ const apiController = (function (uiCtrl) {
   }
 
   //get access token for users
-  async function getUser() {
+  async function getUser(token) {
     uiCtrl.displayLoadingMessage()
-    const token = uiCtrl.getAccToken()
     const response = await fetch('https://api.spotify.com/v1/me', {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -253,7 +254,7 @@ const apiController = (function (uiCtrl) {
     }).then(response => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        console.log(`Response:${response.json()}`)
+        console.log(`Token2:${token}`)
         return response.json()
       }
     }).then(data => {
@@ -281,6 +282,7 @@ const apiController = (function (uiCtrl) {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
         const data = await response.json().catch( (error) => { uiCtrl.displayError(error) })
+        uiCtrl.storeBackToken(data.access_token)
         return data.access_token;
       }
       uiCtrl.displayError(response.status)
@@ -487,11 +489,7 @@ const appController = (function (apiCtrl, uiCtrl) {
     //listener for spotify user login
     domOutput.login.addEventListener("click", async () => {
       try {
-        let token = await apiCtrl.userLogin()
-        console.log(`Token: ${token}`)
-
-        const user = await apiCtrl.getUser()
-        console.log(user)
+        let user = apiCtrl.userLogin()
         if (user) {
           uiCtrl.displayUserName(user.display_name)
   
