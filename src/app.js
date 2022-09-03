@@ -212,30 +212,30 @@ const uiController = (function () {
 const apiController = (function (uiCtrl) {
   function userLogin() {
     try {
-      window.spotifyCallback = (popup, payload) => {
-        console.log(payload)
-        uiCtrl.storeAccessToken(payload)
+      window.spotifyCallback = (popup = [], payload) => {
+        // uiCtrl.storeAccessToken(payload)
         
         // popup.close()
         
         uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
         uiCtrl.hideElement(uiCtrl.outputField().login)
-        
-        getUser(payload)
+        console.log(`payload:${payload}`)
+        payload
       }
       
       // Open the auth popup
-      const spotifyLoginWindow = window.open(
-        `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
-        'Login with Spotify',
-        'width=800,height=600'
-      );
+      // const spotifyLoginWindow = window.open(
+      //   `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
+      //   'Login with Spotify',
+      //   'width=800,height=600'
+      // );
 
-      setTimeout(this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0], 10000)
-      console.log(spotifyLoginWindow.window.location.hash)
+      this.token = uiCtrl.getAccToken()
+      console.log(`this.token:${this.token}`)
+      // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
 
       if (this.token) {
-        this.window.spotifyCallback(spotifyLoginWindow, this.token);
+        this.window.spotifyCallback([], this.token);
       }
     } catch (error) {
       uiCtrl.displayError(`ERROR:${error}`);
@@ -243,8 +243,9 @@ const apiController = (function (uiCtrl) {
   }
 
   //get access token for users
-  async function getUser(token) {
+  async function getUser() {
     uiCtrl.displayLoadingMessage()
+    const token = uiCtrl.getAccToken()
     const response = await fetch('https://api.spotify.com/v1/me', {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -252,9 +253,11 @@ const apiController = (function (uiCtrl) {
     }).then(response => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
+        console.log(`Response:${response.json()}`)
         return response.json()
       }
     }).then(data => {
+      console.log(`Data:${data}`)
       data
     })
     .catch (error => {
@@ -484,10 +487,14 @@ const appController = (function (apiCtrl, uiCtrl) {
     //listener for spotify user login
     domOutput.login.addEventListener("click", async () => {
       try {
-        const user = await apiCtrl.userLogin()
-        console.log(`User: ${user}`)
+        let token = await apiCtrl.userLogin()
+        console.log(`Token: ${token}`)
+
+        const user = await apiCtrl.getUser()
+        console.log(user)
         if (user) {
           uiCtrl.displayUserName(user.display_name)
+  
           await asyncOps();
         }
       } catch (error) {
@@ -501,7 +508,7 @@ const appController = (function (apiCtrl, uiCtrl) {
     uiCtrl.storeBackToken(token);
 
     const genrePopulate = async () => {
-      let token = uiCtrl.getBackToken().token;
+      let token = uiCtrl.getBackToken();
       try {
         await apiCtrl.getGenres(token)
           .then((data) => {
