@@ -207,35 +207,27 @@ var apiController = function (uiCtrl) {
 
   function _userLogin() {
     _userLogin = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var currentUser;
+      var authToken, currentUser;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               // Open the auth popup
               window.location.href = "https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000", "&response_type=token&scope=").concat("user-modify-playback-state user-follow-modify user-read-private user-read-email");
-              this.authToken = window.location.hash.substring(14).split('&')[0];
-              localStorage.setItem("authToken", this.authToken);
+              authToken = window.location.hash.substring(14).split('&')[0];
+              localStorage.setItem("authToken", authToken);
               _context2.prev = 3;
 
               currentUser = window.spotifyCallback = /*#__PURE__*/function () {
                 var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(payload) {
-                  var user;
                   return _regeneratorRuntime().wrap(function _callee$(_context) {
                     while (1) {
                       switch (_context.prev = _context.next) {
                         case 0:
                           uiCtrl.storeAuthToken(payload);
-                          uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
-                          uiCtrl.hideElement(uiCtrl.outputField().login);
-                          _context.next = 5;
-                          return _getUser2(payload);
+                          return _context.abrupt("return", payload);
 
-                        case 5:
-                          user = _context.sent;
-                          return _context.abrupt("return", user);
-
-                        case 7:
+                        case 2:
                         case "end":
                           return _context.stop();
                       }
@@ -248,32 +240,33 @@ var apiController = function (uiCtrl) {
                 };
               }();
 
-              if (!this.authToken) {
-                _context2.next = 10;
+              if (!authToken) {
+                _context2.next = 11;
                 break;
               }
 
-              window.spotifyCallback(this.authToken);
+              window.spotifyCallback(authToken);
+              window.close();
               return _context2.abrupt("return", currentUser);
 
-            case 10:
+            case 11:
               uiCtrl.displayError("Failed to fetch token");
 
-            case 11:
-              _context2.next = 16;
+            case 12:
+              _context2.next = 17;
               break;
 
-            case 13:
-              _context2.prev = 13;
+            case 14:
+              _context2.prev = 14;
               _context2.t0 = _context2["catch"](3);
               uiCtrl.displayError("ERROR:".concat(_context2.t0));
 
-            case 16:
+            case 17:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, this, [[3, 13]]);
+      }, _callee2, null, [[3, 14]]);
     }));
     return _userLogin.apply(this, arguments);
   }
@@ -289,8 +282,10 @@ var apiController = function (uiCtrl) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
+              uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
+              uiCtrl.hideElement(uiCtrl.outputField().login);
               uiCtrl.displayLoadingMessage();
-              _context3.next = 3;
+              _context3.next = 5;
               return fetch("".concat("https://api.spotify.com/v1/", "me"), {
                 headers: {
                   'Authorization': "Bearer ".concat(token)
@@ -309,12 +304,12 @@ var apiController = function (uiCtrl) {
                 uiCtrl.displayError(error);
               });
 
-            case 3:
+            case 5:
               response = _context3.sent;
               uiCtrl.displayUserName(response.display_name);
               return _context3.abrupt("return", response);
 
-            case 6:
+            case 8:
             case "end":
               return _context3.stop();
           }
@@ -883,48 +878,79 @@ var appController = function (apiCtrl, uiCtrl) {
             case 0:
               //listener for spotify user login
               user = domOutput.login.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
-                var _user;
+                var token, _user, _token, _user2;
 
                 return _regeneratorRuntime().wrap(function _callee17$(_context17) {
                   while (1) {
                     switch (_context17.prev = _context17.next) {
                       case 0:
                         _context17.prev = 0;
-                        _context17.next = 3;
-                        return apiCtrl.userLogin();
+                        token = localStorage.getItem("authToken");
 
-                      case 3:
-                        _user = _context17.sent;
-
-                        if (!_user) {
-                          _context17.next = 10;
+                        if (!token) {
+                          _context17.next = 14;
                           break;
                         }
 
-                        _context17.next = 7;
+                        uiCtrl.storeAuthToken(token);
+                        _user = apiCtrl.getUser(token);
+
+                        if (!_user) {
+                          _context17.next = 11;
+                          break;
+                        }
+
+                        _context17.next = 8;
                         return asyncOps();
 
-                      case 7:
+                      case 8:
                         return _context17.abrupt("return", _user);
 
-                      case 10:
-                        alert("Failed to Fetch Token");
-
                       case 11:
-                        _context17.next = 16;
+                        alert("Failed to Fetch User");
+
+                      case 12:
+                        _context17.next = 26;
                         break;
 
-                      case 13:
-                        _context17.prev = 13;
+                      case 14:
+                        _context17.next = 16;
+                        return apiCtrl.userLogin();
+
+                      case 16:
+                        _token = _context17.sent;
+                        uiCtrl.storeAuthToken(_token);
+                        _user2 = apiCtrl.getUser(_token);
+
+                        if (!_user2) {
+                          _context17.next = 25;
+                          break;
+                        }
+
+                        _context17.next = 22;
+                        return asyncOps();
+
+                      case 22:
+                        return _context17.abrupt("return", _user2);
+
+                      case 25:
+                        alert("Failed to Fetch User");
+
+                      case 26:
+                        _context17.next = 31;
+                        break;
+
+                      case 28:
+                        _context17.prev = 28;
                         _context17.t0 = _context17["catch"](0);
                         uiCtrl.displayError("ERROR: ".concat(_context17.t0));
 
-                      case 16:
+                      case 31:
                       case "end":
                         return _context17.stop();
                     }
                   }
-                }, _callee17, null, [[0, 13]]);
+                }, _callee17, null, [[0, 28]]);
               })));
               return _context18.abrupt("return", user);
 
@@ -1244,7 +1270,7 @@ var appController = function (apiCtrl, uiCtrl) {
                 var songDiv = domOutput.playlistSongs;
                 songDiv.addEventListener("click", /*#__PURE__*/function () {
                   var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee23(e) {
-                    var trackDiv, uri, trackID, _token, trackInfo;
+                    var trackDiv, uri, trackID, _token2, trackInfo;
 
                     return _regeneratorRuntime().wrap(function _callee23$(_context23) {
                       while (1) {
@@ -1255,9 +1281,9 @@ var appController = function (apiCtrl, uiCtrl) {
                             uri = document.querySelector(".uri").value;
                             trackID = e.target.value;
                             _context23.prev = 4;
-                            _token = uiCtrl.getBackToken();
+                            _token2 = uiCtrl.getBackToken();
                             _context23.next = 8;
-                            return apiCtrl.getTrackInfo(trackID, _token);
+                            return apiCtrl.getTrackInfo(trackID, _token2);
 
                           case 8:
                             trackInfo = _context23.sent;
@@ -1474,7 +1500,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("310bbd862939504b7137")
+/******/ 		__webpack_require__.h = () => ("7f9c64cc5de04777286f")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

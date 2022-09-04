@@ -228,22 +228,19 @@ const apiController = (function (uiCtrl) {
     // Open the auth popup
     window.location.href = `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token&scope=${process.env.SCOPES}`
 
-    this.authToken = window.location.hash.substring(14).split('&')[0]
-    localStorage.setItem("authToken", this.authToken)
+    const authToken = window.location.hash.substring(14).split('&')[0]
+    localStorage.setItem("authToken", authToken)
 
     try {      
       const currentUser = window.spotifyCallback = async (payload) => {
         uiCtrl.storeAuthToken(payload)
         
-        uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
-        uiCtrl.hideElement(uiCtrl.outputField().login)
-
-        const user = await getUser(payload)
-        return user
+        return payload
       }
       
-      if (this.authToken) {
-        window.spotifyCallback(this.authToken);
+      if (authToken) {
+        window.spotifyCallback(authToken);
+        window.close()
         return currentUser
       } else {
         uiCtrl.displayError("Failed to fetch token")
@@ -255,6 +252,9 @@ const apiController = (function (uiCtrl) {
 
   //get access token for users
   async function getUser(token) {
+    uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
+    uiCtrl.hideElement(uiCtrl.outputField().login)
+
     uiCtrl.displayLoadingMessage()
     const response = await fetch(`${process.env.BASE}me`, {
       headers: {
@@ -504,12 +504,26 @@ const appController = (function (apiCtrl, uiCtrl) {
     //listener for spotify user login
     const user = domOutput.login.addEventListener("click", async () => {
       try {
-        let user = await apiCtrl.userLogin()
-        if (user) {
-          await asyncOps()
-          return user
+        let token = localStorage.getItem("authToken")
+        if (token) {
+          uiCtrl.storeAuthToken(token)
+          let user = apiCtrl.getUser(token)
+          if (user) {
+            await asyncOps()
+            return user
+          } else {
+            alert("Failed to Fetch User")
+          }
         } else {
-          alert("Failed to Fetch Token")
+          let token = await apiCtrl.userLogin()
+          uiCtrl.storeAuthToken(token)
+          let user = apiCtrl.getUser(token)
+          if (user) {
+            await asyncOps()
+            return user
+          } else {
+            alert("Failed to Fetch User")
+          }
         }
       } catch (error) {
         uiCtrl.displayError(`ERROR: ${error}`)
