@@ -74,6 +74,28 @@
     <footer class="grid-items footer">
       <div class="footer-text"></div>
     </footer>
+    <script>
+      function hideElement(element) {
+        element.style.visibility = 'hidden'
+        element.style.background = 'transparent'
+        element.style.opacity = '100%'
+        element.style['background-blend-mode'] = 'none'
+        element.style['z-index'] = -999
+      }
+
+      function checkStorage() {
+        const Authorization = localStorage.getItem("authToken")
+
+        if (Authorization) {
+          alert("Refreshed!")
+          const loginDiv = document.querySelector('#login-div')
+          const loginButton = document.querySelector('#login')
+          hideElement(loginDiv)
+          hideElement(loginButton)
+          window.history.pushState("", "", "http://localhost:5000")
+        }
+      }
+    </script>
     <script src="app.js"></script>
   </body>
 </html>

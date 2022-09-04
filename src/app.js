@@ -1,12 +1,15 @@
 import (__dirname + '/index.css');
 
 function checkStorage() {
-  const Authorization = localStorage.getItem("authToken")
-
-  if (Authorization) {
-    uiController.hideElement(uiCtrl.outputField().loginDiv)
-    uiController.hideElement(uiCtrl.outputField().login)
-    window.history.pushState("", "", process.env.REDIRECT_URI)
+  alert("Refreshed!")
+  if (window.location.search.length > 0) {
+    const Authorization = localStorage.getItem("authToken")
+  
+    if (Authorization) {
+      uiController.hideElement(uiCtrl.outputField().loginDiv)
+      uiController.hideElement(uiCtrl.outputField().login)
+      window.history.pushState("", "", process.env.REDIRECT_URI)
+    }
   }
 }
 

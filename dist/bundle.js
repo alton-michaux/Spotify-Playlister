@@ -18,12 +18,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 __webpack_require__.e(/*! import() */ "src_index_css").then(__webpack_require__.bind(__webpack_require__, /*! ./src/index.css */ "./src/index.css"));
 
 function checkStorage() {
-  var Authorization = localStorage.getItem("authToken");
+  alert("Refreshed!");
 
-  if (Authorization) {
-    uiController.hideElement(uiCtrl.outputField().loginDiv);
-    uiController.hideElement(uiCtrl.outputField().login);
-    window.history.pushState("", "", "http://localhost:5000");
+  if (window.location.search.length > 0) {
+    var Authorization = localStorage.getItem("authToken");
+
+    if (Authorization) {
+      uiController.hideElement(uiCtrl.outputField().loginDiv);
+      uiController.hideElement(uiCtrl.outputField().login);
+      window.history.pushState("", "", "http://localhost:5000");
+    }
   }
 }
 
@@ -1470,7 +1474,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("97232489e1609efe6d8f")
+/******/ 		__webpack_require__.h = () => ("310bbd862939504b7137")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
