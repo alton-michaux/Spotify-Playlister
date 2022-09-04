@@ -214,14 +214,12 @@ const apiController = (function (uiCtrl) {
   async function userLogin() {
     // Open the auth popup
     const spotifyLoginWindow = window.open(
-      spotifyAuthCall
+      `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
+      'Login with Spotify',
+      'width=800,height=600'
     );
 
-    const spotifyAuthCall = await fetch(
-      `${process.env.AUTH}client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,{
-        method: "GET"
-      }
-    )
+    this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0]
 
     try {      
       const currentUser = window.spotifyCallback = async (popup, payload) => {
@@ -235,8 +233,6 @@ const apiController = (function (uiCtrl) {
         const user = await getUser(payload)
         return user
       }
-
-      this.token = window.location.hash.substring(14).split('&')[0]
       
       if (this.token) {
         this.window.spotifyCallback(spotifyLoginWindow, this.token);

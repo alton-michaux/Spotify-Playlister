@@ -193,21 +193,15 @@ var apiController = function (uiCtrl) {
 
   function _userLogin() {
     _userLogin = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var spotifyLoginWindow, spotifyAuthCall, currentUser;
+      var spotifyLoginWindow, currentUser;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               // Open the auth popup
-              spotifyLoginWindow = window.open(spotifyAuthCall);
-              _context2.next = 3;
-              return fetch("".concat("https://accounts.spotify.com/authorize?", "client_id=").concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000", "&response_type=token"), {
-                method: "GET"
-              });
-
-            case 3:
-              spotifyAuthCall = _context2.sent;
-              _context2.prev = 4;
+              spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
+              this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0];
+              _context2.prev = 2;
 
               currentUser = window.spotifyCallback = /*#__PURE__*/function () {
                 var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(popup, payload) {
@@ -240,34 +234,32 @@ var apiController = function (uiCtrl) {
                 };
               }();
 
-              this.token = window.location.hash.substring(14).split('&')[0];
-
               if (!this.token) {
-                _context2.next = 12;
+                _context2.next = 9;
                 break;
               }
 
               this.window.spotifyCallback(spotifyLoginWindow, this.token);
               return _context2.abrupt("return", currentUser);
 
-            case 12:
+            case 9:
               spotifyLoginWindow.close();
 
-            case 13:
-              _context2.next = 18;
+            case 10:
+              _context2.next = 15;
               break;
 
-            case 15:
-              _context2.prev = 15;
-              _context2.t0 = _context2["catch"](4);
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](2);
               uiCtrl.displayError("ERROR:".concat(_context2.t0));
 
-            case 18:
+            case 15:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, this, [[4, 15]]);
+      }, _callee2, this, [[2, 12]]);
     }));
     return _userLogin.apply(this, arguments);
   }
@@ -1469,7 +1461,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("0c276e8f6d762c3c9c6e")
+/******/ 		__webpack_require__.h = () => ("b01e10b18a6d0262590b")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
