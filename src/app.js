@@ -1,5 +1,15 @@
 import (__dirname + '/index.css');
 
+function checkStorage() {
+  const Authorization = localStorage.getItem("authToken")
+
+  if (Authorization) {
+    uiController.hideElement(uiCtrl.outputField().loginDiv)
+    uiController.hideElement(uiCtrl.outputField().login)
+    window.history.pushState("", "", process.env.REDIRECT_URI)
+  }
+}
+
 const uiController = (function () {
   //store html selectors in an object for outputField() method
   const domElements = {
@@ -216,6 +226,7 @@ const apiController = (function (uiCtrl) {
     window.location.href = `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token&scope=${process.env.SCOPES}`
 
     this.authToken = window.location.hash.substring(14).split('&')[0]
+    localStorage.setItem("authToken", this.authToken)
 
     try {      
       const currentUser = window.spotifyCallback = async (payload) => {

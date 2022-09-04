@@ -17,6 +17,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 __webpack_require__.e(/*! import() */ "src_index_css").then(__webpack_require__.bind(__webpack_require__, /*! ./src/index.css */ "./src/index.css"));
 
+function checkStorage() {
+  var Authorization = localStorage.getItem("authToken");
+
+  if (Authorization) {
+    uiController.hideElement(uiCtrl.outputField().loginDiv);
+    uiController.hideElement(uiCtrl.outputField().login);
+    window.history.pushState("", "", "http://localhost:5000");
+  }
+}
+
 var uiController = function () {
   //store html selectors in an object for outputField() method
   var domElements = {
@@ -161,10 +171,10 @@ var uiController = function () {
     storeBackToken: function storeBackToken(value) {
       document.querySelector(domElements.hToken).value = value;
     },
-    storeAccessToken: function storeAccessToken(value) {
+    storeAuthToken: function storeAuthToken(value) {
       document.querySelector(domElements.accToken).value = value;
     },
-    storeRefToken: function storeRefToken(value) {
+    storeAccToken: function storeAccToken(value) {
       document.querySelector(domElements.refToken).value = value;
     },
     getBackToken: function getBackToken() {
@@ -172,12 +182,12 @@ var uiController = function () {
         token: document.querySelector(domElements.hToken).value
       };
     },
-    getAccToken: function getAccToken() {
+    getAuthToken: function getAuthToken() {
       return {
         token: document.querySelector(domElements.accToken).value
       };
     },
-    getRefToken: function getRefToken() {
+    getAccToken: function getAccToken() {
       return {
         token: document.querySelector(domElements.refToken).value
       };
@@ -193,35 +203,35 @@ var apiController = function (uiCtrl) {
 
   function _userLogin() {
     _userLogin = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var spotifyLoginWindow, currentUser;
+      var currentUser;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               // Open the auth popup
-              spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
-              this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0];
-              _context2.prev = 2;
+              window.location.href = "https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000", "&response_type=token&scope=").concat("user-modify-playback-state user-follow-modify user-read-private user-read-email");
+              this.authToken = window.location.hash.substring(14).split('&')[0];
+              localStorage.setItem("authToken", this.authToken);
+              _context2.prev = 3;
 
               currentUser = window.spotifyCallback = /*#__PURE__*/function () {
-                var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(popup, payload) {
+                var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(payload) {
                   var user;
                   return _regeneratorRuntime().wrap(function _callee$(_context) {
                     while (1) {
                       switch (_context.prev = _context.next) {
                         case 0:
-                          uiCtrl.storeAccessToken(payload);
-                          popup.close();
+                          uiCtrl.storeAuthToken(payload);
                           uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
                           uiCtrl.hideElement(uiCtrl.outputField().login);
-                          _context.next = 6;
+                          _context.next = 5;
                           return _getUser2(payload);
 
-                        case 6:
+                        case 5:
                           user = _context.sent;
                           return _context.abrupt("return", user);
 
-                        case 8:
+                        case 7:
                         case "end":
                           return _context.stop();
                       }
@@ -229,37 +239,37 @@ var apiController = function (uiCtrl) {
                   }, _callee);
                 }));
 
-                return function (_x13, _x14) {
+                return function (_x13) {
                   return _ref.apply(this, arguments);
                 };
               }();
 
-              if (!this.token) {
-                _context2.next = 9;
+              if (!this.authToken) {
+                _context2.next = 10;
                 break;
               }
 
-              this.window.spotifyCallback(spotifyLoginWindow, this.token);
+              window.spotifyCallback(this.authToken);
               return _context2.abrupt("return", currentUser);
 
-            case 9:
-              spotifyLoginWindow.close();
-
             case 10:
-              _context2.next = 15;
+              uiCtrl.displayError("Failed to fetch token");
+
+            case 11:
+              _context2.next = 16;
               break;
 
-            case 12:
-              _context2.prev = 12;
-              _context2.t0 = _context2["catch"](2);
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](3);
               uiCtrl.displayError("ERROR:".concat(_context2.t0));
 
-            case 15:
+            case 16:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, this, [[2, 12]]);
+      }, _callee2, this, [[3, 13]]);
     }));
     return _userLogin.apply(this, arguments);
   }
@@ -270,8 +280,6 @@ var apiController = function (uiCtrl) {
 
   function _getUser() {
     _getUser = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(token) {
-      var _this2 = this;
-
       var response;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) {
@@ -286,8 +294,9 @@ var apiController = function (uiCtrl) {
               }).then(function (response) {
                 if (response.ok) {
                   uiCtrl.hideLoadingMessage();
-                  _this2.me = response.json();
-                  return _this2.me;
+                  data = response.json();
+                  uiCtrl.storeAccToken(data.access_token);
+                  return data;
                 } else {
                   uiCtrl.displayUserName("Signed Out");
                   uiCtrl.displayError("Failed to Login");
@@ -366,7 +375,7 @@ var apiController = function (uiCtrl) {
                   }, _callee4);
                 }));
 
-                return function (_x15) {
+                return function (_x14) {
                   return _ref2.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -440,7 +449,7 @@ var apiController = function (uiCtrl) {
                   }, _callee6);
                 }));
 
-                return function (_x16) {
+                return function (_x15) {
                   return _ref3.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -516,7 +525,7 @@ var apiController = function (uiCtrl) {
                   }, _callee8);
                 }));
 
-                return function (_x17) {
+                return function (_x16) {
                   return _ref4.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -589,7 +598,7 @@ var apiController = function (uiCtrl) {
                   }, _callee10);
                 }));
 
-                return function (_x18) {
+                return function (_x17) {
                   return _ref5.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -664,7 +673,7 @@ var apiController = function (uiCtrl) {
                   }, _callee12);
                 }));
 
-                return function (_x19) {
+                return function (_x18) {
                   return _ref6.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -739,7 +748,7 @@ var apiController = function (uiCtrl) {
                   }, _callee14);
                 }));
 
-                return function (_x20) {
+                return function (_x19) {
                   return _ref7.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -1220,14 +1229,14 @@ var appController = function (apiCtrl, uiCtrl) {
                     }, _callee22, null, [[2, 23]]);
                   }));
 
-                  return function (_x21) {
+                  return function (_x20) {
                     return _ref14.apply(this, arguments);
                   };
                 }());
               };
 
               tracklistListener = function tracklistListener() {
-                var token = uiCtrl.getAccToken();
+                var token = uiCtrl.getAuthToken();
                 var songDiv = domOutput.playlistSongs;
                 songDiv.addEventListener("click", /*#__PURE__*/function () {
                   var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee23(e) {
@@ -1285,14 +1294,14 @@ var appController = function (apiCtrl, uiCtrl) {
                     }, _callee23, null, [[4, 13], [17, 22]]);
                   }));
 
-                  return function (_x22) {
+                  return function (_x21) {
                     return _ref15.apply(this, arguments);
                   };
                 }());
               };
 
               trackPlayListener = function trackPlayListener() {
-                var token = uiCtrl.getAccToken();
+                var token = uiCtrl.getAuthToken();
                 var songPlay = domOutput.play; // const songSkip = domOutput.skipForward;
                 // const songBack = domOutput.skipBack;
 
@@ -1461,7 +1470,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("b01e10b18a6d0262590b")
+/******/ 		__webpack_require__.h = () => ("97232489e1609efe6d8f")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
