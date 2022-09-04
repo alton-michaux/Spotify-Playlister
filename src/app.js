@@ -211,13 +211,17 @@ const uiController = (function () {
 })();
 
 const apiController = (function (uiCtrl) {
-  function userLogin() {
+  async function userLogin() {
     // Open the auth popup
     const spotifyLoginWindow = window.open(
-      `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
-      'Login with Spotify',
-      'width=800,height=600'
+      spotifyAuthCall
     );
+
+    const spotifyAuthCall = await fetch(
+      `${process.env.AUTH}client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,{
+        method: "GET"
+      }
+    )
 
     try {      
       const currentUser = window.spotifyCallback = async (popup, payload) => {
@@ -231,14 +235,14 @@ const apiController = (function (uiCtrl) {
         const user = await getUser(payload)
         return user
       }
-      this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0]
 
+      this.token = window.location.hash.substring(14).split('&')[0]
+      
       if (this.token) {
         this.window.spotifyCallback(spotifyLoginWindow, this.token);
         return currentUser
       } else {
-        alert("Failed to Fetch Token")
-        spotifyLoginWindow.window.close()
+        spotifyLoginWindow.close()
       }
     } catch (error) {
       uiCtrl.displayError(`ERROR:${error}`);
@@ -436,6 +440,7 @@ const apiController = (function (uiCtrl) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        json: true,
         body: `{"context_uri":"spotify:track:${uri}"}`
       }
     ).then( (response) => {
@@ -494,10 +499,12 @@ const appController = (function (apiCtrl, uiCtrl) {
     //listener for spotify user login
     const user = domOutput.login.addEventListener("click", async () => {
       try {
-        let user = apiCtrl.userLogin()
+        let user = await apiCtrl.userLogin()
         if (user) {
           await asyncOps()
           return user
+        } else {
+          alert("Failed to Fetch Token")
         }
       } catch (error) {
         uiCtrl.displayError(`ERROR: ${error}`)
