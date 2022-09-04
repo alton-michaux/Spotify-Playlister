@@ -240,7 +240,6 @@ const apiController = (function (uiCtrl) {
       
       if (authToken) {
         window.spotifyCallback(authToken);
-        window.close()
         return currentUser
       } else {
         uiCtrl.displayError("Failed to fetch token")

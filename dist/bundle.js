@@ -241,32 +241,31 @@ var apiController = function (uiCtrl) {
               }();
 
               if (!authToken) {
-                _context2.next = 11;
+                _context2.next = 10;
                 break;
               }
 
               window.spotifyCallback(authToken);
-              window.close();
               return _context2.abrupt("return", currentUser);
 
-            case 11:
+            case 10:
               uiCtrl.displayError("Failed to fetch token");
 
-            case 12:
-              _context2.next = 17;
+            case 11:
+              _context2.next = 16;
               break;
 
-            case 14:
-              _context2.prev = 14;
+            case 13:
+              _context2.prev = 13;
               _context2.t0 = _context2["catch"](3);
               uiCtrl.displayError("ERROR:".concat(_context2.t0));
 
-            case 17:
+            case 16:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[3, 14]]);
+      }, _callee2, null, [[3, 13]]);
     }));
     return _userLogin.apply(this, arguments);
   }
@@ -1500,7 +1499,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("7f9c64cc5de04777286f")
+/******/ 		__webpack_require__.h = () => ("04b03a2871428eb7de56")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
