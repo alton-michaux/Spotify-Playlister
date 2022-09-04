@@ -212,31 +212,34 @@ const uiController = (function () {
 
 const apiController = (function (uiCtrl) {
   function userLogin() {
-    try {
-      this.token = "BQCaGngGN5jphtfDz5Wc_fSRqaf0sfN-f9UluOD-9oyLXgJ4-xr3s6i7PAQ5TZ0Hi2MbcStFDvU2Qv4nTvJINe_2qdKAUkB0aOpWb786LKzeMb18MD-O6bkl3kN7WhAJE9YuLoNopgu92NQ5aOXfQFG3yV6VSyiiRtT8JTax09MwG0xrcqPVJ9dXEA"
-      // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
-      const currentUser = window.spotifyCallback = async (popup = [], payload) => {
-                            uiCtrl.storeAccessToken(payload)
-                            
-                            // popup.close()
-                            
-                            uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
-                            uiCtrl.hideElement(uiCtrl.outputField().login)
+    // Open the auth popup
+    const spotifyLoginWindow = window.open(
+      `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
+      'Login with Spotify',
+      'width=800,height=600'
+    );
 
-                            const user = await getUser(payload)
-                            return user
+    try {      
+      const currentUser = window.spotifyCallback = async (popup, payload) => {
+        uiCtrl.storeAccessToken(payload)
+        
+        popup.close()
+        
+        uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
+        uiCtrl.hideElement(uiCtrl.outputField().login)
+
+        const user = await getUser(payload)
+        return user
       }
+      this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0]
 
-      this.window.spotifyCallback([], this.token);
-      
-      return currentUser
-      // Open the auth popup
-      // const spotifyLoginWindow = window.open(
-      //   `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
-      //   'Login with Spotify',
-      //   'width=800,height=600'
-      // );
-
+      if (this.token) {
+        this.window.spotifyCallback(spotifyLoginWindow, this.token);
+        return currentUser
+      } else {
+        alert("Failed to Fetch Token")
+        spotifyLoginWindow.window.close()
+      }
     } catch (error) {
       uiCtrl.displayError(`ERROR:${error}`);
     }
@@ -254,6 +257,9 @@ const apiController = (function (uiCtrl) {
         uiCtrl.hideLoadingMessage()
         this.me = response.json()
         return this.me
+      } else {
+        uiCtrl.displayUserName("Signed Out")
+        uiCtrl.displayError("Failed to Login")
       }
     }).catch (error => {
       uiCtrl.displayError(error)
@@ -487,15 +493,16 @@ const appController = (function (apiCtrl, uiCtrl) {
   const userOps = async () => {
     //listener for spotify user login
     const user = domOutput.login.addEventListener("click", async () => {
-                try {
-                  let user = apiCtrl.userLogin()
-                  await asyncOps();
-                  return user
-                } catch (error) {
-                  uiCtrl.displayError(`ERROR: ${error}`)
-                }
+      try {
+        let user = apiCtrl.userLogin()
+        if (user) {
+          await asyncOps()
+          return user
+        }
+      } catch (error) {
+        uiCtrl.displayError(`ERROR: ${error}`)
+      }
     })
-    
     return user
   }
 

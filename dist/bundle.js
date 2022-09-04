@@ -187,53 +187,57 @@ var uiController = function () {
 
 var apiController = function (uiCtrl) {
   function _userLogin() {
+    // Open the auth popup
+    var spotifyLoginWindow = window.open("https://accounts.spotify.com/authorize?client_id=".concat("4986258db999480dbcb94669e69535ad", "&redirect_uri=").concat("http://localhost:5000", "&response_type=token"), 'Login with Spotify', 'width=800,height=600');
+
     try {
-      this.token = "BQCaGngGN5jphtfDz5Wc_fSRqaf0sfN-f9UluOD-9oyLXgJ4-xr3s6i7PAQ5TZ0Hi2MbcStFDvU2Qv4nTvJINe_2qdKAUkB0aOpWb786LKzeMb18MD-O6bkl3kN7WhAJE9YuLoNopgu92NQ5aOXfQFG3yV6VSyiiRtT8JTax09MwG0xrcqPVJ9dXEA"; // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
+      var currentUser = window.spotifyCallback = /*#__PURE__*/function () {
+        var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(popup, payload) {
+          var user;
+          return _regeneratorRuntime().wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  uiCtrl.storeAccessToken(payload);
+                  popup.close();
+                  uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
+                  uiCtrl.hideElement(uiCtrl.outputField().login);
+                  _context.next = 6;
+                  return _getUser2(payload);
 
-      var currentUser = window.spotifyCallback = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var popup,
-            payload,
-            user,
-            _args = arguments;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                popup = _args.length > 0 && _args[0] !== undefined ? _args[0] : [];
-                payload = _args.length > 1 ? _args[1] : undefined;
-                uiCtrl.storeAccessToken(payload); // popup.close()
+                case 6:
+                  user = _context.sent;
+                  return _context.abrupt("return", user);
 
-                uiCtrl.hideElement(uiCtrl.outputField().loginDiv);
-                uiCtrl.hideElement(uiCtrl.outputField().login);
-                _context.next = 7;
-                return _getUser2(payload);
-
-              case 7:
-                user = _context.sent;
-                return _context.abrupt("return", user);
-
-              case 9:
-              case "end":
-                return _context.stop();
+                case 8:
+                case "end":
+                  return _context.stop();
+              }
             }
-          }
-        }, _callee);
-      }));
+          }, _callee);
+        }));
 
-      this.window.spotifyCallback([], this.token);
-      return currentUser; // Open the auth popup
-      // const spotifyLoginWindow = window.open(
-      //   `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
-      //   'Login with Spotify',
-      //   'width=800,height=600'
-      // );
+        return function (_x, _x2) {
+          return _ref.apply(this, arguments);
+        };
+      }();
+
+      this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0];
+
+      if (this.token) {
+        this.window.spotifyCallback(spotifyLoginWindow, this.token);
+        return currentUser;
+      } else {
+        alert("Failed to Fetch Token");
+        spotifyLoginWindow.window.close();
+      }
     } catch (error) {
       uiCtrl.displayError("ERROR:".concat(error));
     }
   } //get access token for users
 
 
-  function _getUser2(_x) {
+  function _getUser2(_x3) {
     return _getUser.apply(this, arguments);
   }
 
@@ -257,6 +261,9 @@ var apiController = function (uiCtrl) {
                   uiCtrl.hideLoadingMessage();
                   _this2.me = response.json();
                   return _this2.me;
+                } else {
+                  uiCtrl.displayUserName("Signed Out");
+                  uiCtrl.displayError("Failed to Login");
                 }
               })["catch"](function (error) {
                 uiCtrl.displayError(error);
@@ -332,7 +339,7 @@ var apiController = function (uiCtrl) {
                   }, _callee3);
                 }));
 
-                return function (_x13) {
+                return function (_x15) {
                   return _ref2.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -355,7 +362,7 @@ var apiController = function (uiCtrl) {
 
   ; //fetch genres from spotify for later sorting
 
-  function _getGenres2(_x2) {
+  function _getGenres2(_x4) {
     return _getGenres.apply(this, arguments);
   }
 
@@ -406,7 +413,7 @@ var apiController = function (uiCtrl) {
                   }, _callee5);
                 }));
 
-                return function (_x14) {
+                return function (_x16) {
                   return _ref3.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -429,7 +436,7 @@ var apiController = function (uiCtrl) {
 
   ; //fetch user playlist information from api
 
-  function _getMyPlaylists2(_x3) {
+  function _getMyPlaylists2(_x5) {
     return _getMyPlaylists.apply(this, arguments);
   }
 
@@ -482,7 +489,7 @@ var apiController = function (uiCtrl) {
                   }, _callee7);
                 }));
 
-                return function (_x15) {
+                return function (_x17) {
                   return _ref4.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -505,7 +512,7 @@ var apiController = function (uiCtrl) {
 
   ; //fetch user playlist information from api
 
-  function _getPlaylistByID2(_x4, _x5) {
+  function _getPlaylistByID2(_x6, _x7) {
     return _getPlaylistByID.apply(this, arguments);
   }
 
@@ -555,7 +562,7 @@ var apiController = function (uiCtrl) {
                   }, _callee9);
                 }));
 
-                return function (_x16) {
+                return function (_x18) {
                   return _ref5.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -578,7 +585,7 @@ var apiController = function (uiCtrl) {
 
   ; //function used to fetch playlist track list
 
-  function _getMyPlaylistsTrackList2(_x6, _x7) {
+  function _getMyPlaylistsTrackList2(_x8, _x9) {
     return _getMyPlaylistsTrackList.apply(this, arguments);
   }
 
@@ -630,7 +637,7 @@ var apiController = function (uiCtrl) {
                   }, _callee11);
                 }));
 
-                return function (_x17) {
+                return function (_x19) {
                   return _ref6.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -653,7 +660,7 @@ var apiController = function (uiCtrl) {
 
   ; //function used to fetch individual track info from playlists
 
-  function _getTrackInfo2(_x8, _x9) {
+  function _getTrackInfo2(_x10, _x11) {
     return _getTrackInfo.apply(this, arguments);
   }
 
@@ -705,7 +712,7 @@ var apiController = function (uiCtrl) {
                   }, _callee13);
                 }));
 
-                return function (_x18) {
+                return function (_x20) {
                   return _ref7.apply(this, arguments);
                 };
               }())["catch"](function (error) {
@@ -728,7 +735,7 @@ var apiController = function (uiCtrl) {
 
   ; //fetch play/pause
 
-  function _playFunction2(_x10, _x11) {
+  function _playFunction2(_x12, _x13) {
     return _playFunction.apply(this, arguments);
   }
 
@@ -804,7 +811,7 @@ var apiController = function (uiCtrl) {
       return _getTrackInfo2(trackID, token);
     },
     getAvailableDevices: function (_getAvailableDevices) {
-      function getAvailableDevices(_x12) {
+      function getAvailableDevices(_x14) {
         return _getAvailableDevices.apply(this, arguments);
       }
 
@@ -843,23 +850,33 @@ var appController = function (apiCtrl, uiCtrl) {
                       case 0:
                         _context16.prev = 0;
                         _user = apiCtrl.userLogin();
-                        _context16.next = 4;
+
+                        if (!_user) {
+                          _context16.next = 6;
+                          break;
+                        }
+
+                        _context16.next = 5;
                         return asyncOps();
 
-                      case 4:
+                      case 5:
                         return _context16.abrupt("return", _user);
 
-                      case 7:
-                        _context16.prev = 7;
+                      case 6:
+                        _context16.next = 11;
+                        break;
+
+                      case 8:
+                        _context16.prev = 8;
                         _context16.t0 = _context16["catch"](0);
                         uiCtrl.displayError("ERROR: ".concat(_context16.t0));
 
-                      case 10:
+                      case 11:
                       case "end":
                         return _context16.stop();
                     }
                   }
-                }, _callee16, null, [[0, 7]]);
+                }, _callee16, null, [[0, 8]]);
               })));
               return _context17.abrupt("return", user);
 
@@ -1168,7 +1185,7 @@ var appController = function (apiCtrl, uiCtrl) {
                     }, _callee21, null, [[2, 23]]);
                   }));
 
-                  return function (_x19) {
+                  return function (_x21) {
                     return _ref14.apply(this, arguments);
                   };
                 }());
@@ -1233,7 +1250,7 @@ var appController = function (apiCtrl, uiCtrl) {
                     }, _callee22, null, [[4, 13], [17, 22]]);
                   }));
 
-                  return function (_x20) {
+                  return function (_x22) {
                     return _ref15.apply(this, arguments);
                   };
                 }());
@@ -1409,7 +1426,7 @@ var appController = function (apiCtrl, uiCtrl) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("ca6632931ae884671bab")
+/******/ 		__webpack_require__.h = () => ("4ae40c2a95d755b0f0a7")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
