@@ -213,7 +213,7 @@ const uiController = (function () {
 const apiController = (function (uiCtrl) {
   function userLogin() {
     try {
-      this.token = "BQC3MKdEwoQ8gdfwcIWskcxpgm3DyY4MRaH56vnnn4a6QDpeSNBBEPX0K_aeLUq6RRnYnVtkdj9-02frThjqDDEerySHlN1UN7aU_s3cc73ht9MB8BZsGXn_FZA463clVh38DBZRq2k9BBwNJiVTH7Pg8jiSk4bzLPA98qb_EU1ZwAS"
+      this.token = "BQDQ_a3m7vpxb6aNnVYVJK2w8_AhTPRYMs5AQO7VRzY2sCA4gL-jb34GDB8KMQXqQ24Ur93Eed6ImwbACUhUNMUbS87dT7rcX6uHcj53yWQcvEH1OqA6Vc8oE1dSHXXw2ZxZvhRAcAjUBvzkbFiVG1JAAjyI_iDKqwQA-eL2OqZpDz6leqlX72Ii"
       // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
       const currentUser = window.spotifyCallback = async (popup = [], payload) => {
                             uiCtrl.storeAccessToken(payload)
@@ -245,16 +245,14 @@ const apiController = (function (uiCtrl) {
   //get access token for users
   async function getUser(token) {
     uiCtrl.displayLoadingMessage()
-    const response = await fetch('https://api.spotify.com/v1/me', {
+    const response = await fetch(`${process.env.BASE}me`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     }).then(response => {
-      console.log(response)
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
         this.me = response.json()
-        console.log(this.me)
         return this.me
       }
     }).catch (error => {
@@ -278,7 +276,7 @@ const apiController = (function (uiCtrl) {
     .then(async (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        const data = await response.json().catch( (error) => { uiCtrl.displayError(error) })
+        const data = await response.json()
         uiCtrl.storeBackToken(data.access_token)
         return data.access_token;
       }
@@ -294,14 +292,13 @@ const apiController = (function (uiCtrl) {
   async function getGenres(token) {
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
-      `https://api.spotify.com/v1/recommendations/available-genre-seeds`,
+      `${process.env.BASE}recommendations/available-genre-seeds`,
       {
         method: "GET",
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          'Content-Type': "application/json",
           Authorization: `Bearer ${token}`,
-        },
+        }
       }
     ).then( async (response) => {
       console.log(response)
@@ -323,7 +320,7 @@ const apiController = (function (uiCtrl) {
 
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
-      `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
+      `${process.env.BASE}users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
       {
         method: "GET",
         headers: {
@@ -349,7 +346,7 @@ const apiController = (function (uiCtrl) {
   async function getPlaylistByID(playlistID, token) {
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistID}`,
+      `${process.env.BASE}playlists/${playlistID}`,
       {
         method: "GET",
         headers: {
@@ -375,7 +372,7 @@ const apiController = (function (uiCtrl) {
   async function getMyPlaylistsTrackList(playlistID, token) {
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
+      `${process.env.BASE}playlists/${playlistID}/tracks`,
       {
         method: "GET",
         headers: {
@@ -401,7 +398,7 @@ const apiController = (function (uiCtrl) {
   async function getTrackInfo(trackID, token) {
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
-      `https://api.spotify.com/v1/tracks/${trackID}`,
+      `${process.env.BASE}tracks/${trackID}`,
       {
         method: "GET",
         headers: {
@@ -423,18 +420,46 @@ const apiController = (function (uiCtrl) {
     return response;
   };
 
+  async function getAvailableDevices(token) {
+    uiCtrl.displayLoadingMessage()
+    const response = await fetch(
+      `${process.env.BASE}me/player/devices`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": process.env.URL,
+          Authorization: `Bearer ${token}`
+        }
+      }
+    ).then( async (response) => {
+      console.log(response)
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        const data = await response.json()
+        return data;
+      }
+      uiCtrl.displayError(response.status)
+    }).catch(error => {
+      uiCtrl.displayError(error)
+    })
+    return response;
+  };
+
   //fetch play/pause
   async function playFunction(token, uri) {
     uiCtrl.displayLoadingMessage()
-    const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
+    const response = await fetch(`${process.env.BASE}me/player/play`, {
       method: "PUT",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
+      body: `{"context_uri":"spotify:track:${uri}"}`,
     }).then( (response) => {
+      console.log(response)
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
         data = response.json()
@@ -471,6 +496,9 @@ const apiController = (function (uiCtrl) {
     getTrackInfo(trackID, token) {
       return getTrackInfo(trackID, token);
     },
+    getAvailableDevices(token) {
+      return getAvailableDevices(token)
+    },
     playFunction(token, uri) {
       return playFunction(token, uri);
     },
@@ -502,15 +530,14 @@ const appController = (function (apiCtrl, uiCtrl) {
     uiCtrl.storeBackToken(token);
 
     const genrePopulate = async () => {
-      let token = uiCtrl.getBackToken();
       try {
         await apiCtrl.getGenres(token)
-          .then((data) => {
+        .then((data) => {
           //populate drop-down menu with genres
           data.forEach((element) => uiCtrl.assignGenre(element, element));
         });
       } catch (error) {
-        uiCtrl.displayError("Failed to load genres");
+        uiCtrl.displayError("Genres not loaded:" + error);
       };
     };
 
@@ -567,7 +594,6 @@ const appController = (function (apiCtrl, uiCtrl) {
       genreSelect.addEventListener("change", async () => {
         uiCtrl.resetPlaylists();
         const genreId = genreSelect.options[genreSelect.selectedIndex].value;
-        console.log(genreId)
         try {
           const playlist = await apiCtrl.getMyPlaylists(token);
           for (i = 0; i < playlist.items.length; i++) {
@@ -612,7 +638,7 @@ const appController = (function (apiCtrl, uiCtrl) {
               };
           }
         } catch (error) {
-          uiCtrl.displayError("Failed to load playlist");
+          uiCtrl.displayError("Failed to load playlist:" + error);
         };
       });
     };
@@ -652,7 +678,6 @@ const appController = (function (apiCtrl, uiCtrl) {
     };
 
     const tracklistListener = () => {
-      //retrieve token
       let token = uiCtrl.getAccToken()
       const songDiv = domOutput.playlistSongs;
       songDiv.addEventListener("click", async (e) => {
@@ -662,6 +687,8 @@ const appController = (function (apiCtrl, uiCtrl) {
         const trackID = e.target.value;
 
         try {
+          //retrieve token
+          let token = uiCtrl.getBackToken()
           const trackInfo = await apiCtrl.getTrackInfo(trackID, token);
           uiCtrl.populateSongInfo(
             trackInfo.name,
@@ -670,24 +697,28 @@ const appController = (function (apiCtrl, uiCtrl) {
           );
           uiCtrl.populateSongImage(trackInfo.album.images[0].url);
         } catch (error) {
-          uiCtrl.displayError("Failed to load song");
+          uiCtrl.displayError(error);
         };
-
-        try {
-          console.log(token)
+        // play button for individual tracks
+        try{
+          await apiCtrl.getAvailableDevices(token)
+          .then((data) => {
+            console.log(data)
+            const currentDevice = data
+            return currentDevice
+          })
           await apiCtrl.playFunction(token, uri);
         } catch (error) {
-          uiCtrl.displayError("Playback not yet supported");
+          uiCtrl.displayError("Playback error:" + error);
         };
       });
     };
 
     const trackPlayListener = () => {
-      //retrieve token
       let token = uiCtrl.getAccToken();
       const songPlay = domOutput.play;
-      const songSkip = domOutput.skipForward;
-      const songBack = domOutput.skipBack;
+      // const songSkip = domOutput.skipForward;
+      // const songBack = domOutput.skipBack;
       songPlay.addEventListener("click", async () => {
         const tracklist = domOutput.playlistSongs.children;
         const uri = tracklist[0].childNodes[0].defaultValue;
@@ -695,7 +726,7 @@ const appController = (function (apiCtrl, uiCtrl) {
         try {
           await apiCtrl.playFunction(token, uri);
         } catch (error) {
-          uiCtrl.displayError("Playback error");
+          uiCtrl.displayError("Playback error" + error);
         };
       })
     };
