@@ -182,11 +182,11 @@ const uiController = (function () {
       document.querySelector(domElements.hToken).value = value;
     },
 
-    storeAccessToken(value) {
+    storeAuthToken(value) {
       document.querySelector(domElements.accToken).value = value;
     },
 
-    storeRefToken(value) {
+    storeAccToken(value) {
       document.querySelector(domElements.refToken).value = value;
     },
 
@@ -196,13 +196,13 @@ const uiController = (function () {
       };
     },
 
-    getAccToken() {
+    getAuthToken() {
       return {
         token: document.querySelector(domElements.accToken).value
       };
     },
 
-    getRefToken() {
+    getAccToken() {
       return {
         token: document.querySelector(domElements.refToken).value
       };
@@ -213,19 +213,13 @@ const uiController = (function () {
 const apiController = (function (uiCtrl) {
   async function userLogin() {
     // Open the auth popup
-    const spotifyLoginWindow = window.open(
-      `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token`,
-      'Login with Spotify',
-      'width=800,height=600'
-    );
+    window.location.href = `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token&scope=${process.env.SCOPES}`
 
-    this.token = spotifyLoginWindow.window.location.hash.substring(14).split('&')[0]
+    this.authToken = window.location.hash.substring(14).split('&')[0]
 
     try {      
-      const currentUser = window.spotifyCallback = async (popup, payload) => {
-        uiCtrl.storeAccessToken(payload)
-        
-        popup.close()
+      const currentUser = window.spotifyCallback = async (payload) => {
+        uiCtrl.storeAuthToken(payload)
         
         uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
         uiCtrl.hideElement(uiCtrl.outputField().login)
@@ -234,11 +228,11 @@ const apiController = (function (uiCtrl) {
         return user
       }
       
-      if (this.token) {
-        this.window.spotifyCallback(spotifyLoginWindow, this.token);
+      if (this.authToken) {
+        window.spotifyCallback(this.authToken);
         return currentUser
       } else {
-        spotifyLoginWindow.close()
+        uiCtrl.displayError("Failed to fetch token")
       }
     } catch (error) {
       uiCtrl.displayError(`ERROR:${error}`);
@@ -255,8 +249,9 @@ const apiController = (function (uiCtrl) {
     }).then(response => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        this.me = response.json()
-        return this.me
+        data = response.json()
+        uiCtrl.storeAccToken(data.access_token)
+        return data
       } else {
         uiCtrl.displayUserName("Signed Out")
         uiCtrl.displayError("Failed to Login")
@@ -662,7 +657,7 @@ const appController = (function (apiCtrl, uiCtrl) {
     };
 
     const tracklistListener = () => {
-      let token = uiCtrl.getAccToken()
+      let token = uiCtrl.getAuthToken()
       const songDiv = domOutput.playlistSongs;
       songDiv.addEventListener("click", async (e) => {
         uiCtrl.resetTrackDetail();
@@ -692,7 +687,7 @@ const appController = (function (apiCtrl, uiCtrl) {
     };
 
     const trackPlayListener = () => {
-      let token = uiCtrl.getAccToken();
+      let token = uiCtrl.getAuthToken();
       const songPlay = domOutput.play;
       // const songSkip = domOutput.skipForward;
       // const songBack = domOutput.skipBack;
