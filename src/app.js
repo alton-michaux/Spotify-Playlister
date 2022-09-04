@@ -213,7 +213,7 @@ const uiController = (function () {
 const apiController = (function (uiCtrl) {
   function userLogin() {
     try {
-      this.token = "BQDQ_a3m7vpxb6aNnVYVJK2w8_AhTPRYMs5AQO7VRzY2sCA4gL-jb34GDB8KMQXqQ24Ur93Eed6ImwbACUhUNMUbS87dT7rcX6uHcj53yWQcvEH1OqA6Vc8oE1dSHXXw2ZxZvhRAcAjUBvzkbFiVG1JAAjyI_iDKqwQA-eL2OqZpDz6leqlX72Ii"
+      this.token = "BQCaGngGN5jphtfDz5Wc_fSRqaf0sfN-f9UluOD-9oyLXgJ4-xr3s6i7PAQ5TZ0Hi2MbcStFDvU2Qv4nTvJINe_2qdKAUkB0aOpWb786LKzeMb18MD-O6bkl3kN7WhAJE9YuLoNopgu92NQ5aOXfQFG3yV6VSyiiRtT8JTax09MwG0xrcqPVJ9dXEA"
       // this.token = spotifyLoginWindow.location.hash.substring(14).split('&')[0]
       const currentUser = window.spotifyCallback = async (popup = [], payload) => {
                             uiCtrl.storeAccessToken(payload)
@@ -301,7 +301,6 @@ const apiController = (function (uiCtrl) {
         }
       }
     ).then( async (response) => {
-      console.log(response)
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
         const data = await response.json()
@@ -420,51 +419,26 @@ const apiController = (function (uiCtrl) {
     return response;
   };
 
-  async function getAvailableDevices(token) {
-    uiCtrl.displayLoadingMessage()
-    const response = await fetch(
-      `${process.env.BASE}me/player/devices`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": process.env.URL,
-          Authorization: `Bearer ${token}`
-        }
-      }
-    ).then( async (response) => {
-      console.log(response)
-      if (response.ok) {
-        uiCtrl.hideLoadingMessage()
-        const data = await response.json()
-        return data;
-      }
-      uiCtrl.displayError(response.status)
-    }).catch(error => {
-      uiCtrl.displayError(error)
-    })
-    return response;
-  };
-
   //fetch play/pause
   async function playFunction(token, uri) {
     uiCtrl.displayLoadingMessage()
-    const response = await fetch(`${process.env.BASE}me/player/play`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: `{"context_uri":"spotify:track:${uri}"}`,
-    }).then( (response) => {
+    const response = await fetch(`${process.env.BASE}me/player/play`, 
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: `{"context_uri":"spotify:track:${uri}"}`
+      }
+    ).then( (response) => {
       console.log(response)
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
         data = response.json()
         return data;
-      }
+      } uiCtrl.displayError(response.status)
     }).catch(error => {
       uiCtrl.displayError(error)
     })
@@ -683,11 +657,10 @@ const appController = (function (apiCtrl, uiCtrl) {
       songDiv.addEventListener("click", async (e) => {
         uiCtrl.resetTrackDetail();
         const trackDiv = document.getElementsByClassName("track-items");
-        const uri = document.querySelector("uri");
+        const uri = document.querySelector(".uri").value;
         const trackID = e.target.value;
 
         try {
-          //retrieve token
           let token = uiCtrl.getBackToken()
           const trackInfo = await apiCtrl.getTrackInfo(trackID, token);
           uiCtrl.populateSongInfo(
@@ -701,12 +674,6 @@ const appController = (function (apiCtrl, uiCtrl) {
         };
         // play button for individual tracks
         try{
-          await apiCtrl.getAvailableDevices(token)
-          .then((data) => {
-            console.log(data)
-            const currentDevice = data
-            return currentDevice
-          })
           await apiCtrl.playFunction(token, uri);
         } catch (error) {
           uiCtrl.displayError("Playback error:" + error);
