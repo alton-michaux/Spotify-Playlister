@@ -1,11 +1,27 @@
 import (__dirname + '/index.css');
 
+function checkStorage() {
+  alert("Refreshed!")
+  if (window.location.search.length > 0) {
+    const Authorization = localStorage.getItem("authToken")
+  
+    if (Authorization) {
+      uiController.hideElement(uiCtrl.outputField().loginDiv)
+      uiController.hideElement(uiCtrl.outputField().login)
+      window.history.pushState("", "", process.env.REDIRECT_URI)
+    }
+  }
+}
+
 const uiController = (function () {
   //store html selectors in an object for outputField() method
   const domElements = {
+    loginDiv: "#login-div",
+    login: "#login",
+    userShow: "#userShow",
+    authToken: "#auth-token",
+    accToken: "#access-token",
     hToken: "#hidden-token",
-    hlogin: "#login-div",
-    btnLogin: "#login-btn",
     songDetail: "#song-description",
     previousSong: "#prev",
     currentSong: "#current",
@@ -26,6 +42,10 @@ const uiController = (function () {
     //create a method to callback selectors
     outputField() {
       return {
+        loginDiv: document.querySelector(domElements.loginDiv),
+        login: document.querySelector(domElements.login),
+        auth: document.querySelector(domElements.authToken),
+        access: document.querySelector(domElements.accToken),
         songDetail: document.querySelector(domElements.songDetail),
         hiddenDiv: document.querySelector(domElements.hlogin),
         btnLogin: document.querySelector(domElements.btnLogin),
@@ -44,6 +64,15 @@ const uiController = (function () {
         loader: document.querySelector(domElements.loader)
       };
     },
+
+    hideElement(element) {
+      element.style.visibility = 'hidden'
+      element.style.background = 'transparent'
+      element.style.opacity = '100%'
+      element.style['background-blend-mode'] = 'none'
+      element.style['z-index'] = -999
+    },
+
     //general ui info population methods
     displayLoadingMessage() {
       this.outputField().loader.style.backgroundColor = 'yellow'
@@ -58,7 +87,7 @@ const uiController = (function () {
       this.outputField().loader.classList.remove('display');
     },
     
-    displayError(error) {
+    displayError(error="Unknown Error") {
       this.outputField().loader.style.backgroundColor = 'red'
       this.outputField().loader.style.color = 'white'
       this.outputField().loader.innerHTML = ""
@@ -72,6 +101,13 @@ const uiController = (function () {
       setTimeout(() => {
         this.hideLoadingMessage()
         } , 10000);  // 1000ms = 1s
+    },
+
+    displayUserName(userName){
+      const html = `<div class="nav-box center-box">Logged in as: ${userName.toString()}</div>`;
+      document
+        .querySelector(domElements.userShow)
+        .insertAdjacentHTML("afterbegin", html);
     },
 
     assignGenre(text, value) {
@@ -104,7 +140,7 @@ const uiController = (function () {
     },
 
     populateTrackList(uri, number, name, artist, length, id) {
-      const html = `<div class="track-items"><input class="uri" type="hidden" value=${uri}>${number}. ${name} by ${artist}</input><button class="track-id playlist-items" value=${id}>SELECT</button><div class="track-length">${Math.floor(
+      const html = `<div class="track-items"><input class="uri" type="hidden" value=${uri}>${number}. ${name} by ${artist}</input><button class="track-id playlist-items" id="play" value=${id}>PLAY</button><div class="track-length">${Math.floor(
         length / 1000 / 60
       )}:${Math.floor((length / 1000) % 60).toFixed(0)}</div></div>`;
       document
@@ -155,21 +191,122 @@ const uiController = (function () {
       this.resetTracks();
     },
 
-    storeToken(value) {
+    storeBackToken(value) {
       document.querySelector(domElements.hToken).value = value;
     },
 
-    getStoredToken() {
+    storeAuthToken(value) {
+      document.querySelector(domElements.authToken).value = value;
+    },
+
+    storeAccToken(value) {
+      document.querySelector(domElements.accToken).value = value;
+    },
+
+    getBackToken() {
       return {
-        token: document.querySelector(domElements.hToken).value,
+        token: document.querySelector(domElements.hToken).value
       };
     },
+
+    getAuthToken() {
+      return {
+        token: document.querySelector(domElements.accToken).value
+      };
+    },
+
+    getAccToken() {
+      return {
+        token: document.querySelector(domElements.refToken).value
+      };
+    }
   };
 })();
 
-
 const apiController = (function (uiCtrl) {
-  //get access token
+  async function userLogin() {
+    // Open the auth popup
+    window.location.href = `https://accounts.spotify.com/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=token&scope=${process.env.SCOPES}`
+
+    const authToken = window.location.hash.substring(14).split('&')[0]
+    localStorage.setItem("authToken", authToken)
+
+    try {      
+      window.spotifyCallback = async (payload) => {
+        uiCtrl.storeAuthToken(payload)
+        
+        return payload
+      }
+      
+      if (authToken) {
+        window.spotifyCallback(authToken);
+      } else {
+        uiCtrl.displayError("Failed to fetch token")
+      }
+    } catch (error) {
+      uiCtrl.displayError(`ERROR:${error}`);
+    }
+  }
+
+  //get access token for users
+  async function getUser(token) {
+    uiCtrl.hideElement(uiCtrl.outputField().loginDiv)
+    uiCtrl.hideElement(uiCtrl.outputField().login)
+
+    uiCtrl.displayLoadingMessage()
+    const response = await fetch(`${process.env.BASE}me`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(async response => {
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        data = await response.json()
+        return data
+      } else {
+        uiCtrl.displayUserName("Signed Out")
+        uiCtrl.displayError("Failed to Login")
+      }
+    }).catch (error => {
+      uiCtrl.displayError(error)
+    })
+    uiCtrl.displayUserName(response.display_name)
+    return response
+  };
+
+  //get access token for User
+  async function getUserToken(authCode) {
+    uiCtrl.displayLoadingMessage();
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+          'Content-Type' : 'application/x-www-form-urlencoded', 
+          'Authorization' : 'Basic ' + btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET)
+      },
+      form: {
+        code: authCode,
+        grant_type : 'authorization_code',
+        redirect_uri : process.env.REDIRECT_URI
+      },
+      json: true
+    })
+    .then(async (response) => {
+      console.log(response)
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        const data = await response.json()
+        uiCtrl.storeAccToken(data.access_token)
+        return data.access_token;
+      }
+      uiCtrl.displayError(response.status)
+    })
+    .catch (error => {
+      uiCtrl.displayError(error)
+    } )
+    return response
+  };
+
+  //get access token for GVO playlists
   async function getToken() {
     uiCtrl.displayLoadingMessage();
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -181,16 +318,17 @@ const apiController = (function (uiCtrl) {
       body: 'grant_type=client_credentials'
     })
     .then(async (response) => {
-			if (response.ok) {
+      if (response.ok) {
         uiCtrl.hideLoadingMessage()
-				const data = await response.json().catch( (error) => { uiCtrl.displayError(error) })
+        const data = await response.json()
+        uiCtrl.storeBackToken(data.access_token)
         return data.access_token;
-			}
-			uiCtrl.displayError(response.status)
-		})
+      }
+      uiCtrl.displayError(response.status)
+    })
     .catch (error => {
       uiCtrl.displayError(error)
-		} )
+    } )
     return response
   };
 
@@ -198,19 +336,18 @@ const apiController = (function (uiCtrl) {
   async function getGenres(token) {
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
-      `https://api.spotify.com/v1/recommendations/available-genre-seeds`,
+      `${process.env.BASE}recommendations/available-genre-seeds`,
       {
         method: "GET",
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          'Content-Type': "application/json",
           Authorization: `Bearer ${token}`,
-        },
+        }
       }
     ).then( async (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        const data = await response.json().catch( (error) => { uiCtrl.displayError(error) })
+        const data = await response.json()
         return data.genres;
       }
       uiCtrl.displayError(response.status)
@@ -226,7 +363,7 @@ const apiController = (function (uiCtrl) {
 
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
-      `https://api.spotify.com/v1/users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
+      `${process.env.BASE}users/${process.env.USER_ID}/playlists?limit=${limit}&offset=0`,
       {
         method: "GET",
         headers: {
@@ -238,7 +375,7 @@ const apiController = (function (uiCtrl) {
     ).then( async (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        const data = await response.json().catch((error) => {uiCtrl.displayError(error)});
+        const data = await response.json()
         return data;
       }
       uiCtrl.displayError(response.status)
@@ -252,7 +389,7 @@ const apiController = (function (uiCtrl) {
   async function getPlaylistByID(playlistID, token) {
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistID}`,
+      `${process.env.BASE}playlists/${playlistID}`,
       {
         method: "GET",
         headers: {
@@ -264,7 +401,7 @@ const apiController = (function (uiCtrl) {
     ).then( async (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        data = await response.json()
         return data;
       }
       uiCtrl.displayError(response.status)
@@ -278,7 +415,7 @@ const apiController = (function (uiCtrl) {
   async function getMyPlaylistsTrackList(playlistID, token) {
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
+      `${process.env.BASE}playlists/${playlistID}/tracks`,
       {
         method: "GET",
         headers: {
@@ -290,7 +427,7 @@ const apiController = (function (uiCtrl) {
     ).then( async (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        const data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        const data = await response.json()
         return data;
       }
       uiCtrl.displayError(response.status)
@@ -304,7 +441,7 @@ const apiController = (function (uiCtrl) {
   async function getTrackInfo(trackID, token) {
     uiCtrl.displayLoadingMessage()
     const response = await fetch(
-      `https://api.spotify.com/v1/tracks/${trackID}`,
+      `${process.env.BASE}tracks/${trackID}`,
       {
         method: "GET",
         headers: {
@@ -316,7 +453,7 @@ const apiController = (function (uiCtrl) {
     ).then( async (response) => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        const data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        const data = await response.json()
         return data;
       }
       uiCtrl.displayError(response.status)
@@ -329,21 +466,24 @@ const apiController = (function (uiCtrl) {
   //fetch play/pause
   async function playFunction(token, uri) {
     uiCtrl.displayLoadingMessage()
-    const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: `{"context_uri":"spotify:track:${uri}","offset":{"position":5},"position_ms":0}`,
-    }).then( async (response) => {
+    const response = await fetch(`${process.env.BASE}me/player/play`, 
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        json: true,
+        body: `{"context_uri":"spotify:track:${uri}"}`
+      }
+    ).then( (response) => {
+      console.log(response)
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        data = await response.json().catch((error) => { uiCtrl.displayError(error) });
+        data = response.json()
         return data;
-      }
-      uiCtrl.displayError(response.status)
+      } uiCtrl.displayError(response.status)
     }).catch(error => {
       uiCtrl.displayError(error)
     })
@@ -351,6 +491,15 @@ const apiController = (function (uiCtrl) {
   };
 
   return {
+    userLogin() {
+      return userLogin();
+    },
+    getUser(token) {
+      return getUser(token);
+    },
+    getUserToken() {
+      return getUserToken();
+    },
     getToken() {
       return getToken();
     },
@@ -369,6 +518,9 @@ const apiController = (function (uiCtrl) {
     getTrackInfo(trackID, token) {
       return getTrackInfo(trackID, token);
     },
+    getAvailableDevices(token) {
+      return getAvailableDevices(token)
+    },
     playFunction(token, uri) {
       return playFunction(token, uri);
     },
@@ -380,25 +532,61 @@ const appController = (function (apiCtrl, uiCtrl) {
   //get object reference for DOM outputs
   const domOutput = uiCtrl.outputField();
 
+  const userOps = async () => {
+    //listener for spotify user login
+    const user = domOutput.login.addEventListener("click", async () => {
+      try {
+        let token = localStorage.getItem("authToken")
+        if (token) {
+          uiCtrl.storeAuthToken(token)
+          apiCtrl.getUserToken(token)
+          let user = apiCtrl.getUser(token)
+          if (user) {
+            await asyncOps()
+            localStorage.clear("authToken")
+            window.history.pushState("", "", process.env.REDIRECT_URI)
+            return user
+          } else {
+            alert("Failed to Fetch User")
+          }
+        } else {
+          let token = await apiCtrl.userLogin()
+          uiCtrl.storeAuthToken(token)
+          apiCtrl.getUserToken(token)
+          let user = apiCtrl.getUser(token)
+          if (user) {
+            await asyncOps()
+            window.history.pushState("", "", process.env.REDIRECT_URI)
+            return user
+          } else {
+            alert("Failed to Fetch User")
+          }
+        }
+      } catch (error) {
+        uiCtrl.displayError(`ERROR: ${error}`)
+      }
+    })
+    return user
+  }
+
   const asyncOps = async () => {
     let token = await apiCtrl.getToken();
-    uiCtrl.storeToken(token);
+    uiCtrl.storeBackToken(token);
 
     const genrePopulate = async () => {
-      let token = uiCtrl.getStoredToken().token;
       try {
         await apiCtrl.getGenres(token)
-          .then((data) => {
+        .then((data) => {
           //populate drop-down menu with genres
           data.forEach((element) => uiCtrl.assignGenre(element, element));
         });
       } catch (error) {
-        uiCtrl.displayError("Failed to load genres");
+        uiCtrl.displayError("Genres not loaded:" + error);
       };
     };
 
     const musicPopulate = async () => {
-      let token = uiCtrl.getStoredToken().token;
+      let token = uiCtrl.getBackToken().token;
 
       // fetch playlist info for each playlist
       const data = await apiCtrl.getMyPlaylists(token);
@@ -445,7 +633,7 @@ const appController = (function (apiCtrl, uiCtrl) {
     };
 
     const genreListener = () => {
-      let token = uiCtrl.getStoredToken().token;
+      let token = uiCtrl.getBackToken().token;
       const genreSelect = domOutput.genreSelect;
       genreSelect.addEventListener("change", async () => {
         uiCtrl.resetPlaylists();
@@ -469,7 +657,7 @@ const appController = (function (apiCtrl, uiCtrl) {
               );
             }
           }} catch (error) {
-            uiCtrl.displayError("Failed to load genre");
+            uiCtrl.displayError(error);
           };
 
         try {
@@ -494,13 +682,13 @@ const appController = (function (apiCtrl, uiCtrl) {
               };
           }
         } catch (error) {
-          uiCtrl.displayError("Failed to load playlist");
+          uiCtrl.displayError("Failed to load playlist:" + error);
         };
       });
     };
 
     const playlistListener = () => {
-      let token = uiCtrl.getStoredToken().token;
+      let token = uiCtrl.getBackToken().token;
       const playlistContainer = domOutput.playlistLibrary;
       playlistContainer.addEventListener("click", async (e) => {
         uiCtrl.resetTracks();
@@ -534,16 +722,16 @@ const appController = (function (apiCtrl, uiCtrl) {
     };
 
     const tracklistListener = () => {
-      //retrieve token
-      let token = uiCtrl.getStoredToken().token;
+      let token = uiCtrl.getAuthToken()
       const songDiv = domOutput.playlistSongs;
       songDiv.addEventListener("click", async (e) => {
         uiCtrl.resetTrackDetail();
         const trackDiv = document.getElementsByClassName("track-items");
-        const uri = document.querySelector("uri");
+        const uri = document.querySelector(".uri").value;
         const trackID = e.target.value;
 
         try {
+          let token = uiCtrl.getBackToken()
           const trackInfo = await apiCtrl.getTrackInfo(trackID, token);
           uiCtrl.populateSongInfo(
             trackInfo.name,
@@ -551,25 +739,24 @@ const appController = (function (apiCtrl, uiCtrl) {
             trackInfo.album.name
           );
           uiCtrl.populateSongImage(trackInfo.album.images[0].url);
-          const uri = trackInfo;
         } catch (error) {
-          uiCtrl.displayError("Failed to load song");
+          uiCtrl.displayError(error);
         };
-
-        try {
-          const trackPlay = await apiCtrl.playFunction(token, uri);
+        // play button for individual tracks
+        try{
+          let token = uiCtrl.getAuthToken();
+          await apiCtrl.playFunction(token, uri);
         } catch (error) {
-          uiCtrl.displayError("Playback not yet supported");
+          uiCtrl.displayError("Playback error:" + error);
         };
       });
     };
 
     const trackPlayListener = () => {
-      //retrieve token
-      let token = uiCtrl.getStoredToken().token;
+      let token = uiCtrl.getAuthToken();
       const songPlay = domOutput.play;
-      const songSkip = domOutput.skipForward;
-      const songBack = domOutput.skipBack;
+      // const songSkip = domOutput.skipForward;
+      // const songBack = domOutput.skipBack;
       songPlay.addEventListener("click", async () => {
         const tracklist = domOutput.playlistSongs.children;
         const uri = tracklist[0].childNodes[0].defaultValue;
@@ -577,11 +764,11 @@ const appController = (function (apiCtrl, uiCtrl) {
         try {
           await apiCtrl.playFunction(token, uri);
         } catch (error) {
-          uiCtrl.displayError("Playback error");
+          uiCtrl.displayError("Playback error" + error);
         };
       })
     };
-    
+
     musicPopulate();
     genrePopulate();
     genreListener();
@@ -589,5 +776,5 @@ const appController = (function (apiCtrl, uiCtrl) {
     trackPlayListener();
     tracklistListener();
   };
-  asyncOps();
+  userOps();
 })(apiController, uiController);
