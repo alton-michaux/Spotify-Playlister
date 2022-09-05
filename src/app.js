@@ -19,8 +19,8 @@ const uiController = (function () {
     loginDiv: "#login-div",
     login: "#login",
     userShow: "#userShow",
+    authToken: "#auth-token",
     accToken: "#access-token",
-    refToken: "#refresh-token",
     hToken: "#hidden-token",
     songDetail: "#song-description",
     previousSong: "#prev",
@@ -44,8 +44,8 @@ const uiController = (function () {
       return {
         loginDiv: document.querySelector(domElements.loginDiv),
         login: document.querySelector(domElements.login),
+        auth: document.querySelector(domElements.authToken),
         access: document.querySelector(domElements.accToken),
-        refresh: document.querySelector(domElements.refToken),
         songDetail: document.querySelector(domElements.songDetail),
         hiddenDiv: document.querySelector(domElements.hlogin),
         btnLogin: document.querySelector(domElements.btnLogin),
@@ -196,11 +196,11 @@ const uiController = (function () {
     },
 
     storeAuthToken(value) {
-      document.querySelector(domElements.accToken).value = value;
+      document.querySelector(domElements.authToken).value = value;
     },
 
     storeAccToken(value) {
-      document.querySelector(domElements.refToken).value = value;
+      document.querySelector(domElements.accToken).value = value;
     },
 
     getBackToken() {
@@ -232,7 +232,7 @@ const apiController = (function (uiCtrl) {
     localStorage.setItem("authToken", authToken)
 
     try {      
-      const currentUser = window.spotifyCallback = async (payload) => {
+      window.spotifyCallback = async (payload) => {
         uiCtrl.storeAuthToken(payload)
         
         return payload
@@ -240,7 +240,6 @@ const apiController = (function (uiCtrl) {
       
       if (authToken) {
         window.spotifyCallback(authToken);
-        return currentUser
       } else {
         uiCtrl.displayError("Failed to fetch token")
       }
@@ -259,11 +258,10 @@ const apiController = (function (uiCtrl) {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    }).then(response => {
+    }).then(async response => {
       if (response.ok) {
         uiCtrl.hideLoadingMessage()
-        data = response.json()
-        uiCtrl.storeAccToken(data.access_token)
+        data = await response.json()
         return data
       } else {
         uiCtrl.displayUserName("Signed Out")
@@ -273,6 +271,38 @@ const apiController = (function (uiCtrl) {
       uiCtrl.displayError(error)
     })
     uiCtrl.displayUserName(response.display_name)
+    return response
+  };
+
+  //get access token for User
+  async function getUserToken(authCode) {
+    uiCtrl.displayLoadingMessage();
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+          'Content-Type' : 'application/x-www-form-urlencoded', 
+          'Authorization' : 'Basic ' + btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET)
+      },
+      form: {
+        code: authCode,
+        grant_type : 'authorization_code',
+        redirect_uri : process.env.REDIRECT_URI
+      },
+      json: true
+    })
+    .then(async (response) => {
+      console.log(response)
+      if (response.ok) {
+        uiCtrl.hideLoadingMessage()
+        const data = await response.json()
+        uiCtrl.storeAccToken(data.access_token)
+        return data.access_token;
+      }
+      uiCtrl.displayError(response.status)
+    })
+    .catch (error => {
+      uiCtrl.displayError(error)
+    } )
     return response
   };
 
@@ -467,6 +497,9 @@ const apiController = (function (uiCtrl) {
     getUser(token) {
       return getUser(token);
     },
+    getUserToken() {
+      return getUserToken();
+    },
     getToken() {
       return getToken();
     },
@@ -506,9 +539,12 @@ const appController = (function (apiCtrl, uiCtrl) {
         let token = localStorage.getItem("authToken")
         if (token) {
           uiCtrl.storeAuthToken(token)
+          apiCtrl.getUserToken(token)
           let user = apiCtrl.getUser(token)
           if (user) {
             await asyncOps()
+            localStorage.clear("authToken")
+            window.history.pushState("", "", process.env.REDIRECT_URI)
             return user
           } else {
             alert("Failed to Fetch User")
@@ -516,9 +552,11 @@ const appController = (function (apiCtrl, uiCtrl) {
         } else {
           let token = await apiCtrl.userLogin()
           uiCtrl.storeAuthToken(token)
+          apiCtrl.getUserToken(token)
           let user = apiCtrl.getUser(token)
           if (user) {
             await asyncOps()
+            window.history.pushState("", "", process.env.REDIRECT_URI)
             return user
           } else {
             alert("Failed to Fetch User")
@@ -706,6 +744,7 @@ const appController = (function (apiCtrl, uiCtrl) {
         };
         // play button for individual tracks
         try{
+          let token = uiCtrl.getAuthToken();
           await apiCtrl.playFunction(token, uri);
         } catch (error) {
           uiCtrl.displayError("Playback error:" + error);
